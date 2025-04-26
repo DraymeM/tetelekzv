@@ -1,0 +1,45 @@
+{
+  "name": "tetelekzv",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build && tsc",
+    "serve": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.2",
+    "@tailwindcss/vite": "^4.0.6",
+    "@tanstack/react-query": "^5.74.4",
+    "@tanstack/react-router": "^1.114.3",
+    "@tanstack/react-router-devtools": "^1.114.3",
+    "@tanstack/router-plugin": "^1.114.3",
+    "axios": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.503.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-loading": "^2.0.3",
+    "tailwind-merge": "^3.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "jsdom": "^26.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.4",
+    "tw-animate-css": "^1.2.8",
+    "typescript": "^5.7.2",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5",
+    "web-vitals": "^4.2.4"
+  }
+}

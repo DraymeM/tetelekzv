@@ -1,0 +1,6 @@
+[
+  {
+    "id": 1,
+    "content": "Az OSI modell egy elméleti alap, amely leírja a hálózati kommunikáció lépéseit. A gyakorlatban a TCP/IP modellt használjuk, ami kevesebb réteget tartalmaz, de ugyanúgy lefedi az összes szükséges funkciót. A rétegezett felépítés előnye, hogy könnyebb a fejlesztés és hibakeresés, hiszen minden réteg önállóan is kezelhető."
+  }
+]

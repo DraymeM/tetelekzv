@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "tetel_id": 1,
+    "content": "Az OSI-modell hét rétegből áll, mindegyik rétegnek saját, jól meghatározott feladata van:",
+    "subsection_id": [1, 2]
+  },
+  {
+    "id": 2,
+    "tetel_id": 1,
+    "content": "A protokoll stack kifejezés azt jelenti, hogy a kommunikációt rétegekre bontjuk, és minden réteg egy adott feladatért felelős. Az egyes rétegek szabványosított protokollokon keresztül kommunikálnak a közvetlenül felettük és alattuk lévő rétegekkel. Minden réteg csak a szomszédos rétegekkel 'beszél', és nem kell ismernie a teljes rendszert. Így, ha például egy adat a felhasználótól elindul, a felső rétegektől az alsó rétegekig halad, majd a hálózaton keresztül átvitel után a másik oldalon visszafelé, rétegről rétegre 'kicsomagolva' jut el a célig.",
+    "subsection_id": []
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "framework": "react",
+  "typescript": true,
+  "projectName": "tetelekzv",
+  "mode": "file-router",
+  "tailwind": true,
+  "packageManager": "npm",
+  "toolchain": "none",
+  "variableValues": {},
+  "git": true,
+  "version": 1,
+  "existingAddOns": []
+}
