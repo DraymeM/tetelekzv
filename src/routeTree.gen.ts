@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as TetelekImport } from './routes/tetelek'
 import { Route as IndexImport } from './routes/index'
+import { Route as TetelekIdImport } from './routes/tetelek/$id'
 
 // Create/Update Routes
 
@@ -26,6 +27,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const TetelekIdRoute = TetelekIdImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TetelekRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -46,44 +53,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TetelekImport
       parentRoute: typeof rootRoute
     }
+    '/tetelek/$id': {
+      id: '/tetelek/$id'
+      path: '/$id'
+      fullPath: '/tetelek/$id'
+      preLoaderRoute: typeof TetelekIdImport
+      parentRoute: typeof TetelekImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface TetelekRouteChildren {
+  TetelekIdRoute: typeof TetelekIdRoute
+}
+
+const TetelekRouteChildren: TetelekRouteChildren = {
+  TetelekIdRoute: TetelekIdRoute,
+}
+
+const TetelekRouteWithChildren =
+  TetelekRoute._addFileChildren(TetelekRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/tetelek': typeof TetelekRoute
+  '/tetelek': typeof TetelekRouteWithChildren
+  '/tetelek/$id': typeof TetelekIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/tetelek': typeof TetelekRoute
+  '/tetelek': typeof TetelekRouteWithChildren
+  '/tetelek/$id': typeof TetelekIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/tetelek': typeof TetelekRoute
+  '/tetelek': typeof TetelekRouteWithChildren
+  '/tetelek/$id': typeof TetelekIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tetelek'
+  fullPaths: '/' | '/tetelek' | '/tetelek/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tetelek'
-  id: '__root__' | '/' | '/tetelek'
+  to: '/' | '/tetelek' | '/tetelek/$id'
+  id: '__root__' | '/' | '/tetelek' | '/tetelek/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TetelekRoute: typeof TetelekRoute
+  TetelekRoute: typeof TetelekRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TetelekRoute: TetelekRoute,
+  TetelekRoute: TetelekRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -104,7 +132,14 @@ export const routeTree = rootRoute
       "filePath": "index.tsx"
     },
     "/tetelek": {
-      "filePath": "tetelek.tsx"
+      "filePath": "tetelek.tsx",
+      "children": [
+        "/tetelek/$id"
+      ]
+    },
+    "/tetelek/$id": {
+      "filePath": "tetelek/$id.tsx",
+      "parent": "/tetelek"
     }
   }
 }
