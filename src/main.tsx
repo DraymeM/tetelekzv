@@ -6,7 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // Imp
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import Applayout from "./components/AppLayout.tsx";
-
+import Spinner from "./components/Spinner.tsx";
+import NotFoundPage from "./components/404.tsx";
 const queryClient = new QueryClient();
 
 // Create the router
@@ -16,6 +17,8 @@ const router = createRouter({
   defaultPreload: "intent",
   context: {},
   defaultComponent: Applayout,
+  defaultPendingComponent: Spinner,
+  defaultNotFoundComponent: NotFoundPage,
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
