@@ -1,6 +1,6 @@
-import { StrictMode, Suspense } from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { Outlet, RouterProvider, createRouter } from "@tanstack/react-router";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // Import QueryClient and QueryClientProvider
 import "./styles.css";

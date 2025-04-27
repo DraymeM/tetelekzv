@@ -4,25 +4,23 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchTetelek } from "../../../api/repo";
 import type { ITetel } from "../../../api/repo";
 import { Disclosure } from "@headlessui/react";
-import { FaChevronDown } from "react-icons/fa";
-import { FaSpinner } from "react-icons/fa";
+import { FaChevronDown, FaSpinner, FaListUl } from "react-icons/fa"; // ✅ Added FaListUl icon
 
 const TetelListCard: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  // Only enable the query when the list is opened
   const { data, isLoading, error } = useQuery<ITetel[]>({
     queryKey: ["tetelek"],
     queryFn: fetchTetelek,
-    enabled: isOpen, // Fetch only when the list is opened
+    enabled: isOpen,
   });
 
   const firstSixTetelek = Array.isArray(data) ? data.slice(0, 3) : [];
 
   const handleDisclosureClick = () => {
     startTransition(() => {
-      setIsOpen(!isOpen); // Toggle the open state within a transition
+      setIsOpen(!isOpen);
     });
   };
 
@@ -37,7 +35,8 @@ const TetelListCard: FC = () => {
   return (
     <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-blue-300 mb-2">
+        <h3 className="text-xl font-semibold text-blue-300 mb-2 flex items-center gap-2">
+          <FaListUl size={24} />
           Tétel Lista
         </h3>
         <div className="h-0.5 bg-gray-400 w-full mb-4" />

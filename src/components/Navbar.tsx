@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Link, useMatchRoute, useLocation } from "@tanstack/react-router";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Menu } from "@headlessui/react";
 import { GiSpinningSword, GiCardPick } from "react-icons/gi";
 import { FaScroll } from "react-icons/fa"; // Added new icon for 'Tételek'
@@ -10,7 +10,6 @@ const navLinks = [
 ];
 
 const Navbar: FC = () => {
-  const location = useLocation();
   const matchRoute = useMatchRoute();
 
   const navLinkStyle: React.CSSProperties = {
@@ -101,7 +100,7 @@ const Navbar: FC = () => {
                   {({ active }) => (
                     <Link
                       to={link.to}
-                      className={`block px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
+                      className={` px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
                         isActive
                           ? "text-blue-400 underline"
                           : active
