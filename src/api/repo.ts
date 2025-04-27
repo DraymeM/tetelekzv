@@ -28,6 +28,28 @@ export interface ISubsection {
   title: string;
   description: string;
 }
+export interface IMultiQuestion {
+  id: number;
+  question: string;
+  answers: {
+    text: string;
+    isCorrect: boolean;
+  }[];
+}
+
+export async function fetchMultiQuestionsAll(): Promise<IMultiQuestion[]> {
+  const { data } = await apiClient.get<IMultiQuestion[]>(
+    "/multi_questions.json"
+  );
+  return data;
+}
+export async function fetchMultiQuestionOne() {
+  const res = await fetch("/api/multi-question/random"); // Example URL
+  if (!res.ok) {
+    throw new Error("Failed to fetch question");
+  }
+  return res.json(); // should be { question: string, answers: {text, isCorrect}[] }
+}
 
 export async function fetchTetelek(): Promise<ITetel[]> {
   const { data } = await apiClient.get<ITetel[]>("/tetel.json");

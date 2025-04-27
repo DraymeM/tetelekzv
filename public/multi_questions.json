@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "question": "Az OSI modell melyik rétege felelős az adatok titkosításáért és helyreállításáért?",
+    "answers": [
+      { "text": "Alkalmazási réteg", "isCorrect": false },
+      { "text": "Megjelenítési (prezentációs) réteg", "isCorrect": true },
+      { "text": "Hálózati réteg", "isCorrect": false },
+      { "text": "Szállítási réteg", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 2,
+    "question": "Mit jelöl az IP-cím?",
+    "answers": [
+      { "text": "Egy hálózati eszköz egyedi azonosítóját", "isCorrect": true },
+      { "text": "Egy weboldal nevét", "isCorrect": false },
+      { "text": "Egy ország kódját", "isCorrect": false },
+      { "text": "Egy fájlrendszer típusát", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 3,
+    "question": "Mi a TCP protokoll egyik fő jellemzője?",
+    "answers": [
+      { "text": "Kapcsolat nélküli kommunikáció", "isCorrect": false },
+      { "text": "Megbízható, kapcsolat alapú adatátvitel", "isCorrect": true },
+      { "text": "Broadcast alapú kommunikáció", "isCorrect": false },
+      { "text": "Csak szöveges adatok átvitele", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 4,
+    "question": "Melyik NEM része a számítógép fő alkotóelemeinek?",
+    "answers": [
+      { "text": "CPU", "isCorrect": false },
+      { "text": "Memória", "isCorrect": false },
+      { "text": "Nyomtató", "isCorrect": true },
+      { "text": "Háttértár", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 5,
+    "question": "Az operációs rendszer melyik feladatot látja el?",
+    "answers": [
+      { "text": "Weboldalak tárolása", "isCorrect": false },
+      { "text": "Hardver erőforrások kezelése", "isCorrect": true },
+      { "text": "Programozási nyelv biztosítása", "isCorrect": false },
+      { "text": "Routerek konfigurálása", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 6,
+    "question": "Mi a szemafor szerepe a folyamatok kezelésében?",
+    "answers": [
+      { "text": "Üzenetek továbbítása", "isCorrect": false },
+      { "text": "Kölcsönös kizárás biztosítása", "isCorrect": true },
+      { "text": "Adatok titkosítása", "isCorrect": false },
+      { "text": "Memória foglalása", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 7,
+    "question": "Mire szolgál a virtuális memória?",
+    "answers": [
+      { "text": "Gyorsabb internetkapcsolat elérésére", "isCorrect": false },
+      { "text": "A fizikai memória kiegészítésére", "isCorrect": true },
+      { "text": "Videókártyák gyorsítására", "isCorrect": false },
+      { "text": "Hangfájlok tárolására", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 8,
+    "question": "A C# nyelvben melyik kulcsszóval jelölünk absztrakt osztályt?",
+    "answers": [
+      { "text": "interface", "isCorrect": false },
+      { "text": "abstract", "isCorrect": true },
+      { "text": "base", "isCorrect": false },
+      { "text": "override", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 9,
+    "question": "Melyik kulcsszó biztosítja C#-ban az erőforrások automatikus felszabadítását egy blokk végén?",
+    "answers": [
+      { "text": "using", "isCorrect": true },
+      { "text": "try", "isCorrect": false },
+      { "text": "finally", "isCorrect": false },
+      { "text": "catch", "isCorrect": false }
+    ]
+  },
+  {
+    "id": 10,
+    "question": "Melyik LINQ kulcsszóval szűrünk le elemeket egy feltétel alapján?",
+    "answers": [
+      { "text": "Select", "isCorrect": false },
+      { "text": "Where", "isCorrect": true },
+      { "text": "Sum", "isCorrect": false },
+      { "text": "Join", "isCorrect": false }
+    ]
+  }
+]

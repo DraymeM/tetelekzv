@@ -3,10 +3,12 @@ import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Menu } from "@headlessui/react";
 import { GiSpinningSword, GiCardPick } from "react-icons/gi";
 import { FaScroll } from "react-icons/fa"; // Added new icon for 'Tételek'
+import { MdQuiz } from "react-icons/md";
 
 const navLinks = [
   { name: "Tételek", to: "/tetelek", icon: FaScroll },
   { name: "FlashCards", to: "/flashcards", icon: GiCardPick },
+  { name: "Felelet Választós", to: "/mchoiceq", icon: MdQuiz },
 ];
 
 const Navbar: FC = () => {
