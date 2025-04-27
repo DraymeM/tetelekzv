@@ -26,7 +26,7 @@ const TetelListCard: FC = () => {
   };
 
   return (
-    <div className="bg-gray-700 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
+    <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-300 mb-2">
           Tétel Lista
