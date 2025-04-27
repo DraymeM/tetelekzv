@@ -2,9 +2,10 @@ import { useState, useTransition } from "react";
 import type { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchTetelek } from "../../../api/repo";
-import type { ITetel } from "../../../api/interfaces";
+import type { ITetel } from "../../../api/repo";
 import { Disclosure } from "@headlessui/react";
 import { FaChevronDown } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 
 const TetelListCard: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,14 @@ const TetelListCard: FC = () => {
       setIsOpen(!isOpen); // Toggle the open state within a transition
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <FaSpinner className="animate-spin text-blue-500 text-6xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
@@ -55,13 +64,7 @@ const TetelListCard: FC = () => {
                 />
               </Disclosure.Button>
 
-              <Disclosure.Panel
-                className="overflow-hidden transition-all duration-500 ease-in-out"
-                style={{
-                  maxHeight: isOpen ? "500px" : "0",
-                  opacity: isOpen ? 1 : 0,
-                }}
-              >
+              <Disclosure.Panel className="overflow-hidden transition-all duration-500 ease-in-out">
                 <div
                   className="bg-gray-800 p-4 rounded-lg mt-4"
                   style={{ backgroundColor: "#2d3748" }}

@@ -5,20 +5,9 @@ import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // Import QueryClient and QueryClientProvider
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
-import Navbar from "./components/Navbar.tsx";
+import Applayout from "./components/AppLayout.tsx";
 
 const queryClient = new QueryClient();
-
-const AppLayout = () => {
-  return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Navbar />
-        <Outlet />
-      </Suspense>
-    </>
-  );
-};
 
 // Create the router
 const router = createRouter({
@@ -26,7 +15,7 @@ const router = createRouter({
   basepath: "/tetelekzv",
   defaultPreload: "intent",
   context: {},
-  defaultComponent: AppLayout,
+  defaultComponent: Applayout,
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,

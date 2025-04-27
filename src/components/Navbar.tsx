@@ -6,7 +6,7 @@ const navLinks = [{ name: "Tételek", to: "/tetelek" }];
 
 const Navbar: FC = () => {
   return (
-    <nav className="fixed top-0 w-full  mb-5 h-16 bg-gray-800 text-white flex items-center px-6 z-50 shadow-md">
+    <nav className="fixed top-0 w-full  mb-10 h-16 bg-blue-900 text-white flex items-center px-6 z-50 shadow-md">
       <div className="flex items-center w-full justify-between">
         <Link
           to="/"
