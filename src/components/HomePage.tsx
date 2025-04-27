@@ -33,7 +33,7 @@ const HomePage: FC = () => {
             {/* Right: 2 small cards stacked */}
             <div className="flex flex-col space-y-8">
               {/* Kidolgozott Tételek Card */}
-              <div className="bg-gray-700 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2 p-6 flex-1">
+              <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2 p-6 flex-1">
                 <h3 className="text-xl font-semibold text-gray-300 mb-2">
                   Kidolgozott Tételek
                 </h3>
@@ -47,7 +47,7 @@ const HomePage: FC = () => {
               </div>
 
               {/* Tételekhez Kérdések Card */}
-              <div className="bg-gray-700 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2 p-6 flex-1">
+              <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2 p-6 flex-1">
                 <h3 className="text-xl font-semibold text-gray-300 mb-2">
                   Tételekhez Kérdések
                 </h3>
