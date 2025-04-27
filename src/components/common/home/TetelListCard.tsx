@@ -18,7 +18,7 @@ const TetelListCard: FC = () => {
     enabled: isOpen, // Fetch only when the list is opened
   });
 
-  const firstSixTetelek = Array.isArray(data) ? data.slice(0, 6) : [];
+  const firstSixTetelek = Array.isArray(data) ? data.slice(0, 3) : [];
 
   const handleDisclosureClick = () => {
     startTransition(() => {
@@ -37,7 +37,7 @@ const TetelListCard: FC = () => {
   return (
     <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-300 mb-2">
+        <h3 className="text-xl font-semibold text-blue-300 mb-2">
           Tétel Lista
         </h3>
         <div className="h-0.5 bg-gray-400 w-full mb-4" />
@@ -95,6 +95,7 @@ const TetelListCard: FC = () => {
                       )}
                     </ol>
                   )}
+                  <p>...</p>
                 </div>
               </Disclosure.Panel>
             </div>

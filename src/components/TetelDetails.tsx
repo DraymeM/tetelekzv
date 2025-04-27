@@ -1,4 +1,3 @@
-// src/components/TetelDetails.tsx
 import { Fragment, useState } from "react";
 import { useParams, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -44,7 +43,6 @@ export default function TetelDetails() {
       <Navbar />
 
       <main className="relative max-w-6xl mx-auto mt-10 p-10 text-left">
-        {/* Top Controls */}
         <div className="flex justify-between items-center mb-8">
           <Link
             to="/tetelek"
@@ -60,8 +58,8 @@ export default function TetelDetails() {
             <button
               onClick={enterLearning}
               className="inline-flex items-center px-3 py-2 border bg-purple-600 border-purple-500 
-                         rounded-md text-sm font-medium text-white animate-pulse
-                         hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                         rounded-md text-sm font-medium text-white 
+                         hover:bg-purple-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               <FaBookOpen className="mr-2" />
               Tanulás
@@ -70,8 +68,6 @@ export default function TetelDetails() {
         </div>
 
         <h1 className="text-3xl font-bold mb-8 text-center">{tetel.name}</h1>
-
-        {/* TRANSITION: Normal Mode */}
         <Transition
           show={!learningMode}
           as="div"
@@ -83,7 +79,6 @@ export default function TetelDetails() {
           leaveTo="opacity-0"
         >
           <div>
-            {/* Sections */}
             {sections.map((sec) => (
               <div
                 key={sec.id}
@@ -105,8 +100,6 @@ export default function TetelDetails() {
                 ))}
               </div>
             ))}
-
-            {/* Összegzés */}
             {osszegzes && (
               <div
                 className="bg-gray-800 shadow-md rounded-md p-4 mb-6
@@ -122,8 +115,6 @@ export default function TetelDetails() {
             )}
           </div>
         </Transition>
-
-        {/* TRANSITION: Learning Mode (Flashcards) */}
         <Transition
           show={learningMode}
           as="div"
@@ -143,17 +134,17 @@ export default function TetelDetails() {
             <button
               onClick={nextRandom}
               className="inline-flex items-center px-4 py-2 bg-orange-500 text-white 
-                         rounded-md hover:bg-orange-400 focus:outline-none focus:ring-2 
+                         rounded-md hover:bg-orange-400 focus:outline-none hover:cursor-pointer focus:ring-2 
                          focus:ring-orange-500"
             >
-              <FaSyncAlt className="mr-2 animate-bounce" />
+              <FaSyncAlt className="mr-2 animate-spin" />
               Következő kérdés
             </button>
 
             <button
               onClick={() => setLearningMode(false)}
               className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md
-                         text-sm font-medium text-gray-400
+                         text-sm font-medium text-gray-400 cursor-pointer
                          hover:bg-gray-500 hover:text-white
                          focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >

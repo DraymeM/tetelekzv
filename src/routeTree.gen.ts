@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TetelekImport } from './routes/tetelek'
+import { Route as FlashcardsImport } from './routes/flashcards'
 import { Route as IndexImport } from './routes/index'
 import { Route as TetelekIdImport } from './routes/tetelek/$id'
 
@@ -20,6 +21,12 @@ import { Route as TetelekIdImport } from './routes/tetelek/$id'
 const TetelekRoute = TetelekImport.update({
   id: '/tetelek',
   path: '/tetelek',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FlashcardsRoute = FlashcardsImport.update({
+  id: '/flashcards',
+  path: '/flashcards',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,6 +51,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/flashcards': {
+      id: '/flashcards'
+      path: '/flashcards'
+      fullPath: '/flashcards'
+      preLoaderRoute: typeof FlashcardsImport
       parentRoute: typeof rootRoute
     }
     '/tetelek': {
@@ -78,12 +92,14 @@ const TetelekRouteWithChildren =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/flashcards': typeof FlashcardsRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/flashcards': typeof FlashcardsRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRoute
 }
@@ -91,26 +107,29 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/flashcards': typeof FlashcardsRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tetelek' | '/tetelek/$id'
+  fullPaths: '/' | '/flashcards' | '/tetelek' | '/tetelek/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tetelek' | '/tetelek/$id'
-  id: '__root__' | '/' | '/tetelek' | '/tetelek/$id'
+  to: '/' | '/flashcards' | '/tetelek' | '/tetelek/$id'
+  id: '__root__' | '/' | '/flashcards' | '/tetelek' | '/tetelek/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FlashcardsRoute: typeof FlashcardsRoute
   TetelekRoute: typeof TetelekRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FlashcardsRoute: FlashcardsRoute,
   TetelekRoute: TetelekRouteWithChildren,
 }
 
@@ -125,11 +144,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/flashcards",
         "/tetelek"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/flashcards": {
+      "filePath": "flashcards.tsx"
     },
     "/tetelek": {
       "filePath": "tetelek.tsx",
