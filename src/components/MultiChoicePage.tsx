@@ -6,8 +6,9 @@ import AnswerPicker from "../components/common/AnswerPicker";
 import Spinner from "./Spinner";
 import TimerControls from "../components/common/TimerControls";
 import { useTimer } from "../hooks/useTimer";
-import { FaRedo } from "react-icons/fa";
+import { FaRedo, FaPlus } from "react-icons/fa";
 import { FaCheckCircle, FaClipboardList, FaTrophy } from "react-icons/fa";
+import { Link } from "@tanstack/react-router"; // Make sure to import Link from react-router-dom
 
 function shuffleArray<T>(array: T[]): T[] {
   const arr = array.slice();
@@ -183,6 +184,15 @@ export default function MultiChoicePage() {
             </button>
           </div>
         )}
+
+        {/* Floating Plus Button */}
+        <Link
+          to="/pmchq" // Update this link to the path where users can create questions
+          className="fixed bottom-7 right-7 p-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center"
+          title="Adj hozzá saját kérdést"
+        >
+          <FaPlus size={24} />
+        </Link>
       </main>
     </>
   );

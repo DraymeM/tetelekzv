@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TetelekImport } from './routes/tetelek'
+import { Route as PmchqImport } from './routes/pmchq'
 import { Route as MchoiceqImport } from './routes/mchoiceq'
 import { Route as FlashcardsImport } from './routes/flashcards'
 import { Route as IndexImport } from './routes/index'
@@ -22,6 +23,12 @@ import { Route as TetelekIdImport } from './routes/tetelek/$id'
 const TetelekRoute = TetelekImport.update({
   id: '/tetelek',
   path: '/tetelek',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PmchqRoute = PmchqImport.update({
+  id: '/pmchq',
+  path: '/pmchq',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MchoiceqImport
       parentRoute: typeof rootRoute
     }
+    '/pmchq': {
+      id: '/pmchq'
+      path: '/pmchq'
+      fullPath: '/pmchq'
+      preLoaderRoute: typeof PmchqImport
+      parentRoute: typeof rootRoute
+    }
     '/tetelek': {
       id: '/tetelek'
       path: '/tetelek'
@@ -108,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/flashcards': typeof FlashcardsRoute
   '/mchoiceq': typeof MchoiceqRoute
+  '/pmchq': typeof PmchqRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRoute
 }
@@ -116,6 +131,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/flashcards': typeof FlashcardsRoute
   '/mchoiceq': typeof MchoiceqRoute
+  '/pmchq': typeof PmchqRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRoute
 }
@@ -125,20 +141,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/flashcards': typeof FlashcardsRoute
   '/mchoiceq': typeof MchoiceqRoute
+  '/pmchq': typeof PmchqRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/flashcards' | '/mchoiceq' | '/tetelek' | '/tetelek/$id'
+  fullPaths:
+    | '/'
+    | '/flashcards'
+    | '/mchoiceq'
+    | '/pmchq'
+    | '/tetelek'
+    | '/tetelek/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/flashcards' | '/mchoiceq' | '/tetelek' | '/tetelek/$id'
+  to: '/' | '/flashcards' | '/mchoiceq' | '/pmchq' | '/tetelek' | '/tetelek/$id'
   id:
     | '__root__'
     | '/'
     | '/flashcards'
     | '/mchoiceq'
+    | '/pmchq'
     | '/tetelek'
     | '/tetelek/$id'
   fileRoutesById: FileRoutesById
@@ -148,6 +172,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FlashcardsRoute: typeof FlashcardsRoute
   MchoiceqRoute: typeof MchoiceqRoute
+  PmchqRoute: typeof PmchqRoute
   TetelekRoute: typeof TetelekRouteWithChildren
 }
 
@@ -155,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FlashcardsRoute: FlashcardsRoute,
   MchoiceqRoute: MchoiceqRoute,
+  PmchqRoute: PmchqRoute,
   TetelekRoute: TetelekRouteWithChildren,
 }
 
@@ -171,6 +197,7 @@ export const routeTree = rootRoute
         "/",
         "/flashcards",
         "/mchoiceq",
+        "/pmchq",
         "/tetelek"
       ]
     },
@@ -182,6 +209,9 @@ export const routeTree = rootRoute
     },
     "/mchoiceq": {
       "filePath": "mchoiceq.tsx"
+    },
+    "/pmchq": {
+      "filePath": "pmchq.tsx"
     },
     "/tetelek": {
       "filePath": "tetelek.tsx",

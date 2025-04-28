@@ -1,4 +1,5 @@
 import apiClient from "./index";
+import phpClient from "./index";
 export interface ITetel {
   id: number;
   name: string;
@@ -107,4 +108,15 @@ export async function fetchTetelDetail(id: number) {
   const questions = questionList.filter((q) => tetel.kerdesek.includes(q.id));
 
   return { tetel, osszegzes, sections, questions };
+}
+
+export async function createMultiQuestion(
+  question: Omit<IMultiQuestion, "id">
+): Promise<IMultiQuestion> {
+  console.log("Fetching /tetelekzv/BackEnd/create_multiquestion.php", question);
+  const { data } = await phpClient.post<IMultiQuestion>(
+    "/create_multiquestion.php",
+    question
+  );
+  return data;
 }
