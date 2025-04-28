@@ -102,7 +102,7 @@ export default function MultiChoicePage() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col items-center justify-center min-h-screen mt-5 max-w-4xl mx-auto p-4 text-center overflow-auto">
+      <main className="flex flex-col items-center justify-center min-h-screen mt-5 max-w-4xl mx-auto p-4 text-center ">
         <h1 className="text-3xl font-bold mb-3">Felelet Választás</h1>
         <p className="mb-6 text-gray-300">Csak egy válaszlehetőség jó!</p>
 
