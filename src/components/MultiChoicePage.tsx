@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FaSyncAlt, FaRegClock, FaCheck } from "react-icons/fa";
-import { Menu, Transition } from "@headlessui/react";
 import Navbar from "./Navbar";
 import { fetchMultiQuestionsAll } from "../api/repo";
 import AnswerPicker from "../components/common/AnswerPicker";
-import Spinner from "./Spinner.tsx";
+import Spinner from "./Spinner";
+import TimerControls from "../components/common/TimerControls";
+import { useTimer } from "../hooks/useTimer";
+import { FaRedo } from "react-icons/fa";
+import { FaCheckCircle, FaClipboardList, FaTrophy } from "react-icons/fa";
 
 function shuffleArray<T>(array: T[]): T[] {
   const arr = array.slice();
@@ -32,10 +34,9 @@ export default function MultiChoicePage() {
   const [shuffledAnswers, setShuffledAnswers] = useState<
     { text: string; isCorrect: boolean }[]
   >([]);
-
-  const [timerEnabled, setTimerEnabled] = useState(false);
-  const [timerDuration, setTimerDuration] = useState(10);
-  const [timeLeft, setTimeLeft] = useState(timerDuration);
+  const [score, setScore] = useState(0);
+  const [questionsAnswered, setQuestionsAnswered] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   const pickRandom = () => {
     if (!questions || questions.length === 0) return;
@@ -51,10 +52,18 @@ export default function MultiChoicePage() {
 
     setCurrentIdx(randomIdx);
     setTimeLeft(timerDuration);
-
     const shuffled = shuffleArray(questions[randomIdx].answers);
     setShuffledAnswers(shuffled);
   };
+
+  const {
+    timerEnabled,
+    setTimerEnabled,
+    timerDuration,
+    setTimerDuration,
+    timeLeft,
+    setTimeLeft,
+  } = useTimer(pickRandom, 10);
 
   useEffect(() => {
     if (questions && currentIdx === null) {
@@ -62,28 +71,7 @@ export default function MultiChoicePage() {
     }
   }, [questions]);
 
-  useEffect(() => {
-    if (!timerEnabled || currentIdx === null) return;
-
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev === 1) {
-          pickRandom();
-          return timerDuration;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timerEnabled, currentIdx, timerDuration]);
-
-  if (isLoading)
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
+  if (isLoading) return <Spinner />;
   if (error instanceof Error)
     return (
       <div className="p-10 text-center text-red-500">
@@ -94,19 +82,68 @@ export default function MultiChoicePage() {
   const currentQuestion =
     currentIdx !== null ? (questions ?? [])[currentIdx] : null;
 
-  const handleAnswerPick = (isCorrect: boolean) => {};
+  const handleAnswerPick = (isCorrect: boolean) => {
+    setQuestionsAnswered((prev) => prev + 1);
+    if (isCorrect) {
+      setScore((prev) => prev + 1);
+      setStreak((prev) => prev + 1);
+    } else {
+      setStreak(0);
+    }
+  };
+
+  const handleReset = () => {
+    setScore(0);
+    setQuestionsAnswered(0);
+    setStreak(0);
+    pickRandom();
+  };
 
   return (
     <>
       <Navbar />
-
-      <main className="flex flex-col items-center justify-center min-h-screen max-w-4xl mx-auto p-8 text-center">
+      <main className="flex flex-col items-center justify-center min-h-screen mt-5 max-w-4xl mx-auto p-4 text-center overflow-auto">
         <h1 className="text-3xl font-bold mb-3">Felelet Választás</h1>
         <p className="mb-6 text-gray-300">Csak egy válaszlehetőség jó!</p>
 
+        {/* Progress Info */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 text-gray-400 text-sm">
+          <div className="flex items-center gap-2">
+            <FaCheckCircle className="text-green-500" />
+            <span>
+              Helyes válaszok: <span className="font-semibold">{score}</span>
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <FaClipboardList className="text-blue-500" />
+            <span>
+              Megválaszolt kérdések:{" "}
+              <span className="font-semibold">{questionsAnswered}</span>
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <FaTrophy className="text-yellow-500" />
+            <span>
+              Sorozat: <span className="font-semibold">{streak}</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        {questions && (
+          <div className="w-full bg-gray-700 rounded-full h-3 mb-6">
+            <div
+              className="bg-green-500 h-3 rounded-full"
+              style={{
+                width: `${(questionsAnswered / questions.length) * 100}%`,
+              }}
+            />
+          </div>
+        )}
+
         {currentQuestion && (
           <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
-            <div className="p-6 rounded-lg bg-gray-800 text-white w-full">
+            <div className="p-4 sm:p-6 rounded-lg bg-gray-800 text-white w-full overflow-auto max-h-[80vh]">
               <h2 className="text-xl font-semibold mb-4">
                 {currentQuestion.question}
               </h2>
@@ -117,83 +154,33 @@ export default function MultiChoicePage() {
               />
             </div>
 
-            <div className="flex flex-wrap gap-4 justify-center">
-              <button
-                onClick={pickRandom}
-                className="inline-flex items-center px-4 py-2 bg-orange-500 text-white 
-                  rounded-md hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <FaSyncAlt className="mr-2" />
-                Következő kérdés
-              </button>
+            {/* Timer Controls */}
+            <TimerControls
+              onNext={pickRandom}
+              timerEnabled={timerEnabled}
+              setTimerEnabled={setTimerEnabled}
+              timerDuration={timerDuration}
+              setTimerDuration={(duration) => {
+                setTimerDuration(duration);
+                setTimeLeft(duration);
+              }}
+            />
 
-              <button
-                onClick={() => setTimerEnabled((prev) => !prev)}
-                className={`inline-flex items-center px-4 py-2 rounded-md text-sm font-medium
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500 transition
-                  ${
-                    timerEnabled
-                      ? "bg-red-600 hover:bg-red-500 text-white"
-                      : "bg-green-600 hover:bg-green-500 text-white"
-                  }`}
-              >
-                <FaRegClock className="mr-2" />
-                {timerEnabled ? "Időzítő kikapcsolása" : "Időzítő bekapcsolása"}
-              </button>
-
-              <Menu as="div" className="relative">
-                <div>
-                  <Menu.Button
-                    className="inline-flex items-center px-4 py-2 rounded-md bg-gray-700 text-sm text-white
-                    hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    {timerDuration} mp
-                  </Menu.Button>
-                </div>
-
-                <Transition
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-28 origin-top-center rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5">
-                    <div className="py-1">
-                      {[5, 10, 15, 20, 25, 30].map((seconds) => (
-                        <Menu.Item key={seconds}>
-                          {({ active }) => (
-                            <button
-                              onClick={() => {
-                                setTimerDuration(seconds);
-                                setTimeLeft(seconds);
-                              }}
-                              className={`${
-                                active
-                                  ? "bg-gray-600 text-white"
-                                  : "text-gray-300"
-                              } flex w-full items-center justify-between px-4 py-2 text-sm`}
-                            >
-                              {seconds} mp
-                              {timerDuration === seconds && (
-                                <FaCheck className="text-green-400 ml-2" />
-                              )}
-                            </button>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </div>
-
+            {/* Timer Text */}
             {timerEnabled && (
               <div className="text-gray-400 text-sm mt-4">
                 Következő kérdés {timeLeft} másodperc múlva
               </div>
             )}
+
+            {/* Reset Button */}
+            <button
+              className="mt-8 px-6 py-3 rounded bg-red-600 hover:bg-red-700 transition-all transform hover:scale-105 flex items-center gap-2"
+              onClick={handleReset}
+            >
+              <FaRedo />
+              Újrakezdés
+            </button>
           </div>
         )}
       </main>
