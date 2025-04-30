@@ -5,7 +5,7 @@ import { GiSpinningRibbons } from "react-icons/gi";
 import { FaHome } from "react-icons/fa"; // ⬅️ Import house icon
 
 const NotFoundPage: React.FC = () => {
-  const [open, setOpen] = useState(true);
+  const [open] = useState(true);
 
   return (
     <Transition appear show={open} as={Fragment}>

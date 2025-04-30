@@ -3,3 +3,5 @@ node_modules
 dist
 dist-ssr
 *.local
+BackEnd/env.php
+BackEnd/dev.env.php

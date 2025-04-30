@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useParams, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Transition } from "@headlessui/react";
@@ -42,11 +42,11 @@ export default function TetelDetails() {
     <>
       <Navbar />
 
-      <main className="relative max-w-6xl mx-auto mt-10 p-10 text-left">
+      <main className="relative max-w-6xl mx-auto min-h-screen mt-10 p-10 text-left">
         <div className="flex justify-between items-center mb-8">
           <Link
             to="/tetelek"
-            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md
+            className="inline-flex items-center px-3 py-2 border  border-gray-300 rounded-md
                        text-sm font-medium text-gray-400 hover:bg-gray-500 hover:text-white
                        focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >

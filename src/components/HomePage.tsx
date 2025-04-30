@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import Navbar from "./Navbar";
 import TetelListCard from "./common/home/TetelListCard";
+import { FaBookOpen, FaQuestionCircle } from "react-icons/fa"; // ✅ Added icons
 
 const HomePage: FC = () => {
   return (
@@ -34,7 +35,8 @@ const HomePage: FC = () => {
             <div className="flex flex-col space-y-8">
               {/* Kidolgozott Tételek Card */}
               <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2 p-6 flex-1">
-                <h3 className="text-xl font-semibold text-blue-300 mb-2">
+                <h3 className="text-xl font-semibold text-blue-300 mb-2 flex items-center gap-2">
+                  <FaBookOpen size={24} />
                   Kidolgozott Tételek
                 </h3>
                 <div className="h-0.5 bg-gray-400 w-full mb-4" />
@@ -48,7 +50,8 @@ const HomePage: FC = () => {
 
               {/* Tételekhez Kérdések Card */}
               <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2 p-6 flex-1">
-                <h3 className="text-xl font-semibold text-blue-300 mb-2">
+                <h3 className="text-xl font-semibold text-blue-300 mb-2 flex items-center gap-2">
+                  <FaQuestionCircle size={24} />
                   Tételekhez Kérdések
                 </h3>
                 <div className="h-0.5 bg-gray-400 w-full mb-4" />

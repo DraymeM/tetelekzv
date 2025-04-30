@@ -26,4 +26,14 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/tetelekzv/BackEnd": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/tetelekzv\/BackEnd/, "/BackEnd"),
+        logLevel: "debug",
+      },
+    },
+  },
 });
