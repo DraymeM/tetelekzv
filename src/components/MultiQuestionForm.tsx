@@ -160,7 +160,11 @@ const MultiQuestionForm: React.FC = () => {
   };
 
   return (
-    <FormContainer error={error} success={success}>
+    <FormContainer
+      error={error}
+      success={success}
+      label="Új Felelet Választós Kérdés"
+    >
       <form onSubmit={handleSubmit} className="space-y-6">
         <QuestionInput
           question={question}
@@ -183,7 +187,10 @@ const MultiQuestionForm: React.FC = () => {
             />
           ))}
         </div>
-        <SubmitButton isPending={mutation.isPending} />
+        <SubmitButton
+          isPending={mutation.isPending}
+          label="Kérdés Létrehozása"
+        />
       </form>
     </FormContainer>
   );

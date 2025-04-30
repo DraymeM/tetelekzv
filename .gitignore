@@ -5,3 +5,5 @@ dist-ssr
 *.local
 BackEnd/env.php
 BackEnd/dev.env.php
+tetelekzv/BackEnd/env.php
+tetelekzv/BackEnd/dev.env.php

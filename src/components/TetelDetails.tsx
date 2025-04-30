@@ -3,29 +3,76 @@ import { useParams, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Transition } from "@headlessui/react";
 import { FaArrowLeft, FaBookOpen, FaSyncAlt } from "react-icons/fa";
+import axios from "axios";
 import Navbar from "./Navbar";
-import { fetchTetelDetail } from "../api/repo";
 import FlashCard from "./common/FlashCard";
+
+interface Subsection {
+  id: number;
+  title: string;
+  description: string;
+}
+
+interface Section {
+  id: number;
+  content: string;
+  subsections: Subsection[] | null;
+}
+
+interface Osszegzes {
+  id: number;
+  content: string;
+}
+
+interface Flashcard {
+  id: number;
+  question: string;
+  answer: string;
+}
+
+interface Tetel {
+  id: number;
+  name: string;
+}
+
+interface TetelDetailsResponse {
+  tetel: Tetel;
+  osszegzes: Osszegzes | null;
+  sections: Section[];
+  questions: Flashcard[] | null;
+}
 
 export default function TetelDetails() {
   const { id } = useParams({ strict: false });
   const tetelId = Number(id);
-  const { data, isLoading, error } = useQuery({
+
+  const { data, isLoading, error } = useQuery<TetelDetailsResponse, Error>({
     queryKey: ["tetelDetail", tetelId],
-    queryFn: () => fetchTetelDetail(tetelId),
-    enabled: !isNaN(tetelId),
+    queryFn: async () => {
+      const response = await axios.get<TetelDetailsResponse>(
+        `/tetelekzv/BackEnd/get_tetel_details.php?id=${tetelId}`
+      );
+      return response.data;
+    },
+    enabled: !isNaN(tetelId) && tetelId > 0,
+    retry: 2,
+    refetchOnWindowFocus: false,
   });
+
   const [learningMode, setLearningMode] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
 
-  if (isLoading) return <div className="p-10">Loading…</div>;
-  if (error instanceof Error)
-    return <div className="p-10 text-red-500">Error: {error.message}</div>;
+  // Safe data handling
+  const tetel = data?.tetel ?? { id: 0, name: "Ismeretlen tétel" };
+  const osszegzes = data?.osszegzes;
+  const sections = data?.sections ?? [];
+  const questions = data?.questions ?? [];
 
-  const { tetel, osszegzes, sections, questions } = data!;
+  const hasQuestions = questions.length > 0;
+  const canRandomize = questions.length >= 2;
 
   const nextRandom = () => {
-    if (questions.length < 2) return;
+    if (!canRandomize) return;
     let idx = currentIdx;
     while (idx === currentIdx) {
       idx = Math.floor(Math.random() * questions.length);
@@ -34,9 +81,27 @@ export default function TetelDetails() {
   };
 
   const enterLearning = () => {
+    if (!hasQuestions) return;
     setCurrentIdx(Math.floor(Math.random() * questions.length));
     setLearningMode(true);
   };
+
+  if (isLoading)
+    return (
+      <div className="p-10 text-center">
+        <div className="animate-spin text-blue-500 text-4xl inline-block">
+          <FaSyncAlt />
+        </div>
+        <p className="mt-4 text-gray-400">Tétel betöltése...</p>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="p-10 text-red-500 text-center">
+        Hiba történt: {error.message}
+      </div>
+    );
 
   return (
     <>
@@ -46,111 +111,116 @@ export default function TetelDetails() {
         <div className="flex justify-between items-center mb-8">
           <Link
             to="/tetelek"
-            className="inline-flex items-center px-3 py-2 border  border-gray-300 rounded-md
-                       text-sm font-medium text-gray-400 hover:bg-gray-500 hover:text-white
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md
+                     text-sm font-medium text-gray-400 hover:bg-gray-500 hover:text-white
+                     focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
           >
             <FaArrowLeft className="mr-2" />
             Vissza a tételekhez
           </Link>
 
-          {!learningMode && questions.length > 0 && (
+          {!learningMode && hasQuestions && (
             <button
               onClick={enterLearning}
-              className="inline-flex items-center px-3 py-2 border bg-purple-600 border-purple-500 
-                         rounded-md text-sm font-medium text-white 
-                         hover:bg-purple-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 
+                       rounded-md text-sm font-medium text-white hover:bg-purple-700 
+                       focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors"
             >
               <FaBookOpen className="mr-2" />
-              Tanulás
+              Tanuló mód indítása
             </button>
           )}
         </div>
 
-        <h1 className="text-3xl font-bold mb-8 text-center">{tetel.name}</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-100">
+          {tetel?.name}
+        </h1>
+
         <Transition
           show={!learningMode}
-          as="div"
-          enter="transition-opacity duration-500"
+          enter="transition-opacity duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="transition-opacity duration-300"
+          leave="transition-opacity duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div>
-            {sections.map((sec) => (
+          <div className="space-y-6">
+            {sections.map((section) => (
               <div
-                key={sec.id}
-                className="bg-gray-800 shadow-md rounded-md p-4 mb-6
-                           border-2 border-transparent hover:border-gray-400
-                           transition duration-300"
+                key={section.id}
+                className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700
+                         hover:border-gray-500 transition-colors"
               >
-                <h3 className="text-xl font-semibold mb-2 text-gray-100">
-                  {sec.content}
-                </h3>
-                {sec.subsections.map((sub) => (
+                <h2 className="text-xl font-semibold mb-4 text-gray-100">
+                  {section.content}
+                </h2>
+                {section.subsections?.map((subsection) => (
                   <div
-                    key={sub.id}
-                    className="bg-gray-700 rounded-md p-3 mb-3 ml-4"
+                    key={subsection.id}
+                    className="ml-4 mb-4 p-4 bg-gray-700 rounded-lg"
                   >
-                    <h4 className="font-bold text-gray-100">{sub.title}</h4>
-                    <p className="text-gray-200">{sub.description}</p>
+                    <h3 className="font-medium text-gray-100 mb-2">
+                      {subsection.title}
+                    </h3>
+                    <p className="text-gray-300">{subsection.description}</p>
                   </div>
                 ))}
               </div>
             ))}
-            {osszegzes && (
-              <div
-                className="bg-gray-800 shadow-md rounded-md p-4 mb-6
-                           border-2 border-transparent hover:border-gray-400
-                           transition duration-300"
-              >
-                <h2 className="text-2xl font-semibold mb-2 text-gray-100">
+
+            {osszegzes?.content && (
+              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h2 className="text-2xl font-bold mb-4 text-gray-100">
                   Összegzés
                 </h2>
-                <hr className="border-gray-600 mb-4" />
-                <p className="text-gray-100">{osszegzes.content}</p>
+                <p className="text-gray-300 whitespace-pre-line">
+                  {osszegzes.content}
+                </p>
               </div>
             )}
           </div>
         </Transition>
+
         <Transition
           show={learningMode}
-          as="div"
-          enter="transition-opacity duration-500"
+          enter="transition-opacity duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="transition-opacity duration-300"
+          leave="transition-opacity duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="flex flex-col items-center gap-6">
-            <FlashCard
-              question={questions[currentIdx].question}
-              answer={questions[currentIdx].answer}
-            />
+          <div className="flex flex-col items-center gap-6 mt-10">
+            {hasQuestions && (
+              <>
+                <FlashCard
+                  question={questions[currentIdx]?.question ?? ""}
+                  answer={questions[currentIdx]?.answer ?? ""}
+                />
 
-            <button
-              onClick={nextRandom}
-              className="inline-flex items-center px-4 py-2 bg-orange-500 text-white 
-                         rounded-md hover:bg-orange-400 focus:outline-none hover:cursor-pointer focus:ring-2 
-                         focus:ring-orange-500"
-            >
-              <FaSyncAlt className="mr-2 animate-spin" />
-              Következő kérdés
-            </button>
+                <div className="flex gap-4">
+                  {canRandomize && (
+                    <button
+                      onClick={nextRandom}
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg
+                               hover:bg-blue-700 transition-colors flex items-center"
+                    >
+                      <FaSyncAlt className="mr-2 animate-spin" />
+                      Következő kérdés
+                    </button>
+                  )}
 
-            <button
-              onClick={() => setLearningMode(false)}
-              className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md
-                         text-sm font-medium text-gray-400 cursor-pointer
-                         hover:bg-gray-500 hover:text-white
-                         focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <FaArrowLeft className="mr-2" />
-              Vissza a tételhez
-            </button>
+                  <button
+                    onClick={() => setLearningMode(false)}
+                    className="px-6 py-3 border border-gray-400 text-gray-300
+                             rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    Vissza
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </Transition>
       </main>
