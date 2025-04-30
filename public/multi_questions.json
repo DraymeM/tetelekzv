@@ -1,244 +1,288 @@
 [
-  {
-    "id": 1,
-    "question": "Az OSI modell melyik r\u00e9tege felel\u0151s az adatok titkos\u00edt\u00e1s\u00e1\u00e9rt \u00e9s helyre\u00e1ll\u00edt\u00e1s\u00e1\u00e9rt?",
-    "answers": [
-      {
-        "text": "Alkalmaz\u00e1si r\u00e9teg",
-        "isCorrect": false
-      },
-      {
-        "text": "Megjelen\u00edt\u00e9si (prezent\u00e1ci\u00f3s) r\u00e9teg",
-        "isCorrect": true
-      },
-      {
-        "text": "H\u00e1l\u00f3zati r\u00e9teg",
-        "isCorrect": false
-      },
-      {
-        "text": "Sz\u00e1ll\u00edt\u00e1si r\u00e9teg",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "question": "Mit jel\u00f6l az IP-c\u00edm?",
-    "answers": [
-      {
-        "text": "Egy h\u00e1l\u00f3zati eszk\u00f6z egyedi azonos\u00edt\u00f3j\u00e1t",
-        "isCorrect": true
-      },
-      {
-        "text": "Egy weboldal nev\u00e9t",
-        "isCorrect": false
-      },
-      {
-        "text": "Egy orsz\u00e1g k\u00f3dj\u00e1t",
-        "isCorrect": false
-      },
-      {
-        "text": "Egy f\u00e1jlrendszer t\u00edpus\u00e1t",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 3,
-    "question": "Mi a TCP protokoll egyik f\u0151 jellemz\u0151je?",
-    "answers": [
-      {
-        "text": "Kapcsolat n\u00e9lk\u00fcli kommunik\u00e1ci\u00f3",
-        "isCorrect": false
-      },
-      {
-        "text": "Megb\u00edzhat\u00f3, kapcsolat alap\u00fa adat\u00e1tvitel",
-        "isCorrect": true
-      },
-      {
-        "text": "Broadcast alap\u00fa kommunik\u00e1ci\u00f3",
-        "isCorrect": false
-      },
-      {
-        "text": "Csak sz\u00f6veges adatok \u00e1tvitele",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 4,
-    "question": "Melyik NEM r\u00e9sze a sz\u00e1m\u00edt\u00f3g\u00e9p f\u0151 alkot\u00f3elemeinek?",
-    "answers": [
-      {
-        "text": "CPU",
-        "isCorrect": false
-      },
-      {
-        "text": "Mem\u00f3ria",
-        "isCorrect": false
-      },
-      {
-        "text": "Nyomtat\u00f3",
-        "isCorrect": true
-      },
-      {
-        "text": "H\u00e1tt\u00e9rt\u00e1r",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 5,
-    "question": "Az oper\u00e1ci\u00f3s rendszer melyik feladatot l\u00e1tja el?",
-    "answers": [
-      {
-        "text": "Weboldalak t\u00e1rol\u00e1sa",
-        "isCorrect": false
-      },
-      {
-        "text": "Hardver er\u0151forr\u00e1sok kezel\u00e9se",
-        "isCorrect": true
-      },
-      {
-        "text": "Programoz\u00e1si nyelv biztos\u00edt\u00e1sa",
-        "isCorrect": false
-      },
-      {
-        "text": "Routerek konfigur\u00e1l\u00e1sa",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 6,
-    "question": "Mi a szemafor szerepe a folyamatok kezel\u00e9s\u00e9ben?",
-    "answers": [
-      {
-        "text": "\u00dczenetek tov\u00e1bb\u00edt\u00e1sa",
-        "isCorrect": false
-      },
-      {
-        "text": "K\u00f6lcs\u00f6n\u00f6s kiz\u00e1r\u00e1s biztos\u00edt\u00e1sa",
-        "isCorrect": true
-      },
-      {
-        "text": "Adatok titkos\u00edt\u00e1sa",
-        "isCorrect": false
-      },
-      {
-        "text": "Mem\u00f3ria foglal\u00e1sa",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 7,
-    "question": "Mire szolg\u00e1l a virtu\u00e1lis mem\u00f3ria?",
-    "answers": [
-      {
-        "text": "Gyorsabb internetkapcsolat el\u00e9r\u00e9s\u00e9re",
-        "isCorrect": false
-      },
-      {
-        "text": "A fizikai mem\u00f3ria kieg\u00e9sz\u00edt\u00e9s\u00e9re",
-        "isCorrect": true
-      },
-      {
-        "text": "Vide\u00f3k\u00e1rty\u00e1k gyors\u00edt\u00e1s\u00e1ra",
-        "isCorrect": false
-      },
-      {
-        "text": "Hangf\u00e1jlok t\u00e1rol\u00e1s\u00e1ra",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 8,
-    "question": "A C# nyelvben melyik kulcssz\u00f3val jel\u00f6l\u00fcnk absztrakt oszt\u00e1lyt?",
-    "answers": [
-      {
-        "text": "interface",
-        "isCorrect": false
-      },
-      {
-        "text": "abstract",
-        "isCorrect": true
-      },
-      {
-        "text": "base",
-        "isCorrect": false
-      },
-      {
-        "text": "override",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 9,
-    "question": "Melyik kulcssz\u00f3 biztos\u00edtja C#-ban az er\u0151forr\u00e1sok automatikus felszabad\u00edt\u00e1s\u00e1t egy blokk v\u00e9g\u00e9n?",
-    "answers": [
-      {
-        "text": "using",
-        "isCorrect": true
-      },
-      {
-        "text": "try",
-        "isCorrect": false
-      },
-      {
-        "text": "finally",
-        "isCorrect": false
-      },
-      {
-        "text": "catch",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 10,
-    "question": "Melyik LINQ kulcssz\u00f3val sz\u0171r\u00fcnk le elemeket egy felt\u00e9tel alapj\u00e1n?",
-    "answers": [
-      {
-        "text": "Select",
-        "isCorrect": false
-      },
-      {
-        "text": "Where",
-        "isCorrect": true
-      },
-      {
-        "text": "Sum",
-        "isCorrect": false
-      },
-      {
-        "text": "Join",
-        "isCorrect": false
-      }
-    ]
-  },
-  {
-    "id": 11,
-    "question": "Borbardilllo crocodillo",
-    "answers": [
-      {
-        "text": "1",
-        "isCorrect": false
-      },
-      {
-        "text": "2",
-        "isCorrect": false
-      },
-      {
-        "text": "3",
-        "isCorrect": true
-      },
-      {
-        "text": "4",
-        "isCorrect": false
-      }
-    ]
-  }
+    {
+        "id": 1,
+        "question": "Az OSI modell melyik r\u00e9tege felel\u0151s az adatok titkos\u00edt\u00e1s\u00e1\u00e9rt \u00e9s helyre\u00e1ll\u00edt\u00e1s\u00e1\u00e9rt?",
+        "answers": [
+            {
+                "text": "Alkalmaz\u00e1si r\u00e9teg",
+                "isCorrect": false
+            },
+            {
+                "text": "Megjelen\u00edt\u00e9si (prezent\u00e1ci\u00f3s) r\u00e9teg",
+                "isCorrect": true
+            },
+            {
+                "text": "H\u00e1l\u00f3zati r\u00e9teg",
+                "isCorrect": false
+            },
+            {
+                "text": "Sz\u00e1ll\u00edt\u00e1si r\u00e9teg",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "question": "Mit jel\u00f6l az IP-c\u00edm?",
+        "answers": [
+            {
+                "text": "Egy h\u00e1l\u00f3zati eszk\u00f6z egyedi azonos\u00edt\u00f3j\u00e1t",
+                "isCorrect": true
+            },
+            {
+                "text": "Egy weboldal nev\u00e9t",
+                "isCorrect": false
+            },
+            {
+                "text": "Egy orsz\u00e1g k\u00f3dj\u00e1t",
+                "isCorrect": false
+            },
+            {
+                "text": "Egy f\u00e1jlrendszer t\u00edpus\u00e1t",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "question": "Mi a TCP protokoll egyik f\u0151 jellemz\u0151je?",
+        "answers": [
+            {
+                "text": "Kapcsolat n\u00e9lk\u00fcli kommunik\u00e1ci\u00f3",
+                "isCorrect": false
+            },
+            {
+                "text": "Megb\u00edzhat\u00f3, kapcsolat alap\u00fa adat\u00e1tvitel",
+                "isCorrect": true
+            },
+            {
+                "text": "Broadcast alap\u00fa kommunik\u00e1ci\u00f3",
+                "isCorrect": false
+            },
+            {
+                "text": "Csak sz\u00f6veges adatok \u00e1tvitele",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "question": "Melyik NEM r\u00e9sze a sz\u00e1m\u00edt\u00f3g\u00e9p f\u0151 alkot\u00f3elemeinek?",
+        "answers": [
+            {
+                "text": "CPU",
+                "isCorrect": false
+            },
+            {
+                "text": "Mem\u00f3ria",
+                "isCorrect": false
+            },
+            {
+                "text": "Nyomtat\u00f3",
+                "isCorrect": true
+            },
+            {
+                "text": "H\u00e1tt\u00e9rt\u00e1r",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "question": "Az oper\u00e1ci\u00f3s rendszer melyik feladatot l\u00e1tja el?",
+        "answers": [
+            {
+                "text": "Weboldalak t\u00e1rol\u00e1sa",
+                "isCorrect": false
+            },
+            {
+                "text": "Hardver er\u0151forr\u00e1sok kezel\u00e9se",
+                "isCorrect": true
+            },
+            {
+                "text": "Programoz\u00e1si nyelv biztos\u00edt\u00e1sa",
+                "isCorrect": false
+            },
+            {
+                "text": "Routerek konfigur\u00e1l\u00e1sa",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "question": "Mi a szemafor szerepe a folyamatok kezel\u00e9s\u00e9ben?",
+        "answers": [
+            {
+                "text": "\u00dczenetek tov\u00e1bb\u00edt\u00e1sa",
+                "isCorrect": false
+            },
+            {
+                "text": "K\u00f6lcs\u00f6n\u00f6s kiz\u00e1r\u00e1s biztos\u00edt\u00e1sa",
+                "isCorrect": true
+            },
+            {
+                "text": "Adatok titkos\u00edt\u00e1sa",
+                "isCorrect": false
+            },
+            {
+                "text": "Mem\u00f3ria foglal\u00e1sa",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "question": "Mire szolg\u00e1l a virtu\u00e1lis mem\u00f3ria?",
+        "answers": [
+            {
+                "text": "Gyorsabb internetkapcsolat el\u00e9r\u00e9s\u00e9re",
+                "isCorrect": false
+            },
+            {
+                "text": "A fizikai mem\u00f3ria kieg\u00e9sz\u00edt\u00e9s\u00e9re",
+                "isCorrect": true
+            },
+            {
+                "text": "Vide\u00f3k\u00e1rty\u00e1k gyors\u00edt\u00e1s\u00e1ra",
+                "isCorrect": false
+            },
+            {
+                "text": "Hangf\u00e1jlok t\u00e1rol\u00e1s\u00e1ra",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "question": "A C# nyelvben melyik kulcssz\u00f3val jel\u00f6l\u00fcnk absztrakt oszt\u00e1lyt?",
+        "answers": [
+            {
+                "text": "interface",
+                "isCorrect": false
+            },
+            {
+                "text": "abstract",
+                "isCorrect": true
+            },
+            {
+                "text": "base",
+                "isCorrect": false
+            },
+            {
+                "text": "override",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "question": "Melyik kulcssz\u00f3 biztos\u00edtja C#-ban az er\u0151forr\u00e1sok automatikus felszabad\u00edt\u00e1s\u00e1t egy blokk v\u00e9g\u00e9n?",
+        "answers": [
+            {
+                "text": "using",
+                "isCorrect": true
+            },
+            {
+                "text": "try",
+                "isCorrect": false
+            },
+            {
+                "text": "finally",
+                "isCorrect": false
+            },
+            {
+                "text": "catch",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "question": "Melyik LINQ kulcssz\u00f3val sz\u0171r\u00fcnk le elemeket egy felt\u00e9tel alapj\u00e1n?",
+        "answers": [
+            {
+                "text": "Select",
+                "isCorrect": false
+            },
+            {
+                "text": "Where",
+                "isCorrect": true
+            },
+            {
+                "text": "Sum",
+                "isCorrect": false
+            },
+            {
+                "text": "Join",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "question": "Borbardilllo crocodillo",
+        "answers": [
+            {
+                "text": "1",
+                "isCorrect": false
+            },
+            {
+                "text": "2",
+                "isCorrect": false
+            },
+            {
+                "text": "3",
+                "isCorrect": true
+            },
+            {
+                "text": "4",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "question": "fsdfsdf",
+        "answers": [
+            {
+                "text": "sdfsdfsdf",
+                "isCorrect": false
+            },
+            {
+                "text": "sdfsdfsdf",
+                "isCorrect": false
+            },
+            {
+                "text": "fsdfsdfsdf",
+                "isCorrect": true
+            },
+            {
+                "text": "fsdfsdfsdf",
+                "isCorrect": false
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "question": "1+1",
+        "answers": [
+            {
+                "text": "2+2",
+                "isCorrect": false
+            },
+            {
+                "text": "3+3",
+                "isCorrect": false
+            },
+            {
+                "text": "4",
+                "isCorrect": false
+            },
+            {
+                "text": "2",
+                "isCorrect": true
+            }
+        ]
+    }
 ]
