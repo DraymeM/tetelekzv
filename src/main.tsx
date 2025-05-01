@@ -8,15 +8,22 @@ import reportWebVitals from "./reportWebVitals.ts";
 import Applayout from "./components/AppLayout.tsx";
 import Spinner from "./components/Spinner.tsx";
 import NotFoundPage from "./components/404.tsx";
+import { ToastContainer } from "react-toastify";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import type { RouterContext } from "./api/types";
 
 const queryClient = new QueryClient();
 
-// Create the router
+// Create the router with proper context typing
 const router = createRouter({
   routeTree,
   basepath: "/tetelekzv",
   defaultPreload: "intent",
-  context: {},
+  context: () =>
+    ({
+      isAuthenticated: false,
+      isSuperUser: false,
+    }) as RouterContext,
   defaultComponent: Applayout,
   defaultPendingComponent: Spinner,
   defaultNotFoundComponent: NotFoundPage,
@@ -28,8 +35,23 @@ const router = createRouter({
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
+    RouterContext: RouterContext;
   }
 }
+
+const RouterWrapper = () => {
+  const { isAuthenticated, isSuperUser } = useAuth();
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        isAuthenticated,
+        isSuperUser,
+      }}
+    />
+  );
+};
 
 const rootElement = document.getElementById("app");
 
@@ -38,9 +60,23 @@ if (rootElement && !rootElement.innerHTML) {
 
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterWrapper />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeButton={true}
+            rtl={false}
+            pauseOnFocusLoss={true}
+            draggable={true}
+            pauseOnHover={true}
+            theme="dark"
+          />
+        </QueryClientProvider>
+      </AuthProvider>
     </StrictMode>
   );
 }

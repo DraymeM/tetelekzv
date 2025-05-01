@@ -1,6 +1,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+import { useNavigate } from "@tanstack/react-router";
 import type { Answer, NewMultiQuestion } from "../api/types";
 import { createMultiQuestion } from "../api/repo";
 import FormContainer from "./common/Forms/FormContainer";
@@ -8,6 +9,8 @@ import QuestionInput from "./common/Forms/QuestionInput";
 import AnswerInput from "./common/Forms/AnswerInput";
 import SubmitButton from "./common/Forms/SubmitButton";
 import Spinner from "./Spinner";
+import { toast } from "react-toastify";
+import Navbar from "./Navbar";
 
 const answerSchema = z.object({
   text: z.string().min(1, "A válasz szövege nem lehet üres"),
@@ -25,6 +28,7 @@ const multiQuestionSchema = z.object({
 });
 
 const MultiQuestionForm: React.FC = () => {
+  const navigate = useNavigate();
   const [question, setQuestion] = useState("");
   const [answers, setAnswers] = useState<Answer[]>([
     { text: "", isCorrect: false },
@@ -65,10 +69,13 @@ const MultiQuestionForm: React.FC = () => {
       });
       setTouched({ question: false, answers: [false, false, false, false] });
       setSubmitAttempted(false);
+      toast.success("Kérdés létrehozva!");
       setSuccess(`Kérdés létrehozva!`);
+      navigate({ to: "/mchoiceq" });
       setTimeout(() => setSuccess(null), 3000);
     },
     onError: (err: any) => {
+      toast.error("Nem sikerült a kérdés létrehozása!");
       setError(
         err.response?.data?.error ||
           err.message ||
@@ -132,39 +139,42 @@ const MultiQuestionForm: React.FC = () => {
 
   return (
     <Suspense fallback={<Spinner />}>
-      <FormContainer
-        error={error}
-        success={success}
-        label="Új Felelet Választós Kérdés"
-      >
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <QuestionInput
-            question={question}
-            setQuestion={setQuestion}
-            fieldErrors={fieldErrors}
-            touched={touched}
-          />
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Válaszok
-            </label>
-            {answers.map((answer, index) => (
-              <AnswerInput
-                key={index}
-                answer={answer}
-                index={index}
-                updateAnswer={updateAnswer}
-                fieldErrors={fieldErrors.answers[index]}
-                touched={touched.answers[index]}
-              />
-            ))}
-          </div>
-          <SubmitButton
-            isPending={mutation.isPending}
-            label="Kérdés Létrehozása"
-          />
-        </form>
-      </FormContainer>
+      <Navbar />
+      <div className="max-w-4xl mx-auto items-center">
+        <FormContainer
+          error={error}
+          success={success}
+          label="Új Felelet Választós Kérdés"
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <QuestionInput
+              question={question}
+              setQuestion={setQuestion}
+              fieldErrors={fieldErrors}
+              touched={touched}
+            />
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Válaszok
+              </label>
+              {answers.map((answer, index) => (
+                <AnswerInput
+                  key={index}
+                  answer={answer}
+                  index={index}
+                  updateAnswer={updateAnswer}
+                  fieldErrors={fieldErrors.answers[index]}
+                  touched={touched.answers[index]}
+                />
+              ))}
+            </div>
+            <SubmitButton
+              isPending={mutation.isPending}
+              label="Kérdés Létrehozása"
+            />
+          </form>
+        </FormContainer>
+      </div>
     </Suspense>
   );
 };

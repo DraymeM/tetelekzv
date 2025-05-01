@@ -2,13 +2,13 @@ import { z } from "zod";
 
 export const subsectionSchema = z.object({
   id: z.number().optional(),
-  title: z.string(),
+  title: z.string().min(1, "A cím nem lehet üres!"),
   description: z.string(),
 });
 
 export const sectionSchema = z.object({
   id: z.number().optional(),
-  content: z.string(),
+  content: z.string().min(1, "A szekció tartalma nem lehet üres!"),
   subsections: z
     .array(subsectionSchema)
     .nullable()
