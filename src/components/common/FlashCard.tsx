@@ -1,4 +1,3 @@
-// src/components/common/FlashCard.tsx
 import { useState, useEffect } from "react";
 import { FaQuestionCircle, FaCheckCircle, FaSpinner } from "react-icons/fa";
 
@@ -13,12 +12,12 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
 
   useEffect(() => {
     setIsLoading(true);
-    setFlipped(false); // always reset to question side
+    setFlipped(false);
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 300); // 300ms spinner when new card loads
+    }, 300);
 
-    return () => clearTimeout(timer); // clean up on unmount
+    return () => clearTimeout(timer);
   }, [question, answer]);
 
   const handleFlip = () => {

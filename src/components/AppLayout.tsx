@@ -11,15 +11,12 @@ const AppLayout: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen relative">
       <Navbar />
-
-      {/* Spinner overlay */}
       {isPending && (
         <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-50">
           <Spinner />
         </div>
       )}
 
-      {/* Content */}
       <div className="flex-1 relative">
         <Transition
           appear

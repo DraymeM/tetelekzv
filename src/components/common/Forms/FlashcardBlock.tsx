@@ -1,0 +1,47 @@
+import React from "react";
+import { FaTimes } from "react-icons/fa";
+import InputField from "./InputField";
+
+export interface Flashcard {
+  question: string;
+  answer: string;
+}
+
+export interface FlashcardBlockProps {
+  flashcard: Flashcard;
+  onUpdate: (field: keyof Flashcard, value: string) => void;
+  onRemove: () => void;
+  errors?: Partial<Record<keyof Flashcard, string>>;
+}
+
+const FlashcardBlock: React.FC<FlashcardBlockProps> = ({
+  flashcard,
+  onUpdate,
+  onRemove,
+  errors = {},
+}) => (
+  <div className="space-y-2 relative group">
+    <button
+      type="button"
+      onClick={onRemove}
+      className="absolute -top-3 -right-3 text-red-500 bg-gray-900 rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
+    >
+      <FaTimes className="w-5 h-5" />
+    </button>
+    <hr className="border-t-2 border-gray-300 w-full my-2" />
+    <InputField
+      label="Kérdés"
+      value={flashcard.question}
+      onChange={(e) => onUpdate("question", e.target.value)}
+      error={errors.question}
+    />
+    <InputField
+      label="Válasz"
+      value={flashcard.answer}
+      onChange={(e) => onUpdate("answer", e.target.value)}
+      error={errors.answer}
+    />
+  </div>
+);
+
+export default FlashcardBlock;

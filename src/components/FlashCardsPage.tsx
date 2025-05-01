@@ -1,30 +1,28 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Navbar from "./Navbar";
 import FlashCard from "./common/FlashCard";
 import TimerControls from "./common/TimerControls";
 import { useTimer } from "../hooks/useTimer";
-import { fetchQuestionsAll } from "../api/repo";
+import Spinner from "./Spinner";
+import { fetchRandomFlashcard } from "../api/repo";
+import type { Flashcard } from "../api/types";
 
 export default function FlashCardsPage() {
+  const queryClient = useQueryClient();
   const {
-    data: questions,
+    data: flashcard,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["allQuestions"],
-    queryFn: fetchQuestionsAll,
+  } = useQuery<Flashcard, Error>({
+    queryKey: ["randomFlashcard"],
+    queryFn: fetchRandomFlashcard,
+    retry: 2,
+    refetchOnWindowFocus: false,
   });
 
-  const [currentIdx, setCurrentIdx] = useState<number | null>(null);
-
   const pickRandom = () => {
-    if (!questions || questions.length === 0) return;
-    let idx = currentIdx;
-    while (idx === currentIdx) {
-      idx = Math.floor(Math.random() * questions.length);
-    }
-    setCurrentIdx(idx);
+    queryClient.invalidateQueries({ queryKey: ["randomFlashcard"] });
   };
 
   const {
@@ -39,20 +37,38 @@ export default function FlashCardsPage() {
   });
 
   useEffect(() => {
-    if (questions && currentIdx === null) {
-      pickRandom();
+    if (flashcard && !isLoading) {
+      queryClient.invalidateQueries({ queryKey: ["randomFlashcard"] });
     }
-  }, [questions]);
+  }, []);
 
-  if (isLoading) return <div className="p-10 text-center">Loading…</div>;
-  if (error instanceof Error)
+  if (isLoading)
+    return (
+      <>
+        <Navbar />
+        <div className="p-10 text-center">
+          <Spinner />
+        </div>
+      </>
+    );
+
+  if (error)
     return (
       <div className="p-10 text-center text-red-500">
         Error: {error.message}
       </div>
     );
 
-  const currentQuestion = currentIdx !== null ? questions?.[currentIdx] : null;
+  if (!flashcard || "error" in flashcard) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-10 text-center text-gray-400">
+          No flashcards available.
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -60,31 +76,26 @@ export default function FlashCardsPage() {
       <main className="flex flex-col items-center justify-center min-h-screen max-w-4xl mx-auto p-8 text-center">
         <h1 className="text-3xl font-bold mb-6">Villámkérdések</h1>
 
-        {currentQuestion && (
-          <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
-            <FlashCard
-              question={currentQuestion.question}
-              answer={currentQuestion.answer}
-            />
+        <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
+          <FlashCard question={flashcard.question} answer={flashcard.answer} />
 
-            <TimerControls
-              onNext={pickRandom}
-              timerEnabled={timerEnabled}
-              setTimerEnabled={setTimerEnabled}
-              timerDuration={timerDuration}
-              setTimerDuration={(seconds) => {
-                setTimerDuration(seconds);
-                setTimeLeft(seconds);
-              }}
-            />
+          <TimerControls
+            onNext={pickRandom}
+            timerEnabled={timerEnabled}
+            setTimerEnabled={setTimerEnabled}
+            timerDuration={timerDuration}
+            setTimerDuration={(seconds) => {
+              setTimerDuration(seconds);
+              setTimeLeft(seconds);
+            }}
+          />
 
-            {timerEnabled && (
-              <div className="text-gray-400 text-sm mt-4">
-                Következő kérdés {timeLeft} másodperc múlva
-              </div>
-            )}
-          </div>
-        )}
+          {timerEnabled && (
+            <div className="text-gray-400 text-sm mt-4">
+              Következő kérdés {timeLeft} másodperc múlva
+            </div>
+          )}
+        </div>
       </main>
     </>
   );

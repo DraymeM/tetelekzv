@@ -18,6 +18,7 @@ import { Route as MchoiceqImport } from './routes/mchoiceq'
 import { Route as FlashcardsImport } from './routes/flashcards'
 import { Route as IndexImport } from './routes/index'
 import { Route as TetelekIdImport } from './routes/tetelek/$id'
+import { Route as TetelekIdEditImport } from './routes/tetelek/$id/edit'
 
 // Create/Update Routes
 
@@ -61,6 +62,12 @@ const TetelekIdRoute = TetelekIdImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => TetelekRoute,
+} as any)
+
+const TetelekIdEditRoute = TetelekIdEditImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => TetelekIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -116,17 +123,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TetelekIdImport
       parentRoute: typeof TetelekImport
     }
+    '/tetelek/$id/edit': {
+      id: '/tetelek/$id/edit'
+      path: '/edit'
+      fullPath: '/tetelek/$id/edit'
+      preLoaderRoute: typeof TetelekIdEditImport
+      parentRoute: typeof TetelekIdImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface TetelekIdRouteChildren {
+  TetelekIdEditRoute: typeof TetelekIdEditRoute
+}
+
+const TetelekIdRouteChildren: TetelekIdRouteChildren = {
+  TetelekIdEditRoute: TetelekIdEditRoute,
+}
+
+const TetelekIdRouteWithChildren = TetelekIdRoute._addFileChildren(
+  TetelekIdRouteChildren,
+)
+
 interface TetelekRouteChildren {
-  TetelekIdRoute: typeof TetelekIdRoute
+  TetelekIdRoute: typeof TetelekIdRouteWithChildren
 }
 
 const TetelekRouteChildren: TetelekRouteChildren = {
-  TetelekIdRoute: TetelekIdRoute,
+  TetelekIdRoute: TetelekIdRouteWithChildren,
 }
 
 const TetelekRouteWithChildren =
@@ -139,7 +165,8 @@ export interface FileRoutesByFullPath {
   '/pmchq': typeof PmchqRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
-  '/tetelek/$id': typeof TetelekIdRoute
+  '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/tetelek/$id/edit': typeof TetelekIdEditRoute
 }
 
 export interface FileRoutesByTo {
@@ -149,7 +176,8 @@ export interface FileRoutesByTo {
   '/pmchq': typeof PmchqRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
-  '/tetelek/$id': typeof TetelekIdRoute
+  '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/tetelek/$id/edit': typeof TetelekIdEditRoute
 }
 
 export interface FileRoutesById {
@@ -160,7 +188,8 @@ export interface FileRoutesById {
   '/pmchq': typeof PmchqRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
-  '/tetelek/$id': typeof TetelekIdRoute
+  '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/tetelek/$id/edit': typeof TetelekIdEditRoute
 }
 
 export interface FileRouteTypes {
@@ -173,6 +202,7 @@ export interface FileRouteTypes {
     | '/tetelcreate'
     | '/tetelek'
     | '/tetelek/$id'
+    | '/tetelek/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -182,6 +212,7 @@ export interface FileRouteTypes {
     | '/tetelcreate'
     | '/tetelek'
     | '/tetelek/$id'
+    | '/tetelek/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -191,6 +222,7 @@ export interface FileRouteTypes {
     | '/tetelcreate'
     | '/tetelek'
     | '/tetelek/$id'
+    | '/tetelek/$id/edit'
   fileRoutesById: FileRoutesById
 }
 
@@ -253,7 +285,14 @@ export const routeTree = rootRoute
     },
     "/tetelek/$id": {
       "filePath": "tetelek/$id.tsx",
-      "parent": "/tetelek"
+      "parent": "/tetelek",
+      "children": [
+        "/tetelek/$id/edit"
+      ]
+    },
+    "/tetelek/$id/edit": {
+      "filePath": "tetelek/$id/edit.tsx",
+      "parent": "/tetelek/$id"
     }
   }
 }
