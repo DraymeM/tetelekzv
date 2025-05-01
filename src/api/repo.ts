@@ -1,108 +1,79 @@
 import apiClient from "./index";
-import phpClient from "./index";
-export interface ITetel {
-  id: number;
-  name: string;
-  osszegzes_id: number;
-  sections: number[];
-  kerdesek: number[];
-}
-export interface IQuestion {
-  id: number;
-  question: string;
-  answer: string;
-}
-export interface IOsszegzes {
-  id: number;
-  content: string;
-}
+import type {
+  Tetel,
+  TetelDetailsResponse,
+  TetelFormData,
+  NewMultiQuestion,
+  IMultiQuestion,
+  Flashcard,
+} from "./types";
 
-export interface ISection {
-  id: number;
-  tetel_id: number;
-  content: string;
-  subsection_id: number[];
-}
-
-export interface ISubsection {
-  id: number;
-  title: string;
-  description: string;
-}
-export interface IMultiQuestion {
-  id: number;
-  question: string;
-  answers: {
-    text: string;
-    isCorrect: boolean;
-  }[];
-}
-
-export async function fetchTetelek(): Promise<ITetel[]> {
-  const { data } = await apiClient.get<ITetel[]>("/tetel.json");
-  return data;
-}
-
-export async function fetchOsszegzesAll(): Promise<IOsszegzes[]> {
-  const { data } = await apiClient.get<IOsszegzes[]>("/osszegzes.json");
-  return data;
-}
-
-export async function fetchSectionsAll(): Promise<ISection[]> {
-  const { data } = await apiClient.get<ISection[]>("/section.json");
-  return data;
-}
-
-export async function fetchSubsectionsAll(): Promise<ISubsection[]> {
-  const { data } = await apiClient.get<ISubsection[]>("/subsection.json");
-  return data;
-}
-export async function fetchQuestionsAll(): Promise<IQuestion[]> {
-  const { data } = await apiClient.get<IQuestion[]>("/kerdesek.json");
-  return data;
-}
-
-/**
- * Returns the complete detail bundle for one tétel.
- */
-export async function fetchTetelDetail(id: number) {
-  const [tetelek, osszList, sectionList, subsectionList, questionList] =
-    await Promise.all([
-      fetchTetelek(),
-      fetchOsszegzesAll(),
-      fetchSectionsAll(),
-      fetchSubsectionsAll(),
-      fetchQuestionsAll(),
-    ]);
-
-  const tetel = tetelek.find((t) => t.id === id);
-  if (!tetel) {
-    throw new Error(`Tétel with id=${id} not found`);
+export async function fetchTetelek(): Promise<Tetel[]> {
+  const res = await apiClient.get<Tetel[]>("/get_tetel_list.php");
+  if (!Array.isArray(res.data)) {
+    throw new Error(
+      "Expected an array of tetelek, received: " + JSON.stringify(res.data)
+    );
   }
+  return res.data;
+}
 
-  const osszegzes = osszList.find((o) => o.id === tetel.osszegzes_id) ?? null;
+export async function fetchTetelDetails(
+  tetelId: number
+): Promise<TetelDetailsResponse> {
+  const res = await apiClient.get<TetelDetailsResponse>(
+    `/get_tetel_details.php?id=${tetelId}`
+  );
+  if (!res.data || typeof res.data !== "object") {
+    throw new Error(
+      "Expected a tetel details object, received: " + JSON.stringify(res.data)
+    );
+  }
+  return res.data;
+}
 
-  const sections = sectionList
-    .filter((s) => s.tetel_id === tetel.id)
-    .map((s) => ({
-      ...s,
-      subsections: subsectionList.filter((sub) =>
-        s.subsection_id.includes(sub.id)
-      ),
-    }));
+export async function deleteTetel(tetelId: number): Promise<void> {
+  await apiClient.delete("/delete_tetel.php", {
+    data: { id: tetelId },
+  });
+}
 
-  const questions = questionList.filter((q) => tetel.kerdesek.includes(q.id));
+export async function updateTetel(
+  tetelId: number,
+  formData: TetelFormData
+): Promise<void> {
+  const res = await apiClient.post(`/update_tetel.php?id=${tetelId}`, formData);
+  if (res.status !== 200) {
+    throw new Error("Failed to update tetel");
+  }
+}
 
-  return { tetel, osszegzes, sections, questions };
+export async function createTetel(formData: TetelFormData): Promise<void> {
+  const res = await apiClient.post("/create_tetel.php", formData);
+  if (res.status !== 200) {
+    throw new Error("Failed to create tetel");
+  }
 }
 
 export async function createMultiQuestion(
-  question: Omit<IMultiQuestion, "id">
+  data: NewMultiQuestion
 ): Promise<IMultiQuestion> {
-  console.log("Fetching /tetelekzv/BackEnd/create_multiquestion.php", question);
-  const { data } = await phpClient.post<IMultiQuestion>(
+  const res = await apiClient.post<IMultiQuestion>(
     "/create_multiquestion.php",
-    question
+    data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
   );
-  return data;
+  return res.data;
+}
+export async function fetchRandomMultiQuestion(): Promise<IMultiQuestion> {
+  const res = await apiClient.get<IMultiQuestion>("/get_multiquestion.php");
+  return res.data;
+}
+export async function fetchRandomFlashcard(): Promise<Flashcard> {
+  const res = await apiClient.get<Flashcard>("/get_random_flashcard.php");
+  return res.data;
 }

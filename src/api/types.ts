@@ -1,0 +1,66 @@
+export interface Tetel {
+  id: number;
+  name: string;
+}
+export interface Subsection {
+  id?: number;
+  section_id?: number;
+  title: string;
+  description: string;
+}
+
+export interface Section {
+  id?: number;
+  tetel_id?: number;
+  content: string;
+  subsections: Subsection[];
+}
+
+export interface Flashcard {
+  id?: number;
+  tetel_id?: number;
+  question: string;
+  answer: string;
+}
+
+export interface TetelFormData {
+  name: string;
+  osszegzes: string;
+  sections: Section[];
+  flashcards: Flashcard[];
+}
+
+export interface Osszegzes {
+  id: number;
+  content: string;
+}
+
+export interface IMultiQuestion {
+  id: number;
+  question: string;
+  answers: {
+    text: string;
+    isCorrect: boolean;
+  }[];
+}
+export interface TetelDetailsResponse {
+  tetel: Tetel;
+  osszegzes: Osszegzes | null;
+  sections: Section[];
+  questions: Flashcard[] | null;
+}
+
+export interface IMultiQuestion {
+  id: number;
+  question: string;
+  answers: {
+    text: string;
+    isCorrect: boolean;
+  }[];
+}
+export interface Answer {
+  text: string;
+  isCorrect: boolean;
+}
+
+export type NewMultiQuestion = Omit<IMultiQuestion, "id">;

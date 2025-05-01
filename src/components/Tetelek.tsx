@@ -1,22 +1,11 @@
 import { useParams, Outlet, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Navbar from "./Navbar";
 import TetelekCard from "./common/TetelCard";
-import { FaPlus, FaSpinner } from "react-icons/fa";
-
-export interface ITetel {
-  id: number;
-  name: string;
-}
-
-// Axios fetch function
-async function fetchTetelek(): Promise<ITetel[]> {
-  const res = await axios.get<ITetel[]>(
-    "/tetelekzv/BackEnd/get_tetel_list.php"
-  );
-  return res.data;
-}
+import { FaPlus } from "react-icons/fa";
+import Spinner from "./Spinner";
+import { fetchTetelek } from "../api/repo";
+import type { ITetel } from "../api/repo";
 
 export default function Tetelek() {
   const { id } = useParams({ strict: false });
@@ -34,9 +23,13 @@ export default function Tetelek() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <FaSpinner className="animate-spin text-blue-500 text-6xl" />
-      </div>
+      <>
+        {" "}
+        <Navbar />
+        <div className="p-10 text-center">
+          <Spinner />
+        </div>
+      </>
     );
   }
 
@@ -66,10 +59,10 @@ export default function Tetelek() {
       )}
       <Link
         to="/tetelcreate"
-        className="fixed bottom-7 right-7 p-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center"
+        className="fixed bottom-7 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
         title="Adj hozzá saját tételt"
       >
-        <FaPlus size={24} />
+        <FaPlus size={20} />
       </Link>
     </div>
   );

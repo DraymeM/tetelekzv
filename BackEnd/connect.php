@@ -1,6 +1,6 @@
 <?php
 
-$useDev = false;//false on prod true on dev
+$useDev = true;//false on prod true on dev
 
 $config = require $useDev ? __DIR__ . '/dev.env.php' : __DIR__ . '/env.php';
 

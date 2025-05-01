@@ -9,7 +9,7 @@ interface TetelekCardProps {
 
 function TetelekCard({ id, name }: TetelekCardProps) {
   return (
-    <div className="p-4 bg-gray-800 shadow-md rounded-md transition duration-300 border-transparent hover:border-gray-400 border-2 cursor-pointer transform">
+    <div className="p-4 bg-gray-800 shadow-md rounded-md transition duration-300 border-transparent hover:border-gray-400 border-2  transform">
       <Link
         to={`/tetelek/$id`} // This matches the dynamic route for each ID
         params={{ id: id.toString() }} // Pass the dynamic route parameter
@@ -21,8 +21,8 @@ function TetelekCard({ id, name }: TetelekCardProps) {
             {name}
           </h3>
         </div>
-        <div className="flex items-center bg-gray-700 p-4 rounded-md h-full">
-          <FaChevronRight className="text-blue-500" size={20} />
+        <div className="flex items-center bg-gray-700 p-4 hover:cursor-pointer rounded-md text-teal-600 hover:text-teal-400 h-full">
+          <FaChevronRight className=" " size={20} />
         </div>
       </Link>
     </div>
