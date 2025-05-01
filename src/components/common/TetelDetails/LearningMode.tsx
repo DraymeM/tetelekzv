@@ -42,7 +42,7 @@ export const LearningMode: React.FC<LearningModeProps> = ({
               {canRandomize && (
                 <button
                   onClick={onNext}
-                  className="px-6 py-3 bg-orange-400 text-white rounded-lg
+                  className="px-6 py-3 bg-orange-400 text-white rounded-lg hover:cursor-pointer
                              hover:bg-orange-600 transition-colors flex items-center"
                 >
                   <FaSyncAlt className="mr-2 animate-spin" />
@@ -51,7 +51,7 @@ export const LearningMode: React.FC<LearningModeProps> = ({
               )}
               <button
                 onClick={onExit}
-                className="px-6 py-3 border border-gray-400 text-gray-300
+                className="px-6 py-3 border border-gray-400 text-gray-300 hover:cursor-pointer
                              rounded-lg hover:bg-gray-700 transition-colors"
               >
                 Vissza

@@ -7,18 +7,20 @@ header("Access-Control-Allow-Headers: Content-Type");
 require_once __DIR__ . '/connect.php';
 
 try {
-    // Fetch all questions
-    $stmt = $kapcsolat->query("SELECT id, question FROM questions");
-    $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch a single random question
+    $stmt = $kapcsolat->query("SELECT id, question FROM questions ORDER BY RAND() LIMIT 1");
+    $question = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $result = [];
-
-    foreach ($questions as $question) {
+    if ($question) {
+        // Fetch answers for the selected question
         $stmtAnswers = $kapcsolat->prepare("SELECT answer_text, is_correct FROM answers WHERE question_id = ?");
         $stmtAnswers->execute([$question["id"]]);
         $answers = $stmtAnswers->fetchAll(PDO::FETCH_ASSOC);
 
-        $result[] = [
+        // Shuffle answers
+        shuffle($answers);
+
+        $result = [
             "id" => (int)$question["id"],
             "question" => $question["question"],
             "answers" => array_map(function ($ans) {
@@ -28,9 +30,11 @@ try {
                 ];
             }, $answers),
         ];
-    }
 
-    echo json_encode($result);
+        echo json_encode($result);
+    } else {
+        echo json_encode(["error" => "No questions found"]);
+    }
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => "Hiba a lekérdezés során: " . $e->getMessage()]);
