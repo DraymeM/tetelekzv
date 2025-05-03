@@ -1,13 +1,25 @@
 <?php
+session_start();
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: https://danielmarkus.web.elte.hu");
 header("Access-Control-Allow-Methods: DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Credentials: true"); 
 
 require_once __DIR__ . '/../../connect.php';
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+// ✅ Check if user is authenticated and is a superuser
+if (
+    !isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true ||
+    !isset($_SESSION['superuser']) || $_SESSION['superuser'] != 1
+) {
+    http_response_code(403);
+    echo json_encode(["error" => "Nincs jogosultság a művelethez."]);
+    exit;
+}
 try {
     if ($_SERVER["REQUEST_METHOD"] !== "DELETE") {
         http_response_code(405);

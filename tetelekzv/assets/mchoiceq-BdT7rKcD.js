@@ -1,0 +1,1 @@
+import{M as o}from"./MultiChoicePage-7EH9hImH.js";import"./index-D11hHrFM.js";import"./useQuery-CIM2RExT.js";import"./utils-km2FGkQ4.js";import"./useTimer-BaOfsQwg.js";import"./repo-Di0wT-X2.js";const n=o;export{n as component};
