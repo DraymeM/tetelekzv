@@ -40,10 +40,11 @@ export default function TetelDetails() {
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      if (!isAuthenticated ) {
+      if (!isAuthenticated) {
         toast.error("Nincs engedélyed a művelethez");
         throw new Error("Nincs engedélyed a művelethez");
-      } if (!isSuperUser) {
+      }
+      if (!isSuperUser) {
         toast.error("Nincs engedélyed a művelethez");
         throw new Error("Nincs engedélyed a művelethez");
       }
@@ -51,11 +52,11 @@ export default function TetelDetails() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tetelek"] });
+      toast.success("Sikeresen törölted a tételt.");
       navigate({ to: "/tetelek" });
     },
     onError: (error) => {
       if (error.message === "Nincs engedélyed a művelethez") {
-        
       }
     },
   });

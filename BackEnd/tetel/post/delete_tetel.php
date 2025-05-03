@@ -14,7 +14,7 @@ error_reporting(E_ALL);
 // ✅ Check if user is authenticated and is a superuser
 if (
     !isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true ||
-    !isset($_SESSION['superuser']) || $_SESSION['superuser'] !== true
+    !isset($_SESSION['superuser']) || $_SESSION['superuser'] != 1
 ) {
     http_response_code(403);
     echo json_encode(["error" => "Nincs jogosultság a művelethez."]);
