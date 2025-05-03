@@ -105,7 +105,7 @@ export async function logout() {
 }
 
 export async function updatePassword(currentPassword: string, newPassword: string, confirmation: string) {
-  const res = await apiClient.post("/auth/update-password.php", {
+  const res = await apiClient.post("/auth/update_password.php", {
     current_password: currentPassword,
     password: newPassword,
     password_confirmation: confirmation

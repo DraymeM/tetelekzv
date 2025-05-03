@@ -1,0 +1,6 @@
+import MultiQuestionForm from "@/components/MultiQuestionForm";
+import { createLazyFileRoute } from "@tanstack/react-router";
+
+export const Route = createLazyFileRoute("/pmchq")({
+  component: MultiQuestionForm,
+});

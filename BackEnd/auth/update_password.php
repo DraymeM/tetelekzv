@@ -7,7 +7,7 @@ header("Access-Control-Allow-Credentials: true");
 require_once __DIR__ . '/../connect.php';
 
 // Check authentication
-if (!isset($_SESSION['authenticated'])) {  // <-- fixed line
+if (!isset($_SESSION['authenticated'])) {  
     http_response_code(401);
     echo json_encode(["error" => "Unauthorized"]);
     exit;
