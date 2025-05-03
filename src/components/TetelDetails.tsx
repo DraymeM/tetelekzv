@@ -14,8 +14,11 @@ import LearningMode from "./common/TetelDetails/LearningMode";
 import { fetchTetelDetails, deleteTetel } from "../api/repo";
 import type { TetelDetailsResponse } from "../api/types";
 import { FaArrowLeft, FaBookOpen, FaPen, FaTrash } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function TetelDetails() {
+  const { isAuthenticated } = useAuth();
   const { id } = useParams({ strict: false });
   const tetelId = Number(id);
   const location = useLocation();
@@ -36,10 +39,21 @@ export default function TetelDetails() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: () => deleteTetel(tetelId),
+    mutationFn: () => {
+      if (!isAuthenticated) {
+        toast.error("Nincs engedélyed a művelethez");
+        throw new Error("Nincs engedélyed a művelethez");
+      }
+      return deleteTetel(tetelId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tetelek"] });
       navigate({ to: "/tetelek" });
+    },
+    onError: (error) => {
+      if (error.message === "Nincs engedélyed a művelethez") {
+        toast.info("Ehhez a művelethez be kell jelentkezned!");
+      }
     },
   });
 
@@ -92,7 +106,7 @@ export default function TetelDetails() {
   return (
     <>
       <Navbar />
-      <main className="relative md:max-w-6xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
+      <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
         <div className="flex justify-between items-center mb-8">
           <Link
             to="/tetelek"
@@ -116,11 +130,9 @@ export default function TetelDetails() {
             </button>
           )}
         </div>
-
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-100">
           {tetel.name}
         </h1>
-
         {!learningMode ? (
           <div className="space-y-6">
             {sections.map((section) => (
@@ -165,7 +177,6 @@ export default function TetelDetails() {
             onExit={() => setLearningMode(false)}
           />
         )}
-
         <DeleteModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
@@ -174,25 +185,35 @@ export default function TetelDetails() {
           itemName={tetel.name}
         />
 
-        {/* Floating Action Buttons */}
-        <Link
-          to="/tetelek/$id/edit"
-          params={{ id: tetelId.toString() }}
-          className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
-                     hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
-          title="Szerkeszd a tételt"
-        >
-          <FaPen size={20} />
-        </Link>
+        {isAuthenticated && (
+          <>
+            {/* Floating Action Buttons */}
+            <Link
+              to="/tetelek/$id/edit"
+              params={{ id: tetelId.toString() }}
+              className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
+                 hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              title="Szerkeszd a tételt"
+            >
+              <FaPen size={20} />
+            </Link>
 
-        <button
-          onClick={() => setIsDeleteModalOpen(true)}
-          className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
-                     hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
-          title="Töröld a tételt"
-        >
-          <FaTrash size={20} />
-        </button>
+            <button
+              onClick={() => {
+                if (!isAuthenticated) {
+                  toast.error("Ehhez be kell jelentkezned!");
+                  return;
+                }
+                setIsDeleteModalOpen(true);
+              }}
+              className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
+                 hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
+              title="Töröld a tételt"
+            >
+              <FaTrash size={20} />
+            </button>
+          </>
+        )}
       </main>
     </>
   );

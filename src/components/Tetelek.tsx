@@ -5,11 +5,11 @@ import TetelekCard from "./common/TetelCard";
 import { FaPlus } from "react-icons/fa";
 import Spinner from "./Spinner";
 import { fetchTetelek } from "../api/repo";
-import type { ITetel } from "../api/repo";
+import { useAuth } from "../context/AuthContext";
 
 export default function Tetelek() {
   const { id } = useParams({ strict: false });
-
+  const { isAuthenticated } = useAuth();
   const {
     data: tetelek,
     isLoading,
@@ -57,13 +57,17 @@ export default function Tetelek() {
           ))}
         </div>
       )}
-      <Link
-        to="/tetelcreate"
-        className="fixed bottom-7 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
-        title="Adj hozzá saját tételt"
-      >
-        <FaPlus size={20} />
-      </Link>
+      {isAuthenticated && (
+        <>
+          <Link
+            to="/tetelcreate"
+            className="fixed bottom-7 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
+            title="Adj hozzá saját tételt"
+          >
+            <FaPlus size={20} />
+          </Link>
+        </>
+      )}
     </div>
   );
 }

@@ -2,8 +2,9 @@ import type { FC } from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Menu } from "@headlessui/react";
 import { GiSpinningSword, GiCardPick } from "react-icons/gi";
-import { FaScroll } from "react-icons/fa"; // Added new icon for 'Tételek'
+import { FaScroll, FaSignInAlt, FaUser } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
+import { useAuth } from "../context/AuthContext";
 
 const navLinks = [
   { name: "Tételek", to: "/tetelek", icon: FaScroll },
@@ -13,6 +14,7 @@ const navLinks = [
 
 const Navbar: FC = () => {
   const matchRoute = useMatchRoute();
+  const { isAuthenticated } = useAuth();
 
   const navLinkStyle: React.CSSProperties = {
     position: "relative",
@@ -27,13 +29,13 @@ const Navbar: FC = () => {
   const isHomeActive = matchRoute({ to: "/", fuzzy: true });
 
   return (
-    <nav className="fixed top-0 w-full mb-10 h-16 bg-gray-700 text-white flex items-center px-6 z-50 shadow shadow-gray-500">
+    <nav className="fixed top-0 w-full mb-10 h-16 bg-gray-800 text-white flex items-center px-6 z-50 shadow shadow-gray-800 border-b-2 border-gray-700">
       <div className="flex items-center w-full justify-between">
         <Link
           to="/"
           className={`flex items-center text-3xl font-semibold transition-all duration-300 ${
             isHomeActive
-              ? "text-blue-400 underline"
+              ? "text-emerald-400 underline"
               : "text-white hover:text-gray-200 hover:underline"
           }`}
           style={{
@@ -43,7 +45,7 @@ const Navbar: FC = () => {
           }}
         >
           <div className="hover:animate-spin">
-            <GiSpinningSword size={35} />
+            <GiSpinningSword size={25} />
           </div>
         </Link>
 
@@ -72,11 +74,30 @@ const Navbar: FC = () => {
               </Link>
             );
           })}
+          {isAuthenticated ? (
+            <Link
+              to="/auth/profile"
+              className="transition-all duration-300 flex items-center gap-2 bg-teal-800 rounded-full hover:text-gray-200 hover:underline"
+              style={navLinkStyle}
+            >
+              <FaUser size={20} />
+              Profil
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="transition-all duration-300 flex items-center gap-2 bg-teal-800 rounded-full hover:text-gray-200 hover:underline"
+              style={navLinkStyle}
+            >
+              <FaSignInAlt size={20} />
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile menu */}
         <Menu as="div" className="relative md:hidden">
-          <Menu.Button className="text-white p-2 rounded-md hover:bg-gray-800 hover:cursor-pointer border-gray-400 border-2 transition-colors duration-300">
+          <Menu.Button className="text-white p-1 rounded-md hover:bg-gray-800 hover:cursor-pointer border-gray-400 border-2 transition-colors duration-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -104,7 +125,7 @@ const Navbar: FC = () => {
                       to={link.to}
                       className={` px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
                         isActive
-                          ? "text-blue-400 underline"
+                          ? "text-emerald-400 underline"
                           : active
                             ? "bg-gray-700"
                             : "hover:bg-gray-600"
@@ -117,6 +138,28 @@ const Navbar: FC = () => {
                 </Menu.Item>
               );
             })}
+            <Menu.Item>
+              {({ active }) => (
+                <Link
+                  to={isAuthenticated ? "/auth/profile" : "/login"}
+                  className={`px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
+                    active ? "bg-gray-700" : "hover:bg-gray-600"
+                  }`}
+                >
+                  {isAuthenticated ? (
+                    <>
+                      <FaUser size={20} />
+                      Profil
+                    </>
+                  ) : (
+                    <>
+                      <FaSignInAlt size={20} />
+                      Login
+                    </>
+                  )}
+                </Link>
+              )}
+            </Menu.Item>
           </Menu.Items>
         </Menu>
       </div>

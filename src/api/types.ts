@@ -64,3 +64,8 @@ export interface Answer {
 }
 
 export type NewMultiQuestion = Omit<IMultiQuestion, "id">;
+
+export type RouterContext = {
+  isAuthenticated: boolean | false;
+  isSuperUser: boolean;
+};
