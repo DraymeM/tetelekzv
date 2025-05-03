@@ -71,7 +71,7 @@ const Register: React.FC = () => {
 
   return (
     <div>
-      <div className="max-w-2xl mx-auto items-center h-screen  justify-center overflow-hidden">
+      <div className="max-w-2xl mx-auto items-center h-screen py-50 justify-center overflow-hidden">
         <FormContainer error={error} success={success} label="Register">
           <form onSubmit={handleSubmit} className="space-y-4">
             <InputField

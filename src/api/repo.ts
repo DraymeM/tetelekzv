@@ -99,16 +99,17 @@ export async function login(username: string, password: string) {
   const res = await apiClient.post("/auth/login.php", { username, password });
   return res.data;
 }
+export async function logout() {
+  const res = await apiClient.post("/auth/logout.php");
+  return res.data;
+}
 
-export async function setPassword(
-  userId: number,
-  targetUserId: number,
-  newPassword: string
-) {
-  const res = await apiClient.post("/auth/set_password.php", {
-    userId,
-    targetUserId,
-    newPassword,
+export async function updatePassword(currentPassword: string, newPassword: string, confirmation: string) {
+  const res = await apiClient.post("/auth/update-password.php", {
+    current_password: currentPassword,
+    password: newPassword,
+    password_confirmation: confirmation
   });
   return res.data;
 }
+

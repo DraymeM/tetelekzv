@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 import FormContainer from "../Forms/FormContainer";
 import InputField from "../Forms/InputField";
 import SubmitButton from "../Forms/SubmitButton";
-import { login } from "../../../api/repo";
 import { useAuth } from "../../../context/AuthContext";
+
 const Login: React.FC = () => {
-  const { login: authLogin } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,10 +39,7 @@ const Login: React.FC = () => {
     }
 
     try {
-      const response = await login(username, password);
-
-      authLogin(response.userId.toString(), response.superuser);
-
+      await login(username, password);
       toast.success("Sikeres bejelentkezés!");
       navigate({ to: "/" });
     } catch (err: any) {
@@ -62,8 +59,8 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="max-w-2xl mx-auto items-center h-screen justify-center overflow-hidden">
+    <div >
+      <div className="max-w-2xl mx-auto items-center h-screen py-50 justify-center overflow-hidden">
         <FormContainer error={null} success={null} label="Bejelentkezés">
           <form onSubmit={handleSubmit} className="space-y-4">
             <InputField
