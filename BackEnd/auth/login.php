@@ -18,7 +18,7 @@ $username = $data['username'];
 $password = $data['password'];
 
 try {
-    $stmt = $kapcsolat->prepare("SELECT id, password, superuser FROM user WHERE username = ?");
+    $stmt = $kapcsolat->prepare("SELECT id, password, superuser, username FROM user WHERE username = ?");
     $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -30,6 +30,7 @@ try {
 
     // Store user data in session
     $_SESSION['user_id'] = $user['id'];
+    $_SESSION['username'] = $user['username'];
     $_SESSION['superuser'] = $user['superuser'];
     $_SESSION['authenticated'] = true;
 
@@ -42,7 +43,7 @@ try {
             'expires' => time() + 86400, // 1 day
             'path' => $sessionParams['path'],
             'domain' => $sessionParams['domain'],
-            'secure' => true,
+            'secure' => false,
             'httponly' => true,
             'samesite' => 'Lax'
         ]

@@ -18,7 +18,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
 export default function TetelDetails() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isSuperUser } = useAuth();
   const { id } = useParams({ strict: false });
   const tetelId = Number(id);
   const location = useLocation();
@@ -40,7 +40,10 @@ export default function TetelDetails() {
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated ) {
+        toast.error("Nincs engedélyed a művelethez");
+        throw new Error("Nincs engedélyed a művelethez");
+      } if (!isSuperUser) {
         toast.error("Nincs engedélyed a művelethez");
         throw new Error("Nincs engedélyed a művelethez");
       }
@@ -52,7 +55,7 @@ export default function TetelDetails() {
     },
     onError: (error) => {
       if (error.message === "Nincs engedélyed a művelethez") {
-        toast.info("Ehhez a művelethez be kell jelentkezned!");
+        
       }
     },
   });

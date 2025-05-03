@@ -29,13 +29,13 @@ const TetelekRoute = TetelekImport.update({
   id: '/tetelek',
   path: '/tetelek',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/tetelek.lazy').then((d) => d.Route))
 
 const TetelcreateRoute = TetelcreateImport.update({
   id: '/tetelcreate',
   path: '/tetelcreate',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/tetelcreate.lazy').then((d) => d.Route))
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -47,31 +47,31 @@ const PmchqRoute = PmchqImport.update({
   id: '/pmchq',
   path: '/pmchq',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/pmchq.lazy').then((d) => d.Route))
 
 const MchoiceqRoute = MchoiceqImport.update({
   id: '/mchoiceq',
   path: '/mchoiceq',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/mchoiceq.lazy').then((d) => d.Route))
 
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const FlashcardsRoute = FlashcardsImport.update({
   id: '/flashcards',
   path: '/flashcards',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/flashcards.lazy').then((d) => d.Route))
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const TetelekIdRoute = TetelekIdImport.update({
   id: '/$id',
@@ -83,7 +83,7 @@ const AuthProfileRoute = AuthProfileImport.update({
   id: '/auth/profile',
   path: '/auth/profile',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/auth/profile.lazy').then((d) => d.Route))
 
 const TetelekIdEditRoute = TetelekIdEditImport.update({
   id: '/edit',

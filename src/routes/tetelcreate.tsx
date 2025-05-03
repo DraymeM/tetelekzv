@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import TetelCreate from "../components/TetelCreate";
 import type { RouterContext } from "../api/types";
+import TetelCreate from "../components/TetelCreate";
 
 export const Route = createFileRoute("/tetelcreate")({
   component: TetelCreate,

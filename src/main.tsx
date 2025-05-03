@@ -14,7 +14,6 @@ import type { RouterContext } from "./api/types";
 
 const queryClient = new QueryClient();
 
-// Create the router with proper context typing
 const router = createRouter({
   routeTree,
   basepath: "/tetelekzv",
@@ -40,7 +39,15 @@ declare module "@tanstack/react-router" {
 }
 
 const RouterWrapper = () => {
-  const { isAuthenticated, isSuperUser } = useAuth();
+  const { isAuthenticated, isSuperUser, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <RouterProvider
