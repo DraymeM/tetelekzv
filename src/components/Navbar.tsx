@@ -40,7 +40,7 @@ const Navbar: FC = () => {
           }`}
           style={{
             ...navLinkStyle,
-            color: isHomeActive ? "#3498db" : "var(--text-color)",
+            color: isHomeActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
             fontWeight: isHomeActive ? "bold" : "normal",
           }}
         >
@@ -65,7 +65,7 @@ const Navbar: FC = () => {
                 }`}
                 style={{
                   ...navLinkStyle,
-                  color: isActive ? "#3498db" : "var(--text-color)",
+                  color: isActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
                   fontWeight: isActive ? "bold" : "normal",
                 }}
               >
@@ -74,25 +74,52 @@ const Navbar: FC = () => {
               </Link>
             );
           })}
-          {isAuthenticated ? (
-            <Link
-              to="/auth/profile"
-              className="transition-all duration-300 flex items-center gap-2 bg-teal-800 rounded-full hover:text-gray-200 hover:underline"
-              style={navLinkStyle}
-            >
-              <FaUser size={20} />
-              Profil
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="transition-all duration-300 flex items-center gap-2 bg-teal-800 rounded-full hover:text-gray-200 hover:underline"
-              style={navLinkStyle}
-            >
-              <FaSignInAlt size={20} />
-              Login
-            </Link>
-          )}
+          {isAuthenticated
+            ? (() => {
+                const isActive = matchRoute({
+                  to: "/auth/profile",
+                  fuzzy: true,
+                });
+                return (
+                  <Link
+                    to="/auth/profile"
+                    className={`transition-all duration-300 flex items-center gap-2 rounded-full ${
+                      isActive
+                        ? "text-emerald-400 underline"
+                        : "hover:text-gray-200 hover:underline bg-teal-600 rounded-full"
+                    }`}
+                    style={{
+                      ...navLinkStyle,
+                      color: isActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
+                      fontWeight: isActive ? "bold" : "normal",
+                    }}
+                  >
+                    <FaUser size={20} />
+                    Profil
+                  </Link>
+                );
+              })()
+            : (() => {
+                const isActive = matchRoute({ to: "/login", fuzzy: true });
+                return (
+                  <Link
+                    to="/login"
+                    className={`transition-all duration-300 flex items-center gap-2 rounded-full ${
+                      isActive
+                        ? "text-emerald-400 underline "
+                        : "hover:text-gray-200 hover:underline bg-teal-600 rounded-full"
+                    }`}
+                    style={{
+                      ...navLinkStyle,
+                      color: isActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
+                      fontWeight: isActive ? "bold" : "normal",
+                    }}
+                  >
+                    <FaSignInAlt size={20} />
+                    Login
+                  </Link>
+                );
+              })()}
         </div>
 
         {/* Mobile menu */}
@@ -139,26 +166,35 @@ const Navbar: FC = () => {
               );
             })}
             <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to={isAuthenticated ? "/auth/profile" : "/login"}
-                  className={`px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
-                    active ? "bg-gray-700" : "hover:bg-gray-600"
-                  }`}
-                >
-                  {isAuthenticated ? (
-                    <>
-                      <FaUser size={20} />
-                      Profil
-                    </>
-                  ) : (
-                    <>
-                      <FaSignInAlt size={20} />
-                      Login
-                    </>
-                  )}
-                </Link>
-              )}
+              {({ active }) => {
+                const authPath = isAuthenticated ? "/auth/profile" : "/login";
+                const isAuthActive = matchRoute({ to: authPath, fuzzy: true });
+
+                return (
+                  <Link
+                    to={authPath}
+                    className={`px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
+                      isAuthActive
+                        ? "text-emerald-400 underline"
+                        : active
+                          ? "bg-gray-700"
+                          : "hover:bg-gray-600"
+                    }`}
+                  >
+                    {isAuthenticated ? (
+                      <>
+                        <FaUser size={20} />
+                        Profil
+                      </>
+                    ) : (
+                      <>
+                        <FaSignInAlt size={20} />
+                        Login
+                      </>
+                    )}
+                  </Link>
+                );
+              }}
             </Menu.Item>
           </Menu.Items>
         </Menu>

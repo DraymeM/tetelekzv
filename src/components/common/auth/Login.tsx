@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { z } from "zod";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import FormContainer from "../Forms/FormContainer";
 import InputField from "../Forms/InputField";
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div >
+    <div>
       <div className="max-w-2xl mx-auto items-center h-screen py-50 justify-center overflow-hidden">
         <FormContainer error={null} success={null} label="Bejelentkezés">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -85,6 +85,14 @@ const Login: React.FC = () => {
             />
 
             <SubmitButton isPending={isPending} label="Bejelentkezés" />
+            <div className="text-left mt-2">
+              <Link
+                to="/register"
+                className="text-md text-teal-400 hover:underline"
+              >
+                Nincs fiókod? Regisztrálj
+              </Link>
+            </div>
           </form>
         </FormContainer>
       </div>

@@ -8,7 +8,7 @@ interface SpinnerProps {
 const Spinner: FC<SpinnerProps> = ({}) => {
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <FaSpinner className="animate-spin text-blue-500 text-6xl" />
+      <FaSpinner className="animate-spin text-teal-500 text-6xl" />
     </div>
   );
 };

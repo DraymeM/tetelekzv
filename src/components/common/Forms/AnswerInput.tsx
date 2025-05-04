@@ -37,7 +37,7 @@ const AnswerInput: React.FC<AnswerInputProps> = ({
       <Switch
         checked={answer.isCorrect}
         onChange={(checked) => updateAnswer(index, "isCorrect", checked)}
-        className={`${answer.isCorrect ? "bg-blue-600" : "bg-gray-600"} relative inline-flex h-6 w-11 items-center hover:cursor-pointer rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 animate-in fade-in duration-300`}
+        className={`${answer.isCorrect ? "bg-teal-600" : "bg-gray-600"} relative inline-flex h-6 w-11 items-center hover:cursor-pointer rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 animate-in fade-in duration-300`}
       >
         <span
           className={`${answer.isCorrect ? "translate-x-6" : "translate-x-1"} inline-block h-4 w-4 transform bg-white rounded-full transition-transform`}
