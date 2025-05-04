@@ -9,7 +9,8 @@ import { updatePassword } from "@/api/repo";
 import FormContainer from "../Forms/FormContainer";
 import InputField from "../Forms/InputField";
 import SubmitButton from "../Forms/SubmitButton";
-import { FiMenu, FiX, FiUser, FiLogOut } from "react-icons/fi";
+import { FiX, FiUser, FiLogOut } from "react-icons/fi";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 const Profile: React.FC = () => {
   const { logout, isAuthenticated, isSuperUser, username } = useAuth();
@@ -94,7 +95,7 @@ const Profile: React.FC = () => {
           onClick={() => setIsSidebarOpen(true)}
           aria-label="Open menu"
         >
-          <FiMenu size={24} />
+          <FaArrowAltCircleRight size={36} />
         </button>
       </div>
 
@@ -109,20 +110,20 @@ const Profile: React.FC = () => {
             {/* Mobile Close Button Inside Sidebar */}
             <div className="lg:hidden flex justify-end mb-4">
               <button
-                className="text-white"
+                className="text-white bg-gray-600 p-1 rounded"
                 onClick={() => setIsSidebarOpen(false)}
                 aria-label="Close menu"
               >
-                <FiX size={24} />
+                <FiX size={24} style={{ strokeWidth: 3 }} />
               </button>
             </div>
 
-            <Tab.List className="space-y-2">
+            <Tab.List className="space-y-4">
               <Tab
                 className={({ selected }) =>
-                  `block w-full px-4 py-2 text-sm font-medium transition-colors rounded text-left ${
+                  `block w-full px-4 py-4 text-xl font-medium text-center transition-colors rounded  hover:cursor-pointer ${
                     selected
-                      ? "bg-gray-700 text-blue-500"
+                      ? "bg-gray-700 text-teal-500 font-bold "
                       : "text-gray-300 hover:bg-gray-600"
                   }`
                 }
@@ -131,9 +132,9 @@ const Profile: React.FC = () => {
               </Tab>
               <Tab
                 className={({ selected }) =>
-                  `block w-full px-4 py-2 text-sm font-medium transition-colors rounded text-left ${
+                  `block w-full px-4 py-4 text-xl font-medium transition-colors rounded text-center hover:cursor-pointer ${
                     selected
-                      ? "bg-gray-700 text-blue-500"
+                      ? "bg-gray-700 text-teal-500 font-bold"
                       : "text-gray-300 hover:bg-gray-600"
                   }`
                 }

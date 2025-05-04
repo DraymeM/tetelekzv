@@ -3,13 +3,13 @@ import type { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Disclosure } from "@headlessui/react";
 import { FaChevronDown, FaSpinner, FaListUl } from "react-icons/fa";
-import { fetchTetelek, type ITetel } from "../../../api/repo";
-
+import { fetchTetelek } from "../../../api/repo";
+import type { Tetel } from "../../../api/types";
 const TetelListCard: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const { data, isLoading, error } = useQuery<ITetel[], Error>({
+  const { data, isLoading, error } = useQuery<Tetel[], Error>({
     queryKey: ["tetelek"],
     queryFn: fetchTetelek,
   });
@@ -25,7 +25,7 @@ const TetelListCard: FC = () => {
   return (
     <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-blue-300 mb-2 flex items-center gap-2">
+        <h3 className="text-xl font-semibold text-teal-300 mb-2 flex items-center gap-2">
           <FaListUl size={24} />
           Tétel Lista
         </h3>
