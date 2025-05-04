@@ -1,0 +1,1 @@
+import{c as o}from"./index-CyLvEBSo.js";import{M as t}from"./MultiChoicePage-BQ_uxsvM.js";import"./useQuery-D6mah_mr.js";import"./utils-km2FGkQ4.js";import"./useTimer-BnHJzkAq.js";import"./repo-Bzh9IUS-.js";const a=o("/mchoiceq")({component:t});export{a as Route};

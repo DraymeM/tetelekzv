@@ -1,1 +1,0 @@
-import{F as o}from"./FlashCardsPage-Cn0gEoei.js";import{c as r}from"./index-BiJQXA51.js";import"./useQuery-BN1_Qobg.js";import"./utils-km2FGkQ4.js";import"./FlashCard-DUQgt6hU.js";import"./useTimer-BSPJR_EY.js";import"./repo-B7dmna8k.js";const c=r("/flashcards")({component:o});export{c as Route};

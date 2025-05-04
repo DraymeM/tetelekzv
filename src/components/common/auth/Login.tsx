@@ -60,7 +60,7 @@ const Login: React.FC = () => {
 
   return (
     <div>
-      <div className="max-w-2xl mx-auto items-center h-screen py-50 justify-center overflow-hidden">
+      <div className="max-w-2xl mx-auto items-center h-screen pb-50 pt-35 justify-center overflow-hidden">
         <FormContainer error={null} success={null} label="Bejelentkezés">
           <form onSubmit={handleSubmit} className="space-y-4">
             <InputField
