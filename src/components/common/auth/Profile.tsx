@@ -123,7 +123,7 @@ const Profile: React.FC = () => {
                 className={({ selected }) =>
                   `block w-full px-4 py-4 text-xl font-medium text-center transition-colors rounded  hover:cursor-pointer ${
                     selected
-                      ? "bg-secondary text-primary font-bold "
+                      ? "bg-muted text-primary font-bold "
                       : "text-secondary-foreground hover:bg-muted"
                   }`
                 }
@@ -134,7 +134,7 @@ const Profile: React.FC = () => {
                 className={({ selected }) =>
                   `block w-full px-4 py-4 text-xl font-medium transition-colors rounded text-center hover:cursor-pointer ${
                     selected
-                      ? "bg-secondary text-primary font-bold "
+                      ? "bg-muted text-primary font-bold "
                       : "text-secondary-foreground hover:bg-muted"
                   }`
                 }
