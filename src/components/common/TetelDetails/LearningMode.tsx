@@ -51,8 +51,8 @@ export const LearningMode: React.FC<LearningModeProps> = ({
               )}
               <button
                 onClick={onExit}
-                className="px-6 py-3 border border-gray-400 text-gray-300 hover:cursor-pointer
-                             rounded-lg hover:bg-gray-700 transition-colors"
+                className="px-6 py-3 border border-border text-muted-foreground hover:text-foreground hover:cursor-pointer
+                             rounded-lg hover:bg-secondary transition-colors"
               >
                 Vissza
               </button>

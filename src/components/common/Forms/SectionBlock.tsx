@@ -33,11 +33,11 @@ const SectionBlock: React.FC<SectionBlockProps> = ({
   section,
   errors = {},
 }) => (
-  <div className="p-4 border rounded-lg border-gray-700 relative group">
+  <div className="p-4 border rounded-lg border-border relative group">
     <button
       type="button"
       onClick={onRemoveSection}
-      className="absolute -top-3 -right-3 text-red-500 bg-gray-900 rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
+      className="absolute -top-3 -right-3 text-red-500 bg-background rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
     >
       <FaTimes className="w-5 h-5" />
     </button>
@@ -50,7 +50,7 @@ const SectionBlock: React.FC<SectionBlockProps> = ({
     />
 
     <div className="mt-4 space-y-3">
-      <h4 className="text-md font-medium text-gray-400">Alszekciók</h4>
+      <h4 className="text-md font-medium text-foreground">Alszekciók</h4>
 
       {section.subsections.map((sub, idx) => (
         <SubsectionBlock

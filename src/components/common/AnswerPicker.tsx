@@ -38,7 +38,7 @@ export default function AnswerPicker({ answers, onPick }: AnswerPickerProps) {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <FaSpinner className="animate-spin text-blue-400 text-5xl" />
+        <FaSpinner className="animate-spin text-primary text-5xl" />
       </div>
     );
   }
@@ -61,11 +61,11 @@ export default function AnswerPicker({ answers, onPick }: AnswerPickerProps) {
               ${
                 showResult
                   ? answer.isCorrect
-                    ? "bg-green-600 text-white"
+                    ? "bg-green-600 text-foreground"
                     : selectedIdx === idx
-                      ? "bg-red-600 text-white"
-                      : "bg-gray-700 text-white"
-                  : "bg-gray-700 hover:bg-gray-600 text-white"
+                      ? "bg-red-600 text-foreground"
+                      : "bg-muted text-foreground"
+                  : "bg-muted hover:bg-background text-foreground"
               }
             `}
           >

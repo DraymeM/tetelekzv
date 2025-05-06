@@ -47,7 +47,7 @@ export default function Tetelek() {
       <h2 className="text-3xl font-bold mb-8">Tételek</h2>
 
       {(tetelek ?? []).length === 0 ? (
-        <p className="p-4 bg-gray-800 shadow-md rounded-md transition  text-white duration-300 border-transparent hover:border-gray-400 border-2 cursor-pointer transform ">
+        <p className="p-4 bg-secondary shadow-md rounded-md transition  text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform ">
           Nincsenek tételek még.
         </p>
       ) : (

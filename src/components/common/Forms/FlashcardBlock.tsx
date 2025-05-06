@@ -24,11 +24,11 @@ const FlashcardBlock: React.FC<FlashcardBlockProps> = ({
     <button
       type="button"
       onClick={onRemove}
-      className="absolute -top-3 -right-3 text-red-500 bg-gray-900 rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
+      className="absolute -top-3 -right-3 text-red-500 bg-secondary rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
     >
       <FaTimes className="w-5 h-5" />
     </button>
-    <hr className="border-t-2 border-gray-300 w-full my-2" />
+    <hr className="border-t-2 border-border w-full my-2" />
     <InputField
       label="Kérdés"
       value={flashcard.question}

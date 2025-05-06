@@ -12,14 +12,14 @@ const QuestionInput: React.FC<QuestionInputProps> = ({
   touched,
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-300 mb-2">
+    <label className="block text-sm font-medium text-foreground mb-2">
       Kérdés
     </label>
     <input
       type="text"
       value={question}
       onChange={(e) => setQuestion(e.target.value)}
-      className={`w-full p-3 border rounded-lg bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+      className={`w-full p-3 border rounded-lg bg-secondary text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition ${
         touched.question && fieldErrors.question
           ? "border-red-500"
           : "border-gray-700"

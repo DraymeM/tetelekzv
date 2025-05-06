@@ -96,7 +96,7 @@ export default function MultiChoicePage() {
     return (
       <>
         <Navbar />
-        <div className="p-10 text-center text-gray-400">
+        <div className="p-10 text-center text-muted-foreground">
           No questions available.
         </div>
       </>
@@ -109,10 +109,12 @@ export default function MultiChoicePage() {
         <Navbar />
         <main className="flex flex-col items-center justify-center  mt-25 max-w-4xl mx-auto p-4 text-center">
           <h1 className="text-3xl font-bold mb-3">Felelet Választás</h1>
-          <p className="mb-6 text-gray-300">Csak egy válaszlehetőség jó!</p>
+          <p className="mb-6 text-secondary-foreground">
+            Csak egy válaszlehetőség jó!
+          </p>
 
           {/* Scoreboard */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6 text-gray-400 text-sm">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6 text-muted-foreground text-sm">
             <div className="flex items-center gap-2">
               <FaCheckCircle className="text-green-500" />
               <span>
@@ -136,7 +138,7 @@ export default function MultiChoicePage() {
 
           {/* Current Question */}
           <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
-            <div className="p-4 sm:p-6 rounded-lg bg-gray-800 text-white w-full overflow-auto max-h-[80vh]">
+            <div className="p-4 sm:p-6 rounded-lg bg-secondary text-foreground w-full overflow-auto max-h-[80vh]">
               <h2 className="text-xl font-semibold mb-4">
                 {currentQuestion.question}
               </h2>
@@ -164,7 +166,7 @@ export default function MultiChoicePage() {
             )}
 
             <button
-              className="mt-8 px-6 py-3 rounded bg-red-600 hover:bg-red-700 transition-all transform hover:scale-105 flex items-center gap-2"
+              className="mt-8 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:scale-105 flex items-center gap-2"
               onClick={handleReset}
             >
               <FaRedo />

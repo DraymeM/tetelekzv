@@ -2,9 +2,10 @@ import type { FC } from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Menu } from "@headlessui/react";
 import { GiSpinningSword, GiCardPick } from "react-icons/gi";
-import { FaScroll, FaSignInAlt, FaUser } from "react-icons/fa";
+import { FaScroll, FaSignInAlt, FaUser, FaSun, FaMoon } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../hooks/useTheme";
 
 const navLinks = [
   { name: "Tételek", to: "/tetelek", icon: FaScroll },
@@ -15,6 +16,7 @@ const navLinks = [
 const Navbar: FC = () => {
   const matchRoute = useMatchRoute();
   const { isAuthenticated } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const navLinkStyle: React.CSSProperties = {
     position: "relative",
@@ -29,18 +31,19 @@ const Navbar: FC = () => {
   const isHomeActive = matchRoute({ to: "/", fuzzy: true });
 
   return (
-    <nav className="fixed top-0 w-full mb-10 h-16 bg-gray-800 text-white flex items-center px-6 z-50 shadow shadow-gray-800 border-b-2 border-gray-700">
+    <nav className="fixed top-0 w-full mb-10 h-16 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
       <div className="flex items-center w-full justify-between">
+        {/* Home link */}
         <Link
           to="/"
           className={`flex items-center text-3xl font-semibold transition-all duration-300 ${
-            isHomeActive
-              ? "text-emerald-400 underline"
-              : "text-white hover:text-gray-200 hover:underline"
+            isHomeActive ? "underline" : "hover:underline"
           }`}
           style={{
             ...navLinkStyle,
-            color: isHomeActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
+            color: isHomeActive
+              ? "var(--color-primary)"
+              : "var(--color-foreground)",
             fontWeight: isHomeActive ? "bold" : "normal",
           }}
         >
@@ -59,13 +62,13 @@ const Navbar: FC = () => {
                 key={link.to}
                 to={link.to}
                 className={`transition-all duration-300 flex items-center gap-2 ${
-                  isActive
-                    ? "text-yellow-400 underline"
-                    : "hover:text-gray-200 hover:underline"
+                  isActive ? "underline" : "hover:underline"
                 }`}
                 style={{
                   ...navLinkStyle,
-                  color: isActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
+                  color: isActive
+                    ? "var(--color-primary)"
+                    : "var(--color-foreground)",
                   fontWeight: isActive ? "bold" : "normal",
                 }}
               >
@@ -74,6 +77,17 @@ const Navbar: FC = () => {
               </Link>
             );
           })}
+
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className=" p-2 rounded-full transition-colors text-foreground boder-1 border-border bg-muted"
+            title="Toggle theme"
+          >
+            {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
+          </button>
+
+          {/* Auth link (Profile/Login) */}
           {isAuthenticated
             ? (() => {
                 const isActive = matchRoute({
@@ -84,14 +98,15 @@ const Navbar: FC = () => {
                   <Link
                     to="/auth/profile"
                     className={`transition-all duration-300 flex items-center gap-2 rounded-full ${
-                      isActive
-                        ? "text-emerald-400 underline"
-                        : "hover:text-gray-200 hover:underline bg-teal-600 rounded-full"
+                      isActive ? "underline" : "hover:underline"
                     }`}
                     style={{
                       ...navLinkStyle,
-                      color: isActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
+                      color: isActive
+                        ? "var(--color-primary)"
+                        : "var(--color-foreground)",
                       fontWeight: isActive ? "bold" : "normal",
+                      backgroundColor: "var(--color-secondary)",
                     }}
                   >
                     <FaUser size={20} />
@@ -104,14 +119,14 @@ const Navbar: FC = () => {
                 return (
                   <Link
                     to="/login"
-                    className={`transition-all duration-300 flex items-center gap-2 rounded-full ${
-                      isActive
-                        ? "text-emerald-400 underline "
-                        : "hover:text-gray-200 hover:underline bg-teal-600 rounded-full"
+                    className={`transition-all duration-300 flex items-center gap-2 rounded-full bg-secondary ${
+                      isActive ? "underline" : "hover:underline"
                     }`}
                     style={{
                       ...navLinkStyle,
-                      color: isActive ? "oklch(70.4% 0.14 182.503)" : "#ffffff",
+                      color: isActive
+                        ? "var(--color-primary)"
+                        : "var(--color-foreground)",
                       fontWeight: isActive ? "bold" : "normal",
                     }}
                   >
@@ -124,7 +139,14 @@ const Navbar: FC = () => {
 
         {/* Mobile menu */}
         <Menu as="div" className="relative md:hidden">
-          <Menu.Button className="text-white p-1 rounded-md hover:bg-gray-800 hover:cursor-pointer border-gray-400 border-2 transition-colors duration-300">
+          <button
+            onClick={toggleTheme}
+            className="mr-4 p-2 rounded-full transition-colors border-border border-1 text-foreground bg-muted"
+            title="Toggle theme"
+          >
+            {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
+          </button>
+          <Menu.Button className="p-1 rounded-md border-2 transition-colors duration-300 text-foreground border-border ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -141,7 +163,14 @@ const Navbar: FC = () => {
             </svg>
           </Menu.Button>
 
-          <Menu.Items className="absolute right-0 w-48 bg-gray-800 text-white border-gray-400 border-2 mt-2 shadow-lg transition-all transform scale-95 hover:scale-100">
+          <Menu.Items
+            className="absolute right-0 w-48 mt-2 border-2 shadow-lg transition-all transform scale-95 hover:scale-100"
+            style={{
+              backgroundColor: "var(--color-background)",
+              color: "var(--color-foreground)",
+              borderColor: "var(--color-border)",
+            }}
+          >
             {navLinks.map((link) => {
               const isActive = matchRoute({ to: link.to, fuzzy: true });
               const Icon = link.icon;
@@ -150,13 +179,14 @@ const Navbar: FC = () => {
                   {({ active }) => (
                     <Link
                       to={link.to}
-                      className={` px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
-                        isActive
-                          ? "text-emerald-400 underline"
-                          : active
-                            ? "bg-gray-700"
-                            : "hover:bg-gray-600"
+                      className={`px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
+                        isActive ? "underline" : active ? "bg-muted" : ""
                       }`}
+                      style={{
+                        color: isActive
+                          ? "var(--color-primary)"
+                          : "var(--color-foreground)",
+                      }}
                     >
                       <Icon size={20} />
                       {link.name}
@@ -165,21 +195,23 @@ const Navbar: FC = () => {
                 </Menu.Item>
               );
             })}
+
+            {/* Mobile auth button */}
             <Menu.Item>
               {({ active }) => {
                 const authPath = isAuthenticated ? "/auth/profile" : "/login";
                 const isAuthActive = matchRoute({ to: authPath, fuzzy: true });
-
                 return (
                   <Link
                     to={authPath}
                     className={`px-6 py-3 text-lg font-semibold transition duration-200 flex items-center gap-2 ${
-                      isAuthActive
-                        ? "text-emerald-400 underline"
-                        : active
-                          ? "bg-gray-700"
-                          : "hover:bg-gray-600"
+                      isAuthActive ? "underline" : active ? "bg-muted" : ""
                     }`}
+                    style={{
+                      color: isAuthActive
+                        ? "var(--color-primary)"
+                        : "var(--color-foreground)",
+                    }}
                   >
                     {isAuthenticated ? (
                       <>

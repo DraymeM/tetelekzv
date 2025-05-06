@@ -114,9 +114,9 @@ export default function TetelDetails() {
         <div className="flex justify-between items-center mb-8">
           <Link
             to="/tetelek"
-            className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md
-                       text-sm font-medium text-gray-400 hover:bg-gray-500 hover:text-white
-                       focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+            className="inline-flex items-center px-3 py-2 border border-border rounded-md
+                       text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground
+                       focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
           >
             <FaArrowLeft className="mr-2" />
             Vissza a tételekhez
@@ -134,7 +134,7 @@ export default function TetelDetails() {
             </button>
           )}
         </div>
-        <h1 className="text-3xl font-bold mb-8 text-center text-gray-100">
+        <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
           {tetel.name}
         </h1>
         {!learningMode ? (
@@ -142,32 +142,34 @@ export default function TetelDetails() {
             {sections.map((section) => (
               <div
                 key={section.id}
-                className="bg-gray-800 rounded-lg p-6 shadow-xl border border-gray-700
-                           hover:border-gray-500 transition-colors"
+                className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent
+                           hover:border-border transition-colors"
               >
-                <h2 className="text-xl font-semibold mb-4 text-gray-100">
+                <h2 className="text-xl font-semibold mb-4 text-foreground">
                   {section.content}
                 </h2>
                 {section.subsections?.map((sub) => (
                   <div
                     key={sub.id}
-                    className="ml-4 mb-4 p-4 bg-gray-700 rounded-lg"
+                    className="ml-4 mb-4 p-4 bg-muted rounded-lg"
                   >
-                    <h3 className="font-medium text-gray-100 mb-2">
+                    <h3 className="font-medium text-foreground mb-2">
                       {sub.title}
                     </h3>
-                    <p className="text-gray-300">{sub.description}</p>
+                    <p className="text-secondary-foreground">
+                      {sub.description}
+                    </p>
                   </div>
                 ))}
               </div>
             ))}
 
             {osszegzes?.content && (
-              <div className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-500 transition-colors">
-                <h2 className="text-2xl font-bold mb-4 text-gray-100">
+              <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
+                <h2 className="text-2xl font-bold mb-4 text-foreground">
                   Összegzés
                 </h2>
-                <p className="text-gray-300 whitespace-pre-line">
+                <p className="text-foreground whitespace-pre-line">
                   {osszegzes.content}
                 </p>
               </div>

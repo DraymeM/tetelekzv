@@ -1,6 +1,10 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import {
+  RouterProvider,
+  createRouter,
+  createHashHistory,
+} from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./styles.css";
@@ -11,11 +15,13 @@ import NotFoundPage from "./components/404.tsx";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import type { RouterContext } from "./api/types";
-
+const storedTheme = localStorage.getItem("theme") ?? "dark";
+document.documentElement.classList.add(storedTheme);
 const queryClient = new QueryClient();
 
 const router = createRouter({
   routeTree,
+  history: createHashHistory(),
   basepath: "/tetelekzv",
   defaultPreload: "intent",
   context: () =>
