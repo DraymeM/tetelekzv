@@ -17,8 +17,8 @@ export const sectionSchema = z.object({
 
 export const flashcardSchema = z.object({
   id: z.number().optional(),
-  question: z.string().min(1, "Üresen ne hagyd, zerd be ha nem akarsz."),
-  answer: z.string().min(1, "Üresen ne hagyd, zerd be ha nem akarsz."),
+  question: z.string().min(1, "Üresen ne hagyd, zárd be ha nem akarsz."),
+  answer: z.string().min(1, "Üresen ne hagyd, zárd be ha nem akarsz."),
 });
 
 export const tetelSchema = z.object({

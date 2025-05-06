@@ -1,16 +1,6 @@
 <?php
-session_start();
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: https://danielmarkus.web.elte.hu");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Credentials: true");
-if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-    http_response_code(401);
-    echo json_encode(["authenticated" => false]);
-    exit;
-}
-require_once __DIR__ . '/../../connect.php';
+require_once __DIR__ . '/../../core/bootstrap.php';
+require_once __DIR__ . '/../../core/validate.php'; // Include the validate.php file
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -24,15 +14,33 @@ try {
     $input = json_decode(file_get_contents("php://input"), true);
     $tetelId = $_GET["id"] ?? null;
 
+    // Validate Tetel ID
     if (!$tetelId || !is_numeric($tetelId)) {
         http_response_code(400);
         echo json_encode(["error" => "Érvénytelen ID."]);
         exit;
     }
 
+    // Validate all the input fields using validate.php functions
+    validateString("name", $input["name"]);
+    validateString("osszegzes", $input["osszegzes"]);
+    validateArray("sections", $input["sections"]);
+    validateArray("flashcards", $input["flashcards"]);
+
+    // Validate each section and subsections
+    foreach ($input["sections"] as $section) {
+        validateString("section content", $section["content"]);
+        validateArray("subsections", $section["subsections"]);
+        foreach ($section["subsections"] as $subsection) {
+            validateString("subsection title", $subsection["title"]);
+            validateString("subsection description", $subsection["description"]);
+        }
+    }
+
+    // Start the transaction
     $kapcsolat->beginTransaction();
 
-    // Update summary
+    // Update summary (osszegzes)
     $stmt = $kapcsolat->prepare("SELECT osszegzes_id FROM tetel WHERE id = ?");
     $stmt->execute([$tetelId]);
     $osszegzesId = $stmt->fetchColumn();
@@ -75,6 +83,7 @@ try {
         $stmt->execute([$tetelId, $fc["question"], $fc["answer"]]);
     }
 
+    // Commit the transaction
     $kapcsolat->commit();
 
     echo json_encode(["success" => true]);

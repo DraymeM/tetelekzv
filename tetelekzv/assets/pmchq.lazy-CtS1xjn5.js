@@ -1,1 +1,0 @@
-import{M as o}from"./MultiQuestionForm-_IIP-4bn.js";import{c as t}from"./index-DwmhrtAx.js";import"./useMutation-g6LjvKS5.js";import"./utils-km2FGkQ4.js";import"./SubmitButton-DJYTJT8n.js";import"./repo-d0VTsCf5.js";const a=t("/pmchq")({component:o});export{a as Route};

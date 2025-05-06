@@ -1,65 +1,41 @@
 <?php
-session_start();
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: https://danielmarkus.web.elte.hu");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-    http_response_code(401);
-    echo json_encode(["authenticated" => false]);
-    exit;
-}
-// Enable debugging temporarily
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-require_once __DIR__ . '/../../connect.php';
+require_once __DIR__ . '/../../core/bootstrap.php';
+require_once __DIR__ . '/../../core/validate.php'; 
 
 try {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data = json_decode(file_get_contents("php://input"), true);
-
-        // Validate input
-        if (
-            !isset($data["question"]) ||
-            !is_string($data["question"]) ||
-            !isset($data["answers"]) ||
-            !is_array($data["answers"]) ||
-            count($data["answers"]) < 2 ||
-            !array_reduce($data["answers"], fn($carry, $ans) => $carry && isset($ans["text"]) && isset($ans["isCorrect"]) && is_string($ans["text"]) && is_bool($ans["isCorrect"]), true)
-        ) {
+        validateString("question", $data["question"]); 
+        validateArray("answers", $data["answers"]); 
+        foreach ($data["answers"] as $answer) {
+            validateString("answer text", $answer["text"]);
+            if (!isset($answer["isCorrect"]) || !is_bool($answer["isCorrect"])) {
+                throw new Exception("Érvénytelen válasz isCorrect mező");
+            }
+        }
+        if (count($data["answers"]) < 2) {
             http_response_code(400);
-            echo json_encode(["error" => "Érvénytelen kérdés vagy válaszok"]);
+            echo json_encode(["error" => "Legalább két válasz szükséges"]);
             exit;
         }
 
-        // Check for at least one correct answer
         $hasCorrect = array_reduce($data["answers"], fn($carry, $ans) => $carry || $ans["isCorrect"], false);
         if (!$hasCorrect) {
             http_response_code(400);
             echo json_encode(["error" => "Legalább egy válasznak helyesnek kell lennie"]);
             exit;
         }
-
-        // Start transaction
         $kapcsolat->beginTransaction();
-
-        // Insert question into questions
         $stmt = $kapcsolat->prepare("INSERT INTO questions (question) VALUES (?)");
         $stmt->execute([$data["question"]]);
         $questionId = $kapcsolat->lastInsertId();
 
-        // Insert answers into answers
         $stmt = $kapcsolat->prepare("INSERT INTO answers (question_id, answer_text, is_correct) VALUES (?, ?, ?)");
         foreach ($data["answers"] as $answer) {
             $stmt->execute([$questionId, $answer["text"], $answer["isCorrect"] ? 1 : 0]);
         }
 
-        // Commit transaction
         $kapcsolat->commit();
-
-        // Prepare response
         $newQuestion = [
             "id" => (int)$questionId,
             "question" => $data["question"],
@@ -74,7 +50,6 @@ try {
     http_response_code(400);
     echo json_encode(["error" => "Érvénytelen kérés"]);
 } catch (Exception $e) {
-    // Rollback on error
     if ($kapcsolat->inTransaction()) {
         $kapcsolat->rollBack();
     }

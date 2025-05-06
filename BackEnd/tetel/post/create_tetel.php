@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../core/bootstrap.php';
+require_once __DIR__ . '/../../core/validate.php'; // Include the validate.php file
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -12,14 +13,28 @@ try {
 
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (
-        !isset($data["name"], $data["osszegzes"], $data["sections"], $data["flashcards"]) ||
-        !is_string($data["name"]) || !is_string($data["osszegzes"]) ||
-        !is_array($data["sections"]) || !is_array($data["flashcards"])
-    ) {
-        http_response_code(400);
-        echo json_encode(["error" => "Hiányzó vagy érvénytelen mezők."]);
-        exit;
+    // Validate the required fields
+    validateString("name", $data["name"]);
+    validateString("osszegzes", $data["osszegzes"]);
+    validateArray("sections", $data["sections"]);
+    validateArray("flashcards", $data["flashcards"]);
+
+    // Validate sections content
+    foreach ($data["sections"] as $section) {
+        validateString("section content", $section["content"]);
+        if (isset($section["subsections"])) {
+            validateArray("subsections", $section["subsections"]);
+            foreach ($section["subsections"] as $sub) {
+                validateString("subsection title", $sub["title"]);
+                validateString("subsection description", $sub["description"]);
+            }
+        }
+    }
+
+    // Validate flashcards
+    foreach ($data["flashcards"] as $card) {
+        validateString("flashcard question", $card["question"]);
+        validateString("flashcard answer", $card["answer"]);
     }
 
     $kapcsolat->beginTransaction();
