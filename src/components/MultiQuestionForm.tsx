@@ -154,9 +154,7 @@ const MultiQuestionForm: React.FC = () => {
               touched={touched}
             />
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Válaszok
-              </label>
+              <label className="block text-sm font-medium mb-2">Válaszok</label>
               {answers.map((answer, index) => (
                 <AnswerInput
                   key={index}

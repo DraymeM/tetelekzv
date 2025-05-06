@@ -63,7 +63,7 @@ export default function FlashCardsPage() {
     return (
       <>
         <Navbar />
-        <div className="p-10 text-center text-gray-400">
+        <div className="p-10 text-center text-muted">
           No flashcards available.
         </div>
       </>

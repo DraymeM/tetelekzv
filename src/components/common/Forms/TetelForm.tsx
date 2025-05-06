@@ -245,7 +245,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
             </div>
 
             <div className="flex justify-between items-center">
-              <h4 className="text-md font-medium text-gray-400">FlashCard</h4>
+              <h4 className="text-md font-medium text-foreground">FlashCard</h4>
             </div>
 
             {flashcards.map((fc, fcIndex) => {

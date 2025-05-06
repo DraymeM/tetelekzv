@@ -47,8 +47,8 @@ export default function TimerControls({
       <Menu as="div" className="relative">
         <div>
           <Menu.Button
-            className="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md 
-                       text-sm transition focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:cursor-pointer"
+            className="inline-flex items-center px-4 py-2 bg-muted hover:bg-secondary text-foreground rounded-md 
+                       text-sm transition focus:outline-none focus:ring-2 focus:ring-primary hover:cursor-pointer"
           >
             {timerDuration} mp
           </Menu.Button>
@@ -64,7 +64,7 @@ export default function TimerControls({
         >
           <Menu.Items
             className="absolute bottom-full mb-2 w-40 sm:top-full sm:bottom-auto sm:mt-2 sm:mb-0 left-1/2 -translate-x-1/2 
-                       rounded-md bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                       rounded-md bg-secondary shadow-lg ring-1 ring-border ring-opacity-5 focus:outline-none"
           >
             <div className="py-1">
               {[5, 10, 30].map((seconds) => (
@@ -73,7 +73,9 @@ export default function TimerControls({
                     <button
                       onClick={() => setTimerDuration(seconds)}
                       className={`${
-                        active ? "bg-gray-600 text-white" : "text-gray-300"
+                        active
+                          ? "bg-muted text-muted-foreground"
+                          : "text-foreground"
                       } flex w-full items-center justify-between px-4 py-2 text-sm`}
                     >
                       <span>{seconds} mp</span>

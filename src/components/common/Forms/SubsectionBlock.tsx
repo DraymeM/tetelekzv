@@ -25,7 +25,7 @@ const SubsectionBlock: React.FC<SubsectionBlockProps> = ({
     <button
       type="button"
       onClick={onRemove}
-      className="absolute -top-3 -right-3 text-red-500 bg-gray-900 rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
+      className="absolute -top-3 -right-3 text-red-500 bg-background rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
     >
       <FaTimes className="w-5 h-5" />
     </button>

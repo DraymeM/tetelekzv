@@ -32,8 +32,8 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
         }`}
       >
         {/* Front side */}
-        <div className="absolute w-full h-full backface-hidden hover:cursor-pointer hover:border-gray-400 border-2 border-transparent bg-gray-800 rounded-md shadow-md p-4 flex flex-col justify-between">
-          <div className="inline-flex items-center text-lg font-semibold bg-blue-800 p-2 rounded text-gray-100">
+        <div className="absolute w-full h-full backface-hidden hover:cursor-pointer hover:border-border border-2 border-transparent bg-secondary rounded-md shadow-md p-4 flex flex-col justify-between">
+          <div className="inline-flex items-center text-lg font-semibold bg-blue-800 p-2 rounded text-white">
             <FaQuestionCircle className="mr-2" />
             Kérdés
           </div>
@@ -41,7 +41,7 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
             {isLoading ? (
               <FaSpinner className="animate-spin text-blue-400 text-3xl" />
             ) : (
-              <p className="text-gray-100 p-4 text-center overflow-auto">
+              <p className="text-foreground p-4 text-center overflow-auto">
                 {question}
               </p>
             )}
@@ -49,8 +49,8 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
         </div>
 
         {/* Back side */}
-        <div className="absolute w-full h-full backface-hidden rotate-y-180 hover:cursor-pointer hover:border-gray-400 border-2 border-transparent bg-gray-700 rounded-md shadow-md p-4 flex flex-col justify-between">
-          <div className="inline-flex items-center text-lg font-semibold p-2 rounded bg-green-800 text-gray-100">
+        <div className="absolute w-full h-full backface-hidden rotate-y-180 hover:cursor-pointer hover:border-border border-2 border-transparent bg-muted rounded-md shadow-md p-4 flex flex-col justify-between">
+          <div className="inline-flex items-center text-lg font-semibold p-2 rounded bg-green-800 text-white">
             <FaCheckCircle className="mr-2" />
             Válasz
           </div>
@@ -58,7 +58,7 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
             {isLoading ? (
               <FaSpinner className="animate-spin text-blue-400 text-3xl" />
             ) : (
-              <p className="text-gray-200 text-center mt-4 overflow-auto">
+              <p className="text-foreground text-center mt-4 overflow-auto">
                 {answer}
               </p>
             )}

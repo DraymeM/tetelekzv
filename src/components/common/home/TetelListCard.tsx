@@ -23,17 +23,17 @@ const TetelListCard: FC = () => {
   };
 
   return (
-    <div className="bg-gray-800 shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-gray-400 border-2">
+    <div className="bg-secondary shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2">
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-teal-300 mb-2 flex items-center gap-2">
+        <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
           <FaListUl size={24} />
           Tétel Lista
         </h3>
-        <div className="h-0.5 bg-gray-400 w-full mb-4" />
+        <div className="h-0.5 bg-border w-full mb-4" />
       </div>
 
       <div className="px-6 pb-6">
-        <p className="text-gray-400 mb-4">
+        <p className="text-foreground mb-4">
           Az alapvető tételek listája, amelyek segítenek a vizsga
           felkészülésében. A témák alapján könnyedén kereshetsz.
         </p>
@@ -42,7 +42,7 @@ const TetelListCard: FC = () => {
           {({ open }) => (
             <div>
               <Disclosure.Button
-                className="flex items-center gap-2 text-gray-300 hover:text-gray-100 hover:cursor-pointer transition"
+                className="flex items-center gap-2 text-secondary-foreground hover:text-foreground hover:cursor-pointer transition"
                 onClick={handleDisclosureClick}
               >
                 <span>{open ? "Lista bezárása" : "Lista megnyitása"}</span>
@@ -54,22 +54,21 @@ const TetelListCard: FC = () => {
               </Disclosure.Button>
 
               <Disclosure.Panel className="overflow-hidden transition-all duration-500 ease-in-out">
-                <div
-                  className="bg-gray-800 p-4 rounded-lg mt-4"
-                  style={{ backgroundColor: "#2d3748" }}
-                >
+                <div className="bg-muted p-4 rounded-lg mt-4">
                   {isLoading ? (
                     <div className="flex justify-center">
-                      <FaSpinner className="animate-spin text-blue-500 text-4xl" />
+                      <FaSpinner className="animate-spin text-primary text-4xl" />
                     </div>
                   ) : error ? (
                     <p className="text-red-400">Hiba: {error.message}</p>
                   ) : (
-                    <ol className="pl-6 text-gray-300 space-y-2">
+                    <ol className="pl-6 text-foreground0 space-y-2">
                       {firstThreeTetelek.length > 0 ? (
                         firstThreeTetelek.map((tétel, index) => (
-                          <li key={tétel.id} className="hover:text-gray-100">
-                            <span className="text-gray-400">{index + 1}. </span>
+                          <li key={tétel.id} className="hover:text-foreground">
+                            <span className="text-secondary-foreground">
+                              {index + 1}.{" "}
+                            </span>
                             {tétel.name}
                           </li>
                         ))

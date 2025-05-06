@@ -91,7 +91,7 @@ const Profile: React.FC = () => {
       {/* Mobile Hamburger Menu Toggle */}
       <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50 overflow-hidden">
         <button
-          className="text-white p-2 border-white rounded-md focus:outline-none"
+          className=" p-2 border-border rounded-md focus:outline-none"
           onClick={() => setIsSidebarOpen(true)}
           aria-label="Open menu"
         >
@@ -103,14 +103,14 @@ const Profile: React.FC = () => {
         <div className="flex mt-4 relative">
           {/* Sidebar */}
           <div
-            className={`w-64 p-6 space-y-4 bg-gray-800 transition-all duration-300 transform lg:h-[110dvh] mt-13 h-full fixed z-40 top-0 lg:relative ${
+            className={`w-64 p-6 space-y-4 bg-secondary transition-all duration-300 transform lg:h-[110dvh] mt-13 h-full fixed z-40 top-0 lg:relative ${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             } lg:translate-x-0`}
           >
             {/* Mobile Close Button Inside Sidebar */}
             <div className="lg:hidden flex justify-end mb-4">
               <button
-                className="text-white bg-gray-600 p-1 rounded"
+                className="text-foreground bg-muted p-1 rounded"
                 onClick={() => setIsSidebarOpen(false)}
                 aria-label="Close menu"
               >
@@ -123,8 +123,8 @@ const Profile: React.FC = () => {
                 className={({ selected }) =>
                   `block w-full px-4 py-4 text-xl font-medium text-center transition-colors rounded  hover:cursor-pointer ${
                     selected
-                      ? "bg-gray-700 text-teal-500 font-bold "
-                      : "text-gray-300 hover:bg-gray-600"
+                      ? "bg-secondary text-primary font-bold "
+                      : "text-secondary-foreground hover:bg-muted"
                   }`
                 }
               >
@@ -134,8 +134,8 @@ const Profile: React.FC = () => {
                 className={({ selected }) =>
                   `block w-full px-4 py-4 text-xl font-medium transition-colors rounded text-center hover:cursor-pointer ${
                     selected
-                      ? "bg-gray-700 text-teal-500 font-bold"
-                      : "text-gray-300 hover:bg-gray-600"
+                      ? "bg-secondary text-primary font-bold "
+                      : "text-secondary-foreground hover:bg-muted"
                   }`
                 }
               >
@@ -154,7 +154,7 @@ const Profile: React.FC = () => {
                     {/* Added mb-6 for spacing */}
                     <FiUser
                       size={100}
-                      className="text-white bg-gray-700 p-2 rounded-full"
+                      className="text-foreground bg-secondary p-2 rounded-full"
                     />
                     <div>
                       <p className="text-4xl font-bold mb-5 text-center justify-center">

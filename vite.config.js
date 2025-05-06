@@ -12,7 +12,7 @@ export default defineConfig({
     viteReact(),
     tailwindcss(),
   ],
-  base: "/tetelekzv",
+  base: "/tetelekzv/",
   test: {
     globals: true,
     environment: "jsdom",
