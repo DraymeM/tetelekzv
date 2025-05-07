@@ -1,10 +1,17 @@
 # TételekZV 📚
 
 **TételekZV** is a modern full-stack web application for organizing and preparing **tételek** (topics) for oral or written exams. Built with **React + TypeScript** and a **PHP backend**, it provides a sleek, form-based interface to structure learning into sections, subsections, and flashcards.
+## 📖 Table of Contents
 
+- [✨ Features](#-features)  
+- [🧑‍💻 Tech Stack](#-tech-stack)  
+- [🚀 Getting Started](#-getting-started)  
+- [🧪 Example: Section Block Component](#-example-section-block-component)  
+- [✅ Validation with Zod](#-validation-with-zod)  
+- [DB Setup](#db-setup)  
 ---
 
-## ✨ Features
+## ✨ Features 
 
 - ✅ **Create, edit, and manage** tételek with nested structure
 - ✍️ Markdown-style rich text editing (WIP)
