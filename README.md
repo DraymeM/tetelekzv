@@ -52,7 +52,8 @@ npm install
 npm run dev
 ```
 
-##Setup Backend (PHP)
+## Setup Backend (PHP)
+Make sure you installed php on your system
 ```bash
 cd BackEnd
 php -S localhost:8000
