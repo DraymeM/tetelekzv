@@ -1,1 +1,0 @@
-import{T as t}from"./Tetelek-CmTj5qUi.js";import{c as e}from"./index-hOu_68pd.js";import"./useQuery-DkrJjoao.js";import"./utils-km2FGkQ4.js";import"./repo-CO9k5sGB.js";const a=e("/tetelek")({component:t});export{a as Route};
