@@ -47,6 +47,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
+  // Validate on field change
   useEffect(() => {
     const result = tetelSchema.safeParse({
       name,
@@ -92,25 +93,25 @@ const TetelForm: React.FC<TetelFormProps> = ({
   };
 
   const handleAddSection = () => {
-    setSections([
-      ...sections,
+    setSections((prev) => [
+      ...prev,
       { id: Date.now() * -1, content: "", subsections: [] },
     ]);
   };
 
   const handleRemoveSection = (sectionId: number) => {
-    setSections(sections.filter((sec) => sec.id !== sectionId));
+    setSections((prev) => prev.filter((sec) => sec.id !== sectionId));
   };
 
   const handleSectionUpdate = (sectionId: number, content: string) => {
-    setSections(
-      sections.map((sec) => (sec.id === sectionId ? { ...sec, content } : sec))
+    setSections((prev) =>
+      prev.map((sec) => (sec.id === sectionId ? { ...sec, content } : sec))
     );
   };
 
   const handleAddSubsection = (sectionId: number) => {
-    setSections(
-      sections.map((sec) =>
+    setSections((prev) =>
+      prev.map((sec) =>
         sec.id === sectionId
           ? {
               ...sec,
@@ -130,8 +131,8 @@ const TetelForm: React.FC<TetelFormProps> = ({
     field: keyof Subsection,
     value: string
   ) => {
-    setSections(
-      sections.map((sec) =>
+    setSections((prev) =>
+      prev.map((sec) =>
         sec.id === sectionId
           ? {
               ...sec,
@@ -145,8 +146,8 @@ const TetelForm: React.FC<TetelFormProps> = ({
   };
 
   const handleRemoveSubsection = (sectionId: number, index: number) => {
-    setSections(
-      sections.map((sec) =>
+    setSections((prev) =>
+      prev.map((sec) =>
         sec.id === sectionId
           ? {
               ...sec,
@@ -158,8 +159,8 @@ const TetelForm: React.FC<TetelFormProps> = ({
   };
 
   const handleAddFlashcard = () => {
-    setFlashcards([
-      ...flashcards,
+    setFlashcards((prev) => [
+      ...prev,
       { id: Date.now() * -1, question: "", answer: "" },
     ]);
   };
@@ -169,14 +170,21 @@ const TetelForm: React.FC<TetelFormProps> = ({
     field: keyof Flashcard,
     value: string
   ) => {
-    setFlashcards(
-      flashcards.map((fc) => (fc.id === id ? { ...fc, [field]: value } : fc))
+    setFlashcards((prev) =>
+      prev.map((fc) => (fc.id === id ? { ...fc, [field]: value } : fc))
     );
   };
 
   const handleRemoveFlashcard = (id: number) => {
-    setFlashcards(flashcards.filter((fc) => fc.id !== id));
+    setFlashcards((prev) => prev.filter((fc) => fc.id !== id));
   };
+
+  // Scroll to top when an error or success message appears
+  useEffect(() => {
+    if (error || success) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [error, success]);
 
   return (
     <div>
@@ -189,7 +197,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                setTouched({ ...touched, name: true });
+                setTouched((t) => ({ ...t, name: true }));
               }}
               error={touched.name ? fieldErrors.name : undefined}
             />
@@ -199,7 +207,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
               value={osszegzes}
               onChange={(e) => {
                 setOsszegzes(e.target.value);
-                setTouched({ ...touched, osszegzes: true });
+                setTouched((t) => ({ ...t, osszegzes: true }));
               }}
               error={touched.osszegzes ? fieldErrors.osszegzes : undefined}
             />
@@ -222,12 +230,10 @@ const TetelForm: React.FC<TetelFormProps> = ({
                   }
                   onAddSubsection={() => handleAddSubsection(sec.id!)}
                   onRemoveSection={() => handleRemoveSection(sec.id!)}
-                  onUpdateSubsection={(index, field, value) =>
-                    handleSubsectionUpdate(sec.id!, index, field, value)
+                  onUpdateSubsection={(i, field, val) =>
+                    handleSubsectionUpdate(sec.id!, i, field, val)
                   }
-                  onRemoveSubsection={(index) =>
-                    handleRemoveSubsection(sec.id!, index)
-                  }
+                  onRemoveSubsection={(i) => handleRemoveSubsection(sec.id!, i)}
                   errors={touched.sections ? sectionErrors : {}}
                 />
               );
@@ -237,15 +243,11 @@ const TetelForm: React.FC<TetelFormProps> = ({
               <button
                 type="button"
                 onClick={handleAddSection}
-                className="flex items-center justify-center p-2 rounded-full bg-emerald-600 hover:cursor-pointer text-white hover:bg-emerald-700"
+                className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
               >
                 <FaPlus size={15} />
               </button>
               <span>Új Szekció</span>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <h4 className="text-md font-medium text-foreground">FlashCard</h4>
             </div>
 
             {flashcards.map((fc, fcIndex) => {
@@ -274,7 +276,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
               <button
                 type="button"
                 onClick={handleAddFlashcard}
-                className="flex items-center justify-center p-2 rounded-full bg-emerald-600 hover:cursor-pointer text-white hover:bg-emerald-700"
+                className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
               >
                 <FaPlus size={15} />
               </button>

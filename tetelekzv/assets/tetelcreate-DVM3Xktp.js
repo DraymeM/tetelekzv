@@ -1,1 +1,0 @@
-import{T as o}from"./TetelCreate-CjWY_hYs.js";import"./index-B3mK96cR.js";import"./useMutation-D8yuaxoC.js";import"./utils-km2FGkQ4.js";import"./TetelForm-Br9gphLC.js";import"./SubmitButton-ChVK-gER.js";import"./InputField-C6Mt1HMU.js";import"./repo-Dongd2NK.js";const s=o;export{s as component};

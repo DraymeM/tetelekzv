@@ -39,7 +39,7 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
           </div>
           <div className="flex-grow flex items-center justify-center">
             {isLoading ? (
-              <FaSpinner className="animate-spin text-blue-400 text-3xl" />
+              <FaSpinner className="animate-spin text-primary text-3xl" />
             ) : (
               <p className="text-foreground p-4 text-center overflow-auto">
                 {question}
@@ -56,7 +56,7 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
           </div>
           <div className="flex-grow flex items-center justify-center">
             {isLoading ? (
-              <FaSpinner className="animate-spin text-blue-400 text-3xl" />
+              <FaSpinner className="animate-spin text-primary text-3xl" />
             ) : (
               <p className="text-foreground text-center mt-4 overflow-auto">
                 {answer}
