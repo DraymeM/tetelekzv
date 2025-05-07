@@ -24,17 +24,16 @@ try {
 
     $kapcsolat->beginTransaction();
 
-    // 1. Insert into osszegzes
-    $stmt = $kapcsolat->prepare("INSERT INTO osszegzes (content) VALUES (?)");
-    $stmt->execute([$data["osszegzes"]]);
-    $osszegzesId = $kapcsolat->lastInsertId();
-
-    // 2. Insert into tetel
-    $stmt = $kapcsolat->prepare("INSERT INTO tetel (name, osszegzes_id) VALUES (?, ?)");
-    $stmt->execute([$data["name"], $osszegzesId]);
+    // 1. Insert into tetel
+    $stmt = $kapcsolat->prepare("INSERT INTO tetel (name) VALUES (?)");
+    $stmt->execute([$data["name"]]);
     $tetelId = $kapcsolat->lastInsertId();
 
-    // 3. Insert sections and subsections
+    // 2. Insert into osszegzes with foreign key reference to tetel
+    $stmt = $kapcsolat->prepare("INSERT INTO osszegzes (tetel_id, content) VALUES (?, ?)");
+    $stmt->execute([$tetelId, $data["osszegzes"]]);
+
+    // 3. Insert sections and their subsections
     $sectionStmt = $kapcsolat->prepare("INSERT INTO section (tetel_id, content) VALUES (?, ?)");
     $subsectionStmt = $kapcsolat->prepare("INSERT INTO subsection (section_id, title, description) VALUES (?, ?, ?)");
 
@@ -61,6 +60,7 @@ try {
 
     $kapcsolat->commit();
     echo json_encode(["success" => true, "tetel_id" => $tetelId]);
+
 } catch (Exception $e) {
     if ($kapcsolat->inTransaction()) {
         $kapcsolat->rollBack();

@@ -1,1 +1,0 @@
-import{P as o}from"./Profile-CT-Li2ku.js";import{c as t}from"./index-BKFVu-gy.js";import"./SubmitButton-DjncTPnH.js";import"./repo-BkP0mGIY.js";import"./InputField-lKVmnUXG.js";const a=t("/auth/profile")({component:o});export{a as Route};

@@ -1,0 +1,1 @@
+import{c as o}from"./index-Bk802S-e.js";import{H as t}from"./HomePage-BVbI8qGl.js";import"./useQuery-D91EH5Nk.js";import"./utils-km2FGkQ4.js";import"./repo-ChYOazUn.js";const a=o("/")({component:t});export{a as Route};

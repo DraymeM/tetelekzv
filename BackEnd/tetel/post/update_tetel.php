@@ -21,27 +21,26 @@ try {
 
     $kapcsolat->beginTransaction();
 
-    // Update summary
-    $stmt = $kapcsolat->prepare("SELECT osszegzes_id FROM tetel WHERE id = ?");
+    // Check if osszegzes exists for this tetel
+    $stmt = $kapcsolat->prepare("SELECT id FROM osszegzes WHERE tetel_id = ?");
     $stmt->execute([$tetelId]);
     $osszegzesId = $stmt->fetchColumn();
 
     if ($osszegzesId) {
+        // Update existing osszegzes
         $stmt = $kapcsolat->prepare("UPDATE osszegzes SET content = ? WHERE id = ?");
         $stmt->execute([$input["osszegzes"], $osszegzesId]);
     } else {
-        $stmt = $kapcsolat->prepare("INSERT INTO osszegzes (content) VALUES (?)");
-        $stmt->execute([$input["osszegzes"]]);
-        $osszegzesId = $kapcsolat->lastInsertId();
-        $stmt = $kapcsolat->prepare("UPDATE tetel SET osszegzes_id = ? WHERE id = ?");
-        $stmt->execute([$osszegzesId, $tetelId]);
+        // Insert new osszegzes and associate it with this tetel
+        $stmt = $kapcsolat->prepare("INSERT INTO osszegzes (content, tetel_id) VALUES (?, ?)");
+        $stmt->execute([$input["osszegzes"], $tetelId]);
     }
 
     // Update tetel name
     $stmt = $kapcsolat->prepare("UPDATE tetel SET name = ? WHERE id = ?");
     $stmt->execute([$input["name"], $tetelId]);
 
-    // Clear and reinsert sections
+    // Clear and reinsert sections and subsections
     $kapcsolat->prepare("DELETE FROM subsection WHERE section_id IN (SELECT id FROM section WHERE tetel_id = ?)")->execute([$tetelId]);
     $kapcsolat->prepare("DELETE FROM section WHERE tetel_id = ?")->execute([$tetelId]);
 
@@ -65,7 +64,6 @@ try {
     }
 
     $kapcsolat->commit();
-
     echo json_encode(["success" => true]);
 
 } catch (Exception $e) {
