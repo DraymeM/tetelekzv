@@ -51,7 +51,7 @@ cd BackEnd
 php -S localhost:8000
 ```
 
-##🧪 Example: Section Block Component
+## 🧪 Example: Section Block Component
 ```typescript
 // components/SectionBlock.tsx
 import { Fragment } from "react";
@@ -122,14 +122,14 @@ const SectionBlock = ({ section, onUpdateContent, onAddSubsection, ... }) => {
 };
 ```
 
-🧠 What this shows:
+## 🧠 What this shows:
   Elegant UI using TailwindCSS
 
   Interactive UI logic via @headlessui/react
 
   Controlled inputs for live validation
 
-✅ Validation with Zod
+## ✅ Validation with Zod
 Zod ensures your forms never break the schema.
 ```typescript
 export const tetelSchema = z.object({
