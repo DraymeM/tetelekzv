@@ -81,7 +81,7 @@ const Navbar: FC = () => {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className=" p-2 rounded-full transition-colors text-foreground boder-1 border-border bg-muted"
+            className=" p-2 rounded-full transition-colors text-foreground boder-1 border-border hover:cursor-pointer bg-muted"
             title="Toggle theme"
           >
             {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
@@ -97,7 +97,7 @@ const Navbar: FC = () => {
                 return (
                   <Link
                     to="/auth/profile"
-                    className={`transition-all duration-300 flex items-center gap-2 rounded-full ${
+                    className={`transition-all duration-300 flex items-center gap-2 bg-muted rounded-full ${
                       isActive ? "underline" : "hover:underline"
                     }`}
                     style={{
@@ -106,7 +106,6 @@ const Navbar: FC = () => {
                         ? "var(--color-primary)"
                         : "var(--color-foreground)",
                       fontWeight: isActive ? "bold" : "normal",
-                      backgroundColor: "var(--color-secondary)",
                     }}
                   >
                     <FaUser size={20} />
