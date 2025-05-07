@@ -12,6 +12,7 @@ if (
     echo json_encode(["error" => "Nincs jogosultság a művelethez."]);
     exit;
 }
+
 try {
     if ($_SERVER["REQUEST_METHOD"] !== "DELETE") {
         http_response_code(405);
@@ -49,13 +50,12 @@ try {
         $stmt = $kapcsolat->prepare("DELETE FROM flashcard WHERE tetel_id = ?");
         $stmt->execute([$tetelId]);
 
-        // Delete összegzés and tetel
-        $stmt = $kapcsolat->prepare("
-            DELETE t, o
-            FROM tetel t
-            LEFT JOIN osszegzes o ON t.osszegzes_id = o.id
-            WHERE t.id = ?
-        ");
+        // Delete the corresponding osszegzes record
+        $stmt = $kapcsolat->prepare("DELETE FROM osszegzes WHERE tetel_id = ?");
+        $stmt->execute([$tetelId]);
+
+        // Delete tetel record
+        $stmt = $kapcsolat->prepare("DELETE FROM tetel WHERE id = ?");
         $stmt->execute([$tetelId]);
 
         $kapcsolat->commit();

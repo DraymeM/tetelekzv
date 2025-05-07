@@ -25,9 +25,8 @@ try {
 
     // Get main tetel data
     $stmt = $kapcsolat->prepare("
-        SELECT t.id, t.name, t.osszegzes_id, o.content AS osszegzes_content 
+        SELECT t.id, t.name 
         FROM tetel t
-        LEFT JOIN osszegzes o ON t.osszegzes_id = o.id
         WHERE t.id = ?
     ");
     $stmt->execute([$tetelId]);
@@ -38,6 +37,16 @@ try {
         echo json_encode(["error" => "Tétel nem található."]);
         exit;
     }
+
+    // Get corresponding osszegzes data (now in osszegzes table)
+    $osszegzes = null;
+    $stmt = $kapcsolat->prepare("
+        SELECT o.id, o.content 
+        FROM osszegzes o 
+        WHERE o.tetel_id = ?
+    ");
+    $stmt->execute([$tetelId]);
+    $osszegzes = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get sections and subsections
     $sections = [];
@@ -84,9 +93,9 @@ try {
             "id" => (int)$tetel['id'],
             "name" => $tetel['name']
         ],
-        "osszegzes" => $tetel['osszegzes_id'] ? [
-            "id" => (int)$tetel['osszegzes_id'],
-            "content" => $tetel['osszegzes_content'] ?? ''
+        "osszegzes" => $osszegzes ? [
+            "id" => (int)$osszegzes['id'],
+            "content" => $osszegzes['content'] ?? ''
         ] : null,
         "sections" => $sections ?: [],
         "questions" => $flashcards ?: null
