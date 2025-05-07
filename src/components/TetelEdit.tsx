@@ -13,6 +13,7 @@ const TetelEdit: React.FC = () => {
   const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [isBlocking, setIsBlocking] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["tetelDetail", tetelId],
@@ -22,16 +23,21 @@ const TetelEdit: React.FC = () => {
 
   const mutation = useMutation({
     mutationFn: (formData: TetelFormData) => updateTetel(tetelId, formData),
+    onMutate: () => {
+      setIsBlocking(true);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tetelDetail", tetelId] });
       setSuccess("Sikeres frissítés!");
       setTimeout(() => {
         setSuccess(null);
         navigate({ to: `/tetelek/${tetelId}` });
+        setIsBlocking(false);
       }, 2000);
     },
     onError: (e: any) => {
       setError(e.response?.data?.error || "Hiba a frissítés közben.");
+      setIsBlocking(false);
     },
   });
 
@@ -63,7 +69,7 @@ const TetelEdit: React.FC = () => {
   const initialData: TetelFormData = {
     name: data?.tetel.name || "",
     osszegzes: data?.osszegzes?.content || "",
-    sections: data?.sections?.map((sec: any) => ({
+    sections: data?.sections.map((sec: any) => ({
       ...sec,
       subsections: sec.subsections || [],
     })) || [{ content: "", subsections: [] }],
@@ -71,15 +77,26 @@ const TetelEdit: React.FC = () => {
   };
 
   return (
-    <TetelForm
-      initialData={initialData}
-      onSubmit={handleSubmit}
-      isPending={mutation.isPending}
-      error={error}
-      success={success}
-      label="Tétel szerkesztése"
-      submitLabel="Tétel mentése"
-    />
+    <div className="relative">
+      {isBlocking && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
+        >
+          <Spinner />
+        </div>
+      )}
+
+      <TetelForm
+        initialData={initialData}
+        onSubmit={handleSubmit}
+        isPending={mutation.isPending}
+        error={error}
+        success={success}
+        label="Tétel szerkesztése"
+        submitLabel="Tétel mentése"
+      />
+    </div>
   );
 };
 

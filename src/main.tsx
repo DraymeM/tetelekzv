@@ -86,7 +86,8 @@ if (rootElement && !rootElement.innerHTML) {
             pauseOnFocusLoss={true}
             draggable={true}
             pauseOnHover={true}
-            theme="dark"
+            toastClassName="custom-toast"
+            className="custom-toast-body"
           />
         </QueryClientProvider>
       </AuthProvider>

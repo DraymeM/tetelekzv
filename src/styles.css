@@ -64,6 +64,25 @@ code {
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
 }
+.custom-toast {
+  background-color: var(--secondary) !important;
+  color: var(--foreground) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--radius);
+}
+
+.custom-toast-body {
+  color: var(--foreground) !important;
+}
+
+.custom-toast .Toastify__close-button {
+  color: var(--foreground) !important;
+  opacity: 1 !important;
+}
+
+.custom-toast .Toastify__toast-icon {
+  color: var(--foreground) !important;
+}
 
 .dark {
   --background: #1f202a;
