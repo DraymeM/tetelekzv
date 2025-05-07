@@ -150,7 +150,7 @@ export const tetelSchema = z.object({
 });
 ```
 
-##DB setup
+## DB setup
 I tried to make the setup as db agnostic as possible
 you will need a dev.env.php for the backend to coccect to your db and an env.php for production.
 connect.php contains a boolean thats switches between production and local file.
