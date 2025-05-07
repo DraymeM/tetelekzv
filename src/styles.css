@@ -21,7 +21,7 @@ code {
   --radius: 0.5rem;
 
   /* Base theme */
-  --background: #f8f9fa;
+  --background: #e9f4ff;
   --foreground: #1d212c;
   --primary: #1ab474;
 
@@ -67,7 +67,7 @@ code {
 
 .dark {
   --background: #1f202a;
-  --foreground: #f1f1f1;
+  --foreground: #e4edff;
   --primary: #4df7a2;
 }
 

@@ -1,17 +1,5 @@
 <?php
-session_start();
-header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: https://danielmarkus.web.elte.hu");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Credentials: true");
-require_once __DIR__ . '/../connect.php';
-
-// Check authentication
-if (!isset($_SESSION['authenticated'])) {  
-    http_response_code(401);
-    echo json_encode(["error" => "Unauthorized"]);
-    exit;
-}
+require_once __DIR__ . '/../core/bootstrap.php';
 
 // Validate input
 $data = json_decode(file_get_contents("php://input"), true);
