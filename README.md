@@ -21,7 +21,7 @@
 | Frontend      | Backend       | UI/UX & Validation               |
 |---------------|---------------|----------------------------------|
 | React (Vite)  | PHP (vanilla) | TailwindCSS, Headless UI         |
-| TypeScript    |               | Zod, React Hook Form             |
+| TypeScript    |               | Zod,                             |
 | TanStack Router|              | Toastify, React Icons            |
 
 ---
