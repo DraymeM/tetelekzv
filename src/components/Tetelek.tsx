@@ -43,7 +43,7 @@ export default function Tetelek() {
   }
 
   return (
-    <Suspense>
+    <Suspense fallback={<Spinner />}>
       <div className="text-center pt-20">
         <Navbar />
         <h2 className="text-3xl font-bold mb-8">Tételek</h2>

@@ -112,7 +112,7 @@ export default function TetelDetails() {
 
   return (
     <>
-      <Suspense>
+      <Suspense fallback={<Spinner />}>
         <Navbar />
         <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
           <div className="flex justify-between items-center mb-8">
