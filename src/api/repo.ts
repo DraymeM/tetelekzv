@@ -5,6 +5,7 @@ import type {
   TetelFormData,
   NewMultiQuestion,
   IMultiQuestion,
+  IQuestion,
   Flashcard,
 } from "./types";
 
@@ -57,7 +58,7 @@ export async function createTetel(formData: TetelFormData): Promise<void> {
     throw new Error("Failed to create tetel");
   }
 }
-
+/*-----------------------------------------------------Kérdések--------------------------------------------------------------- */
 export async function createMultiQuestion(
   data: NewMultiQuestion
 ): Promise<IMultiQuestion> {
@@ -70,6 +71,60 @@ export async function createMultiQuestion(
       },
     }
   );
+  return res.data;
+}
+export async function updateMultiQuestion(
+  id: number,
+  updated: NewMultiQuestion
+): Promise<{ success: boolean }> {
+  if (isNaN(id)) {
+    console.warn("❌ updateMultiQuestion called with invalid id:", id);
+    return { success: false }; // Guard it!
+  }
+
+  const res = await apiClient.post<{ success: boolean }>(
+    `/multiquestion/post/update_multiquestion.php?id=${id}`,
+    updated,
+    { headers: { "Content-Type": "application/json" } }
+  );
+  return res.data;
+}
+export async function deleteMultiQuestion(id: number): Promise<void> {
+  // send DELETE with JSON body { id }
+  const res = await apiClient.delete<{ success: boolean }>(
+    `/multiquestion/post/delete_multiquestion.php`,
+    {
+      data: { id },
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+  if (!res.data.success) {
+    throw new Error("A kérdés törlése nem sikerült.");
+  }
+}
+
+export async function fetchQuestions(): Promise<IQuestion[]> {
+  const res = await apiClient.get<IQuestion[]>(
+    "/multiquestion/get/get_multiquestion_list.php"
+  );
+  if (!Array.isArray(res.data)) {
+    throw new Error(
+      "Expected an array of questions, received: " + JSON.stringify(res.data)
+    );
+  }
+  return res.data;
+}
+export async function fetchMultiQuestionDetails(
+  id: number
+): Promise<IMultiQuestion> {
+  const res = await apiClient.get<IMultiQuestion>(
+    `/multiquestion/get/get_multiquestion_details.php?id=${id}`
+  );
+  if (!res.data || typeof res.data !== "object") {
+    throw new Error(
+      "Expected a multiquestion object, received: " + JSON.stringify(res.data)
+    );
+  }
   return res.data;
 }
 export async function fetchRandomMultiQuestion(): Promise<IMultiQuestion> {
@@ -85,7 +140,7 @@ export async function fetchRandomFlashcard(): Promise<Flashcard> {
   return res.data;
 }
 
-/*---------------------------AUTH--------------------------------------*/
+/*------------------------------------------------------AUTH---------------------------------------------------------------*/
 
 export async function register(username: string, password: string) {
   const res = await apiClient.post("/auth/register.php", {
@@ -104,12 +159,15 @@ export async function logout() {
   return res.data;
 }
 
-export async function updatePassword(currentPassword: string, newPassword: string, confirmation: string) {
+export async function updatePassword(
+  currentPassword: string,
+  newPassword: string,
+  confirmation: string
+) {
   const res = await apiClient.post("/auth/update_password.php", {
     current_password: currentPassword,
     password: newPassword,
-    password_confirmation: confirmation
+    password_confirmation: confirmation,
   });
   return res.data;
 }
-

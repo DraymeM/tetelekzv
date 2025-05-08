@@ -24,7 +24,6 @@ code {
   --background: #e9f4ff;
   --foreground: #1d212c;
   --primary: #1ab474;
-
   /* Computed theme colors */
   --primary-foreground: color-mix(
     in srgb,
