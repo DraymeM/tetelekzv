@@ -1,0 +1,1 @@
+import{c as o}from"./index-GncX1r6g.js";import{L as t}from"./Login-D5O_hP7T.js";import"./SubmitButton-B8SN_Nro.js";import"./InputField-BbTPsTCZ.js";const p=o("/login")({component:t});export{p as Route};

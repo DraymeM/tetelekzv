@@ -92,7 +92,9 @@ const MquestionsIdRoute = MquestionsIdImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => MquestionsRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/mquestions/$id.lazy').then((d) => d.Route),
+)
 
 const AuthProfileRoute = AuthProfileImport.update({
   id: '/auth/profile',
@@ -110,7 +112,9 @@ const MquestionsIdEditRoute = MquestionsIdEditImport.update({
   id: '/edit',
   path: '/edit',
   getParentRoute: () => MquestionsIdRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/mquestions/$id/edit.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 

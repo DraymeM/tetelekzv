@@ -1,0 +1,1 @@
+import{M as o}from"./MultiquestionEdit-DAfdiIfV.js";import"./index-GncX1r6g.js";import"./useQuery-D_39Ub9U.js";import"./utils-km2FGkQ4.js";import"./useMutation-oDiw3r_r.js";import"./SubmitButton-B8SN_Nro.js";import"./repo-HgviLFAr.js";import"./AnswerInput-B1hK8_07.js";const a=o;export{a as component};

@@ -55,7 +55,7 @@ const TetelListCard: FC = () => {
 
               <Disclosure.Panel className="overflow-hidden transition-all duration-500 ease-in-out">
                 <div className="bg-muted p-4 rounded-lg mt-4">
-                  {isLoading ? (
+                  {isLoading || isPending ? (
                     <div className="flex justify-center">
                       <FaSpinner className="animate-spin text-primary text-4xl" />
                     </div>
