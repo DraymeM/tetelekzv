@@ -29,6 +29,8 @@ const multiQuestionSchema = z.object({
 
 const MultiQuestionForm: React.FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [question, setQuestion] = useState("");
   const [answers, setAnswers] = useState<Answer[]>([
     { text: "", isCorrect: false },
@@ -47,12 +49,14 @@ const MultiQuestionForm: React.FC = () => {
     answers: boolean[];
   }>({ question: false, answers: [false, false, false, false] });
   const [, setSubmitAttempted] = useState(false);
-
-  const queryClient = useQueryClient();
+  const [isBlocking, setIsBlocking] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (newQuestion: NewMultiQuestion) =>
       createMultiQuestion(newQuestion),
+    onMutate: () => {
+      setIsBlocking(true);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
       setQuestion("");
@@ -70,9 +74,13 @@ const MultiQuestionForm: React.FC = () => {
       setTouched({ question: false, answers: [false, false, false, false] });
       setSubmitAttempted(false);
       toast.success("Kérdés létrehozva!");
-      setSuccess(`Kérdés létrehozva!`);
-      navigate({ to: "/mchoiceq" });
-      setTimeout(() => setSuccess(null), 3000);
+      setSuccess("Kérdés létrehozva!");
+
+      setTimeout(() => {
+        setSuccess(null);
+        setIsBlocking(false);
+        navigate({ to: "/mquestions" });
+      }, 2000);
     },
     onError: (err: any) => {
       toast.error("Nem sikerült a kérdés létrehozása!");
@@ -81,6 +89,7 @@ const MultiQuestionForm: React.FC = () => {
           err.message ||
           "Nem sikerült a kérdés létrehozása"
       );
+      setIsBlocking(false);
     },
   });
 
@@ -140,7 +149,15 @@ const MultiQuestionForm: React.FC = () => {
   return (
     <Suspense fallback={<Spinner />}>
       <Navbar />
-      <div className="max-w-4xl mx-auto items-center">
+      {isBlocking && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
+        >
+          <Spinner />
+        </div>
+      )}
+      <div className="max-w-4xl mx-auto items-center mt-10">
         <FormContainer
           error={error}
           success={success}

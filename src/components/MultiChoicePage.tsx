@@ -8,10 +8,10 @@ import TimerControls from "../components/common/TimerControls";
 import { useTimer } from "../hooks/useTimer";
 import {
   FaRedo,
-  FaPlus,
   FaCheckCircle,
   FaClipboardList,
   FaTrophy,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { fetchRandomMultiQuestion } from "../api/repo";
 
@@ -107,8 +107,18 @@ export default function MultiChoicePage() {
     <>
       <Suspense fallback={<Spinner />}>
         <Navbar />
-        <main className="flex flex-col items-center justify-center  mt-25 max-w-4xl mx-auto p-4 text-center">
+        <Link
+          to="/mquestions"
+          className="inline-flex items-center px-3 py-2 border border-border mt-20 md:ml-10 ml-1 rounded-md
+                               text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground
+                               focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+        >
+          <FaArrowLeft className="mr-2" />
+          Vissza a kérdésekhez
+        </Link>
+        <main className="flex flex-col items-center justify-center max-w-4xl mx-auto p-4 text-center">
           <h1 className="text-3xl font-bold mb-3">Felelet Választás</h1>
+
           <p className="mb-6 text-secondary-foreground">
             Csak egy válaszlehetőség jó!
           </p>
@@ -166,22 +176,13 @@ export default function MultiChoicePage() {
             )}
 
             <button
-              className="mt-8 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:scale-105 flex items-center gap-2"
+              className="mt-1 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:scale-105 flex items-center gap-2"
               onClick={handleReset}
             >
               <FaRedo />
               Újrakezdés
             </button>
           </div>
-
-          {/* Add Question Link */}
-          <Link
-            to="/pmchq"
-            className="fixed bottom-7 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-all transform hover:scale-105 flex items-center justify-center"
-            title="Adj hozzá saját kérdést"
-          >
-            <FaPlus size={20} />
-          </Link>
         </main>
       </Suspense>
     </>

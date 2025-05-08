@@ -10,7 +10,7 @@ import { useTheme } from "../hooks/useTheme";
 const navLinks = [
   { name: "Tételek", to: "/tetelek", icon: FaScroll },
   { name: "FlashCards", to: "/flashcards", icon: GiCardPick },
-  { name: "Felelet Választós", to: "/mchoiceq", icon: MdQuiz },
+  { name: "Felelet Választós", to: "/mquestions", icon: MdQuiz },
 ];
 
 const Navbar: FC = () => {

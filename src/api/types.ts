@@ -35,14 +35,6 @@ export interface Osszegzes {
   content: string;
 }
 
-export interface IMultiQuestion {
-  id: number;
-  question: string;
-  answers: {
-    text: string;
-    isCorrect: boolean;
-  }[];
-}
 export interface TetelDetailsResponse {
   tetel: Tetel;
   osszegzes: Osszegzes | null;
@@ -58,6 +50,11 @@ export interface IMultiQuestion {
     isCorrect: boolean;
   }[];
 }
+export interface IQuestion {
+  id: number;
+  question: string;
+}
+
 export interface Answer {
   text: string;
   isCorrect: boolean;

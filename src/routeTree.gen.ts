@@ -15,13 +15,16 @@ import { Route as TetelekImport } from './routes/tetelek'
 import { Route as TetelcreateImport } from './routes/tetelcreate'
 import { Route as RegisterImport } from './routes/register'
 import { Route as PmchqImport } from './routes/pmchq'
+import { Route as MquestionsImport } from './routes/mquestions'
 import { Route as MchoiceqImport } from './routes/mchoiceq'
 import { Route as LoginImport } from './routes/login'
 import { Route as FlashcardsImport } from './routes/flashcards'
 import { Route as IndexImport } from './routes/index'
 import { Route as TetelekIdImport } from './routes/tetelek/$id'
+import { Route as MquestionsIdImport } from './routes/mquestions/$id'
 import { Route as AuthProfileImport } from './routes/auth/profile'
 import { Route as TetelekIdEditImport } from './routes/tetelek/$id/edit'
+import { Route as MquestionsIdEditImport } from './routes/mquestions/$id/edit'
 
 // Create/Update Routes
 
@@ -48,6 +51,12 @@ const PmchqRoute = PmchqImport.update({
   path: '/pmchq',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pmchq.lazy').then((d) => d.Route))
+
+const MquestionsRoute = MquestionsImport.update({
+  id: '/mquestions',
+  path: '/mquestions',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const MchoiceqRoute = MchoiceqImport.update({
   id: '/mchoiceq',
@@ -79,6 +88,12 @@ const TetelekIdRoute = TetelekIdImport.update({
   getParentRoute: () => TetelekRoute,
 } as any)
 
+const MquestionsIdRoute = MquestionsIdImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => MquestionsRoute,
+} as any)
+
 const AuthProfileRoute = AuthProfileImport.update({
   id: '/auth/profile',
   path: '/auth/profile',
@@ -89,6 +104,12 @@ const TetelekIdEditRoute = TetelekIdEditImport.update({
   id: '/edit',
   path: '/edit',
   getParentRoute: () => TetelekIdRoute,
+} as any)
+
+const MquestionsIdEditRoute = MquestionsIdEditImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => MquestionsIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -121,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/mchoiceq'
       fullPath: '/mchoiceq'
       preLoaderRoute: typeof MchoiceqImport
+      parentRoute: typeof rootRoute
+    }
+    '/mquestions': {
+      id: '/mquestions'
+      path: '/mquestions'
+      fullPath: '/mquestions'
+      preLoaderRoute: typeof MquestionsImport
       parentRoute: typeof rootRoute
     }
     '/pmchq': {
@@ -158,12 +186,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthProfileImport
       parentRoute: typeof rootRoute
     }
+    '/mquestions/$id': {
+      id: '/mquestions/$id'
+      path: '/$id'
+      fullPath: '/mquestions/$id'
+      preLoaderRoute: typeof MquestionsIdImport
+      parentRoute: typeof MquestionsImport
+    }
     '/tetelek/$id': {
       id: '/tetelek/$id'
       path: '/$id'
       fullPath: '/tetelek/$id'
       preLoaderRoute: typeof TetelekIdImport
       parentRoute: typeof TetelekImport
+    }
+    '/mquestions/$id/edit': {
+      id: '/mquestions/$id/edit'
+      path: '/edit'
+      fullPath: '/mquestions/$id/edit'
+      preLoaderRoute: typeof MquestionsIdEditImport
+      parentRoute: typeof MquestionsIdImport
     }
     '/tetelek/$id/edit': {
       id: '/tetelek/$id/edit'
@@ -176,6 +218,30 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface MquestionsIdRouteChildren {
+  MquestionsIdEditRoute: typeof MquestionsIdEditRoute
+}
+
+const MquestionsIdRouteChildren: MquestionsIdRouteChildren = {
+  MquestionsIdEditRoute: MquestionsIdEditRoute,
+}
+
+const MquestionsIdRouteWithChildren = MquestionsIdRoute._addFileChildren(
+  MquestionsIdRouteChildren,
+)
+
+interface MquestionsRouteChildren {
+  MquestionsIdRoute: typeof MquestionsIdRouteWithChildren
+}
+
+const MquestionsRouteChildren: MquestionsRouteChildren = {
+  MquestionsIdRoute: MquestionsIdRouteWithChildren,
+}
+
+const MquestionsRouteWithChildren = MquestionsRoute._addFileChildren(
+  MquestionsRouteChildren,
+)
 
 interface TetelekIdRouteChildren {
   TetelekIdEditRoute: typeof TetelekIdEditRoute
@@ -205,12 +271,15 @@ export interface FileRoutesByFullPath {
   '/flashcards': typeof FlashcardsRoute
   '/login': typeof LoginRoute
   '/mchoiceq': typeof MchoiceqRoute
+  '/mquestions': typeof MquestionsRouteWithChildren
   '/pmchq': typeof PmchqRoute
   '/register': typeof RegisterRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/auth/profile': typeof AuthProfileRoute
+  '/mquestions/$id': typeof MquestionsIdRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/mquestions/$id/edit': typeof MquestionsIdEditRoute
   '/tetelek/$id/edit': typeof TetelekIdEditRoute
 }
 
@@ -219,12 +288,15 @@ export interface FileRoutesByTo {
   '/flashcards': typeof FlashcardsRoute
   '/login': typeof LoginRoute
   '/mchoiceq': typeof MchoiceqRoute
+  '/mquestions': typeof MquestionsRouteWithChildren
   '/pmchq': typeof PmchqRoute
   '/register': typeof RegisterRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/auth/profile': typeof AuthProfileRoute
+  '/mquestions/$id': typeof MquestionsIdRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/mquestions/$id/edit': typeof MquestionsIdEditRoute
   '/tetelek/$id/edit': typeof TetelekIdEditRoute
 }
 
@@ -234,12 +306,15 @@ export interface FileRoutesById {
   '/flashcards': typeof FlashcardsRoute
   '/login': typeof LoginRoute
   '/mchoiceq': typeof MchoiceqRoute
+  '/mquestions': typeof MquestionsRouteWithChildren
   '/pmchq': typeof PmchqRoute
   '/register': typeof RegisterRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/auth/profile': typeof AuthProfileRoute
+  '/mquestions/$id': typeof MquestionsIdRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/mquestions/$id/edit': typeof MquestionsIdEditRoute
   '/tetelek/$id/edit': typeof TetelekIdEditRoute
 }
 
@@ -250,12 +325,15 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/login'
     | '/mchoiceq'
+    | '/mquestions'
     | '/pmchq'
     | '/register'
     | '/tetelcreate'
     | '/tetelek'
     | '/auth/profile'
+    | '/mquestions/$id'
     | '/tetelek/$id'
+    | '/mquestions/$id/edit'
     | '/tetelek/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -263,12 +341,15 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/login'
     | '/mchoiceq'
+    | '/mquestions'
     | '/pmchq'
     | '/register'
     | '/tetelcreate'
     | '/tetelek'
     | '/auth/profile'
+    | '/mquestions/$id'
     | '/tetelek/$id'
+    | '/mquestions/$id/edit'
     | '/tetelek/$id/edit'
   id:
     | '__root__'
@@ -276,12 +357,15 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/login'
     | '/mchoiceq'
+    | '/mquestions'
     | '/pmchq'
     | '/register'
     | '/tetelcreate'
     | '/tetelek'
     | '/auth/profile'
+    | '/mquestions/$id'
     | '/tetelek/$id'
+    | '/mquestions/$id/edit'
     | '/tetelek/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -291,6 +375,7 @@ export interface RootRouteChildren {
   FlashcardsRoute: typeof FlashcardsRoute
   LoginRoute: typeof LoginRoute
   MchoiceqRoute: typeof MchoiceqRoute
+  MquestionsRoute: typeof MquestionsRouteWithChildren
   PmchqRoute: typeof PmchqRoute
   RegisterRoute: typeof RegisterRoute
   TetelcreateRoute: typeof TetelcreateRoute
@@ -303,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   FlashcardsRoute: FlashcardsRoute,
   LoginRoute: LoginRoute,
   MchoiceqRoute: MchoiceqRoute,
+  MquestionsRoute: MquestionsRouteWithChildren,
   PmchqRoute: PmchqRoute,
   RegisterRoute: RegisterRoute,
   TetelcreateRoute: TetelcreateRoute,
@@ -324,6 +410,7 @@ export const routeTree = rootRoute
         "/flashcards",
         "/login",
         "/mchoiceq",
+        "/mquestions",
         "/pmchq",
         "/register",
         "/tetelcreate",
@@ -343,6 +430,12 @@ export const routeTree = rootRoute
     "/mchoiceq": {
       "filePath": "mchoiceq.tsx"
     },
+    "/mquestions": {
+      "filePath": "mquestions.tsx",
+      "children": [
+        "/mquestions/$id"
+      ]
+    },
     "/pmchq": {
       "filePath": "pmchq.tsx"
     },
@@ -361,12 +454,23 @@ export const routeTree = rootRoute
     "/auth/profile": {
       "filePath": "auth/profile.tsx"
     },
+    "/mquestions/$id": {
+      "filePath": "mquestions/$id.tsx",
+      "parent": "/mquestions",
+      "children": [
+        "/mquestions/$id/edit"
+      ]
+    },
     "/tetelek/$id": {
       "filePath": "tetelek/$id.tsx",
       "parent": "/tetelek",
       "children": [
         "/tetelek/$id/edit"
       ]
+    },
+    "/mquestions/$id/edit": {
+      "filePath": "mquestions/$id/edit.tsx",
+      "parent": "/mquestions/$id"
     },
     "/tetelek/$id/edit": {
       "filePath": "tetelek/$id/edit.tsx",
