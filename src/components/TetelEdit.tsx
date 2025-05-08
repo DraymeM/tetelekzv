@@ -77,7 +77,7 @@ const TetelEdit: React.FC = () => {
   };
 
   return (
-    <Suspense>
+    <Suspense fallback={<Spinner />}>
       <div className="relative">
         {isBlocking && (
           <div

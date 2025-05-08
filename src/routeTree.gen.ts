@@ -44,7 +44,7 @@ const RegisterRoute = RegisterImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
 
 const PmchqRoute = PmchqImport.update({
   id: '/pmchq',
@@ -56,7 +56,7 @@ const MquestionsRoute = MquestionsImport.update({
   id: '/mquestions',
   path: '/mquestions',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/mquestions.lazy').then((d) => d.Route))
 
 const MchoiceqRoute = MchoiceqImport.update({
   id: '/mchoiceq',

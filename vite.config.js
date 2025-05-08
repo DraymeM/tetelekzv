@@ -8,7 +8,7 @@ import { resolve } from "node:path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({ autoCodeSplitting: true }),
+    TanStackRouterVite({ autoCodeSplitting: true, target: "react" }),
     viteReact(),
     tailwindcss(),
   ],
