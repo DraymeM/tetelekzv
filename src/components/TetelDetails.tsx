@@ -217,7 +217,7 @@ export default function TetelDetails() {
                   setIsDeleteModalOpen(true);
                 }}
                 className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
-                 hover:bg-rose-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
+                 hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
                 title="Töröld a tételt"
               >
                 <FaTrash size={20} />
