@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import MultiQuestionForm from "../components/MultiQuestionForm.tsx";
+import MultiQuestionForm from "../components/MultiQuestionCreate.tsx";
 import type { RouterContext } from "../api/types";
 export const Route = createFileRoute("/pmchq")({
   component: MultiQuestionForm,
