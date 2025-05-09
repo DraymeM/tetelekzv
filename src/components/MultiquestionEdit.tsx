@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useParams, useNavigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { fetchMultiQuestionDetails, updateMultiQuestion } from "../api/repo";
 import type { Answer } from "../api/types";
-import MultiQuestionForm from "./common/Forms/MultiQuestionForm";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
+import React from "react";
+const MultiQuestionForm = React.lazy(
+  () => import("./common/Forms/MultiQuestionForm")
+);
 
 const MultiQuestionEdit = () => {
   const { id } = useParams({ strict: false });
@@ -50,19 +53,21 @@ const MultiQuestionEdit = () => {
           <Spinner />
         </div>
       )}
-      <div className="max-w-4xl mx-auto mt-10">
-        <MultiQuestionForm
-          onSubmit={mutation.mutate}
-          isPending={mutation.isPending}
-          initialQuestion={data?.question}
-          initialAnswers={data?.answers}
-          submitLabel="Mentés"
-          formLabel="Kérdés szerkesztése"
-          successMessage={
-            mutation.isSuccess ? "Kérdés sikeresen frissítve!" : null
-          }
-        />
-      </div>
+      <Suspense>
+        <div className="max-w-4xl mx-auto mt-10">
+          <MultiQuestionForm
+            onSubmit={mutation.mutate}
+            isPending={mutation.isPending}
+            initialQuestion={data?.question}
+            initialAnswers={data?.answers}
+            submitLabel="Mentés"
+            formLabel="Kérdés szerkesztése"
+            successMessage={
+              mutation.isSuccess ? "Kérdés sikeresen frissítve!" : null
+            }
+          />
+        </div>
+      </Suspense>
     </>
   );
 };

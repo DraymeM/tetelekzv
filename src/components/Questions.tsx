@@ -7,7 +7,7 @@ import { fetchQuestions } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
 import { Suspense } from "react";
 import React from "react";
-const QuestionCard = React.lazy(() => import("./common/QuestionCard"));
+const CardLink = React.lazy(() => import("./common/CardLink"));
 
 export default function Questions() {
   const { id } = useParams({ strict: false });
@@ -59,10 +59,11 @@ export default function Questions() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
             {(questions ?? []).map((question) => (
-              <QuestionCard
+              <CardLink
                 key={question.id}
                 id={question.id}
-                question={question.question}
+                title={question.question}
+                to="/mquestions/$id"
               />
             ))}
           </div>

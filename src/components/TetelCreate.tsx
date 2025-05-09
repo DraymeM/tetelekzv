@@ -42,7 +42,7 @@ const TetelCreate: React.FC = () => {
   };
 
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense>
       <div className="relative">
         {isBlocking && (
           <div

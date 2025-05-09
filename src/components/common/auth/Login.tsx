@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { z } from "zod";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
-import FormContainer from "../Forms/FormContainer";
-import InputField from "../Forms/InputField";
-import SubmitButton from "../Forms/SubmitButton";
 import { useAuth } from "../../../context/AuthContext";
+const FormContainer = React.lazy(() => import("../Forms/FormContainer"));
+const InputField = React.lazy(() => import("../Forms/InputField"));
+const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -59,44 +59,46 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="max-w-2xl mx-auto items-center h-screen pb-50 pt-35 justify-center overflow-hidden">
-        <FormContainer error={null} success={null} label="Bejelentkezés">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <InputField
-              label="Felhasználónév"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-                setTouched({ ...touched, username: true });
-              }}
-              error={touched.username ? fieldErrors.username : undefined}
-            />
+    <Suspense>
+      <div>
+        <div className="max-w-2xl mx-auto items-center h-screen pb-50 pt-35 justify-center overflow-hidden">
+          <FormContainer error={null} success={null} label="Bejelentkezés">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <InputField
+                label="Felhasználónév"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setTouched({ ...touched, username: true });
+                }}
+                error={touched.username ? fieldErrors.username : undefined}
+              />
 
-            <InputField
-              label="Jelszó"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setTouched({ ...touched, password: true });
-              }}
-              enablePasswordToggle
-              error={touched.password ? fieldErrors.password : undefined}
-            />
+              <InputField
+                label="Jelszó"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setTouched({ ...touched, password: true });
+                }}
+                enablePasswordToggle
+                error={touched.password ? fieldErrors.password : undefined}
+              />
 
-            <SubmitButton isPending={isPending} label="Bejelentkezés" />
-            <div className="text-left mt-2">
-              <Link
-                to="/register"
-                className="text-md text-teal-400 hover:underline"
-              >
-                Nincs fiókod? Regisztrálj
-              </Link>
-            </div>
-          </form>
-        </FormContainer>
+              <SubmitButton isPending={isPending} label="Bejelentkezés" />
+              <div className="text-left mt-2">
+                <Link
+                  to="/register"
+                  className="text-md text-teal-400 hover:underline"
+                >
+                  Nincs fiókod? Regisztrálj
+                </Link>
+              </div>
+            </form>
+          </FormContainer>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

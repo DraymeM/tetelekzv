@@ -1,1 +1,0 @@
-import{M as o}from"./MultiQuestionDetails-BM_HrD0Y.js";import"./index-Devi4yYS.js";import"./DeleteModal-Sl3hdD4U.js";import"./useQuery-CFWVEYDE.js";import"./utils-km2FGkQ4.js";import"./useMutation-BqAPE7zp.js";import"./repo-Br9-sPjB.js";import"./AnswerPicker-DyfV1gGx.js";const a=o;export{a as component};

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { z } from "zod";
-import FormContainer from "../Forms/FormContainer";
-import InputField from "../Forms/InputField";
-import SubmitButton from "../Forms/SubmitButton";
 import { useNavigate } from "@tanstack/react-router";
 import { register } from "../../../api/repo";
 import { toast } from "react-toastify";
+const FormContainer = React.lazy(() => import("../Forms/FormContainer"));
+const InputField = React.lazy(() => import("../Forms/InputField"));
+const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
+
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -70,51 +71,53 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
-        <FormContainer error={error} success={success} label="Register">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <InputField
-              label="Username"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-                setTouched({ ...touched, username: true });
-              }}
-              error={touched.username ? fieldErrors.username : undefined}
-            />
+    <Suspense>
+      <div>
+        <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
+          <FormContainer error={error} success={success} label="Register">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <InputField
+                label="Username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setTouched({ ...touched, username: true });
+                }}
+                error={touched.username ? fieldErrors.username : undefined}
+              />
 
-            <InputField
-              label="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setTouched({ ...touched, password: true });
-              }}
-              enablePasswordToggle
-              error={touched.password ? fieldErrors.password : undefined}
-            />
+              <InputField
+                label="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setTouched({ ...touched, password: true });
+                }}
+                enablePasswordToggle
+                error={touched.password ? fieldErrors.password : undefined}
+              />
 
-            <InputField
-              label="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                setTouched({ ...touched, confirmPassword: true });
-              }}
-              enablePasswordToggle
-              error={
-                touched.confirmPassword
-                  ? fieldErrors.confirmPassword
-                  : undefined
-              }
-            />
+              <InputField
+                label="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setTouched({ ...touched, confirmPassword: true });
+                }}
+                enablePasswordToggle
+                error={
+                  touched.confirmPassword
+                    ? fieldErrors.confirmPassword
+                    : undefined
+                }
+              />
 
-            <SubmitButton isPending={isPending} label="Register" />
-          </form>
-        </FormContainer>
+              <SubmitButton isPending={isPending} label="Register" />
+            </form>
+          </FormContainer>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { FaTimes } from "react-icons/fa";
-import InputField from "./InputField";
-import TextAreaField from "./TextAreaField";
+const InputField = React.lazy(() => import("./InputField"));
+const TextAreaField = React.lazy(() => import("./TextAreaField"));
 
 export interface Subsection {
   title: string;
@@ -21,27 +21,29 @@ const SubsectionBlock: React.FC<SubsectionBlockProps> = ({
   onRemove,
   errors = {},
 }) => (
-  <div className="space-y-2 relative group">
-    <button
-      type="button"
-      onClick={onRemove}
-      className="absolute -top-3 -right-3 text-red-500 bg-background rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
-    >
-      <FaTimes className="w-5 h-5" />
-    </button>
-    <InputField
-      label="Cím"
-      value={subsection.title}
-      onChange={(e) => onUpdate("title", e.target.value)}
-      error={errors.title}
-    />
-    <TextAreaField
-      label="Leírás"
-      value={subsection.description}
-      onChange={(e) => onUpdate("description", e.target.value)}
-      error={errors.description}
-    />
-  </div>
+  <Suspense>
+    <div className="space-y-2 relative group">
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute -top-3 -right-3 text-red-500 bg-background rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
+      >
+        <FaTimes className="w-5 h-5" />
+      </button>
+      <InputField
+        label="Cím"
+        value={subsection.title}
+        onChange={(e) => onUpdate("title", e.target.value)}
+        error={errors.title}
+      />
+      <TextAreaField
+        label="Leírás"
+        value={subsection.description}
+        onChange={(e) => onUpdate("description", e.target.value)}
+        error={errors.description}
+      />
+    </div>
+  </Suspense>
 );
 
 export default SubsectionBlock;

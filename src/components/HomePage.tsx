@@ -1,15 +1,14 @@
+import React from "react";
 import { Suspense, type FC } from "react";
 import Navbar from "./Navbar";
-import TetelListCard from "./common/home/TetelListCard";
-import { FaBookOpen, FaQuestionCircle } from "react-icons/fa"; // ✅ Added icons
-import Spinner from "./Spinner";
+import { FaBookOpen, FaQuestionCircle } from "react-icons/fa";
+const TetelListCard = React.lazy(() => import("./common/home/TetelListCard"));
 
 const HomePage: FC = () => {
   return (
-    <Suspense fallback={<Spinner />}>
-      <div>
-        <Navbar />
-
+    <div>
+      <Navbar />
+      <Suspense>
         {/* Hero Section */}
         <section className="text-center mt-5 py-16">
           <h1 className="text-4xl font-bold text-foreground">
@@ -67,8 +66,8 @@ const HomePage: FC = () => {
             </div>
           </div>
         </section>
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 };
 
