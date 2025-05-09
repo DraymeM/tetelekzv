@@ -5,21 +5,13 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
 require_once __DIR__ . '/../../connect.php';
+require_once __DIR__ . '/../../models/Model.php';
+require_once __DIR__ . '/../../models/Answer.php';
+require_once __DIR__ . '/../../models/Question.php';
 
-try {
-    $stmt = $kapcsolat->query("SELECT id, question FROM questions");
-    $questionss = $stmt->fetchAll(PDO::FETCH_ASSOC);
+use Models\Question;
 
-    $result = array_map(function ($questions) {
-        return [
-            "id" => (int)$questions["id"],
-            "question" => $questions["question"]
-        ];
-    }, $questionss);
+$qm   = new Question($kapcsolat);
+$list = $qm->findAll();
 
-    echo json_encode($result);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["error" => "Hiba a lekérdezés során: " . $e->getMessage()]);
-}
-?>
+echo json_encode($list);

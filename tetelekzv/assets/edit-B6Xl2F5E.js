@@ -1,1 +1,0 @@
-import{M as o}from"./MultiquestionEdit-vqeORHet.js";import"./index-BQ-Le8Of.js";import"./useQuery-Df8i-Hvh.js";import"./utils-km2FGkQ4.js";import"./useMutation-DiaXxBXJ.js";import"./repo-4pMOnM0t.js";const e=o;export{e as component};

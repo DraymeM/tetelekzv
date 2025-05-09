@@ -1,1 +1,0 @@
-import{Q as o}from"./Questions-BK4djNEH.js";import{c as t}from"./index-BQ-Le8Of.js";import"./useQuery-Df8i-Hvh.js";import"./utils-km2FGkQ4.js";import"./repo-4pMOnM0t.js";const s=t("/mquestions")({component:o});export{s as Route};
