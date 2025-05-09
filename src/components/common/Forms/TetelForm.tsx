@@ -9,12 +9,13 @@ import type {
   Subsection,
 } from "../../../api/types";
 import Navbar from "@/components/Navbar";
+import Spinner from "@/components/Spinner";
 const FormContainer = React.lazy(() => import("./FormContainer"));
 const SubmitButton = React.lazy(() => import("./SubmitButton"));
 const InputField = React.lazy(() => import("./InputField"));
-const TextAreaField = React.lazy(() => import("./TextAreaField"));
-const SectionBlock = React.lazy(() => import("./SectionBlock"));
-const FlashcardBlock = React.lazy(() => import("./FlashcardBlock"));
+import TextAreaField from "./TextAreaField";
+import SectionBlock from "./SectionBlock";
+import FlashcardBlock from "./FlashcardBlock";
 
 interface TetelFormProps {
   initialData?: TetelFormData;
@@ -189,7 +190,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
   return (
     <div>
       <Navbar />
-      <Suspense>
+      <Suspense fallback={<Spinner />}>
         <div className="max-w-6xl mx-auto items-center">
           <FormContainer error={error} success={success} label={label}>
             <form onSubmit={handleSubmit} className="space-y-6">

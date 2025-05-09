@@ -1,25 +1,18 @@
 <?php
 require_once __DIR__ . '/../../core/bootstrap.php';
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+require_once __DIR__ . '/../../models/Model.php';
+require_once __DIR__ . '/../../models/Flashcard.php';
 
-try {
-    $input = json_decode(file_get_contents("php://input"), true);
-    $flashcardId = $input["flashcardId"];
+use Models\Flashcard;
 
-    if (!$flashcardId || !is_numeric($flashcardId)) {
-        http_response_code(400);
-        echo json_encode(["error" => "Érvénytelen flashcard ID."]);
-        exit;
-    }
+$in  = json_decode(file_get_contents('php://input'), true);
+$id  = $in['flashcardId'] ?? null;
 
-    // Delete the flashcard
-    $stmt = $kapcsolat->prepare("DELETE FROM flashcard WHERE id = ?");
-    $stmt->execute([$flashcardId]);
-
-    echo json_encode(["success" => true]);
-
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["error" => "Szerver hiba: " . $e->getMessage()]);
+if (! $id || !is_numeric($id)) {
+    http_response_code(400);
+    exit(json_encode(['error' => 'Érvénytelen flashcard ID.']));
 }
+
+$fc = new Flashcard($kapcsolat);
+$fc->deleteById((int)$id);
+echo json_encode(['success' => true]);

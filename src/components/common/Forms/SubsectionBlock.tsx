@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { FaTimes } from "react-icons/fa";
 const InputField = React.lazy(() => import("./InputField"));
-const TextAreaField = React.lazy(() => import("./TextAreaField"));
+import TextAreaField from "./TextAreaField";
 
 export interface Subsection {
   title: string;

@@ -5,21 +5,11 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
 require_once __DIR__ . '/../../connect.php';
+require_once __DIR__ . '/../../models/Model.php';
+require_once __DIR__ . '/../../models/Tetel.php';
 
-try {
-    $stmt = $kapcsolat->query("SELECT id, name FROM tetel");
-    $tetelek = $stmt->fetchAll(PDO::FETCH_ASSOC);
+use Models\Tetel;
 
-    $result = array_map(function ($tetel) {
-        return [
-            "id" => (int)$tetel["id"],
-            "name" => $tetel["name"]
-        ];
-    }, $tetelek);
-
-    echo json_encode($result);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["error" => "Hiba a lekérdezés során: " . $e->getMessage()]);
-}
-?>
+$t = new Tetel($kapcsolat);
+$list = $t->findAll();
+echo json_encode($list);
