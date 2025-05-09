@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { FaPlus } from "react-icons/fa";
 import { tetelSchema } from "../../../validator/tetelSchema";
 import { toast } from "react-toastify";
@@ -8,13 +8,13 @@ import type {
   TetelFormData,
   Subsection,
 } from "../../../api/types";
-import FormContainer from "./FormContainer";
-import SubmitButton from "./SubmitButton";
-import InputField from "./InputField";
-import TextAreaField from "./TextAreaField";
-import SectionBlock from "./SectionBlock";
-import FlashcardBlock from "./FlashcardBlock";
 import Navbar from "@/components/Navbar";
+const FormContainer = React.lazy(() => import("./FormContainer"));
+const SubmitButton = React.lazy(() => import("./SubmitButton"));
+const InputField = React.lazy(() => import("./InputField"));
+const TextAreaField = React.lazy(() => import("./TextAreaField"));
+const SectionBlock = React.lazy(() => import("./SectionBlock"));
+const FlashcardBlock = React.lazy(() => import("./FlashcardBlock"));
 
 interface TetelFormProps {
   initialData?: TetelFormData;
@@ -189,104 +189,109 @@ const TetelForm: React.FC<TetelFormProps> = ({
   return (
     <div>
       <Navbar />
-      <div className="max-w-6xl mx-auto items-center">
-        <FormContainer error={error} success={success} label={label}>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <InputField
-              label="Tétel címe"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setTouched((t) => ({ ...t, name: true }));
-              }}
-              error={touched.name ? fieldErrors.name : undefined}
-            />
+      <Suspense>
+        <div className="max-w-6xl mx-auto items-center">
+          <FormContainer error={error} success={success} label={label}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <InputField
+                label="Tétel címe"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setTouched((t) => ({ ...t, name: true }));
+                }}
+                error={touched.name ? fieldErrors.name : undefined}
+              />
 
-            <TextAreaField
-              label="Összegzés"
-              value={osszegzes}
-              onChange={(e) => {
-                setOsszegzes(e.target.value);
-                setTouched((t) => ({ ...t, osszegzes: true }));
-              }}
-              error={touched.osszegzes ? fieldErrors.osszegzes : undefined}
-            />
+              <TextAreaField
+                label="Összegzés"
+                value={osszegzes}
+                onChange={(e) => {
+                  setOsszegzes(e.target.value);
+                  setTouched((t) => ({ ...t, osszegzes: true }));
+                }}
+                error={touched.osszegzes ? fieldErrors.osszegzes : undefined}
+              />
 
-            {sections.map((sec, secIndex) => {
-              const sectionErrors: Record<string, string> = {};
-              Object.entries(fieldErrors).forEach(([key, msg]) => {
-                if (key.startsWith(`sections.${secIndex}.`)) {
-                  sectionErrors[key.replace(`sections.${secIndex}.`, "")] = msg;
-                }
-              });
-
-              return (
-                <SectionBlock
-                  key={sec.id}
-                  index={sec.id!}
-                  section={sec}
-                  onUpdateContent={(value) =>
-                    handleSectionUpdate(sec.id!, value)
+              {sections.map((sec, secIndex) => {
+                const sectionErrors: Record<string, string> = {};
+                Object.entries(fieldErrors).forEach(([key, msg]) => {
+                  if (key.startsWith(`sections.${secIndex}.`)) {
+                    sectionErrors[key.replace(`sections.${secIndex}.`, "")] =
+                      msg;
                   }
-                  onAddSubsection={() => handleAddSubsection(sec.id!)}
-                  onRemoveSection={() => handleRemoveSection(sec.id!)}
-                  onUpdateSubsection={(i, field, val) =>
-                    handleSubsectionUpdate(sec.id!, i, field, val)
+                });
+
+                return (
+                  <SectionBlock
+                    key={sec.id}
+                    index={sec.id!}
+                    section={sec}
+                    onUpdateContent={(value) =>
+                      handleSectionUpdate(sec.id!, value)
+                    }
+                    onAddSubsection={() => handleAddSubsection(sec.id!)}
+                    onRemoveSection={() => handleRemoveSection(sec.id!)}
+                    onUpdateSubsection={(i, field, val) =>
+                      handleSubsectionUpdate(sec.id!, i, field, val)
+                    }
+                    onRemoveSubsection={(i) =>
+                      handleRemoveSubsection(sec.id!, i)
+                    }
+                    errors={touched.sections ? sectionErrors : {}}
+                  />
+                );
+              })}
+
+              <div className="flex items-center space-x-2 text-emerald-600">
+                <button
+                  type="button"
+                  onClick={handleAddSection}
+                  className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
+                >
+                  <FaPlus size={15} />
+                </button>
+                <span>Új Szekció</span>
+              </div>
+
+              {flashcards.map((fc, fcIndex) => {
+                const flashcardErrors: Record<string, string> = {};
+                Object.entries(fieldErrors).forEach(([key, msg]) => {
+                  if (key.startsWith(`flashcards.${fcIndex}.`)) {
+                    flashcardErrors[key.replace(`flashcards.${fcIndex}.`, "")] =
+                      msg;
                   }
-                  onRemoveSubsection={(i) => handleRemoveSubsection(sec.id!, i)}
-                  errors={touched.sections ? sectionErrors : {}}
-                />
-              );
-            })}
+                });
 
-            <div className="flex items-center space-x-2 text-emerald-600">
-              <button
-                type="button"
-                onClick={handleAddSection}
-                className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
-              >
-                <FaPlus size={15} />
-              </button>
-              <span>Új Szekció</span>
-            </div>
+                return (
+                  <FlashcardBlock
+                    key={fc.id}
+                    flashcard={fc}
+                    onUpdate={(field, value) =>
+                      handleFlashcardUpdate(fc.id!, field, value)
+                    }
+                    onRemove={() => handleRemoveFlashcard(fc.id!)}
+                    errors={touched.flashcards ? flashcardErrors : {}}
+                  />
+                );
+              })}
 
-            {flashcards.map((fc, fcIndex) => {
-              const flashcardErrors: Record<string, string> = {};
-              Object.entries(fieldErrors).forEach(([key, msg]) => {
-                if (key.startsWith(`flashcards.${fcIndex}.`)) {
-                  flashcardErrors[key.replace(`flashcards.${fcIndex}.`, "")] =
-                    msg;
-                }
-              });
+              <div className="flex items-center space-x-2 text-emerald-600">
+                <button
+                  type="button"
+                  onClick={handleAddFlashcard}
+                  className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
+                >
+                  <FaPlus size={15} />
+                </button>
+                <span>Új flashcard</span>
+              </div>
 
-              return (
-                <FlashcardBlock
-                  key={fc.id}
-                  flashcard={fc}
-                  onUpdate={(field, value) =>
-                    handleFlashcardUpdate(fc.id!, field, value)
-                  }
-                  onRemove={() => handleRemoveFlashcard(fc.id!)}
-                  errors={touched.flashcards ? flashcardErrors : {}}
-                />
-              );
-            })}
-
-            <div className="flex items-center space-x-2 text-emerald-600">
-              <button
-                type="button"
-                onClick={handleAddFlashcard}
-                className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
-              >
-                <FaPlus size={15} />
-              </button>
-              <span>Új flashcard</span>
-            </div>
-
-            <SubmitButton isPending={isPending} label={submitLabel} />
-          </form>
-        </FormContainer>
-      </div>
+              <SubmitButton isPending={isPending} label={submitLabel} />
+            </form>
+          </FormContainer>
+        </div>
+      </Suspense>
     </div>
   );
 };

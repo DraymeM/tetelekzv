@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
-import MultiQuestionForm from "./common/Forms/MultiQuestionForm";
 import { createMultiQuestion } from "../api/repo";
 import type { Answer } from "../api/types";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
+import React from "react";
+const MultiQuestionForm = React.lazy(
+  () => import("./common/Forms/MultiQuestionForm")
+);
 
 const MultiQuestionCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -40,18 +43,20 @@ const MultiQuestionCreate: React.FC = () => {
           <Spinner />
         </div>
       )}
-      <div className="max-w-4xl mx-auto items-center mt-10">
-        <MultiQuestionForm
-          onSubmit={mutation.mutate}
-          isPending={mutation.isPending}
-          submitLabel="Kérdés Létrehozása"
-          formLabel="Új Felelet Választós Kérdés"
-          successMessage={mutation.isSuccess ? "Kérdés létrehozva!" : null}
-          errorMessage={
-            mutation.error ? "Nem sikerült a kérdés létrehozása" : null
-          }
-        />
-      </div>
+      <Suspense>
+        <div className="max-w-4xl mx-auto items-center mt-10">
+          <MultiQuestionForm
+            onSubmit={mutation.mutate}
+            isPending={mutation.isPending}
+            submitLabel="Kérdés Létrehozása"
+            formLabel="Új Felelet Választós Kérdés"
+            successMessage={mutation.isSuccess ? "Kérdés létrehozva!" : null}
+            errorMessage={
+              mutation.error ? "Nem sikerült a kérdés létrehozása" : null
+            }
+          />
+        </div>
+      </Suspense>
     </>
   );
 };

@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import React, { Suspense } from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { FaScroll, FaPlus } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
@@ -6,10 +7,10 @@ import { GiCardPick } from "react-icons/gi";
 import { FaDice } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/useTheme";
-import DesktopNav from "./common/nav/DesktopNav";
-import MobileNav from "./common/nav/MobileNav";
 import type { NavLink } from "./common/nav/NavLinkItem";
-import LogoIcon from "./common/nav/LogoIcon";
+const DesktopNav = React.lazy(() => import("./common/nav/DesktopNav"));
+const MobileNav = React.lazy(() => import("./common/nav/MobileNav"));
+const LogoIcon = React.lazy(() => import("./common/nav/LogoIcon"));
 
 const navLinks: NavLink[] = [
   {
@@ -39,32 +40,34 @@ const Navbar: FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="fixed top-0 w-full mb-10 h-16 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
-      <div className="flex items-center w-full mx-auto justify-between">
-        <Link
-          to="/"
-          className={`flex items-center hover:animate-pulse font-semibold transition-all duration-300 ${
-            isHomeActive ? "text-primary" : "text-foreground"
-          }`}
-        >
-          <LogoIcon className="w-6 h-6 mr-2" />
-        </Link>
+    <Suspense>
+      <nav className="fixed top-0 w-full mb-10 h-16 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
+        <div className="flex items-center w-full mx-auto justify-between">
+          <Link
+            to="/"
+            className={`flex items-center hover:animate-pulse font-semibold transition-all duration-300 ${
+              isHomeActive ? "text-primary" : "text-foreground"
+            }`}
+          >
+            <LogoIcon className="w-6 h-6 mr-2" />
+          </Link>
 
-        <DesktopNav
-          navLinks={navLinks}
-          theme={theme}
-          toggleTheme={toggleTheme}
-          isAuthenticated={isAuthenticated}
-        />
+          <DesktopNav
+            navLinks={navLinks}
+            theme={theme}
+            toggleTheme={toggleTheme}
+            isAuthenticated={isAuthenticated}
+          />
 
-        <MobileNav
-          navLinks={navLinks}
-          theme={theme}
-          toggleTheme={toggleTheme}
-          isAuthenticated={isAuthenticated}
-        />
-      </div>
-    </nav>
+          <MobileNav
+            navLinks={navLinks}
+            theme={theme}
+            toggleTheme={toggleTheme}
+            isAuthenticated={isAuthenticated}
+          />
+        </div>
+      </nav>
+    </Suspense>
   );
 };
 

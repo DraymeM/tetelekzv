@@ -6,16 +6,18 @@ import {
   Link,
 } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { FaArrowLeft, FaPen, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-
 import { fetchMultiQuestionDetails, deleteMultiQuestion } from "../api/repo";
-import AnswerPicker from "../components/common/AnswerPicker";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import { useAuth } from "../context/AuthContext";
 import DeleteModal from "./common/Forms/DeleteModal";
+import React from "react";
+const AnswerPicker = React.lazy(
+  () => import("../components/common/AnswerPicker")
+);
 
 export default function MultiquestionDetails() {
   const { id } = useParams({ strict: false });
@@ -27,8 +29,6 @@ export default function MultiquestionDetails() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  // 1) Fetch single question
   const {
     data: question,
     isLoading,
@@ -38,32 +38,24 @@ export default function MultiquestionDetails() {
     queryFn: () => fetchMultiQuestionDetails(questionId),
     enabled: !isNaN(questionId),
   });
-
-  // 2) Delete mutation with auth + superuser guard
   const deleteMutation = useMutation({
     mutationFn: () => {
-      // not logged in?
       if (!isAuthenticated) {
         toast.error("Ehhez be kell jelentkezned!");
         throw new Error("Nincs engedélyed");
       }
-      // not superuser?
       if (!isSuperUser) {
         toast.error("Nincs jogosultság a művelethez!");
         throw new Error("Nincs jogosultság");
       }
-      // actually call delete endpoint
       return deleteMultiQuestion(questionId);
     },
     onSuccess: () => {
-      // refresh the list
       queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
       toast.success("Sikeresen törölted a kérdést.");
       navigate({ to: "/mquestions" });
     },
-    onError: () => {
-      // toast was already shown inside mutationFn
-    },
+    onError: () => {},
   });
 
   if (isEditMode) return <Outlet />;
@@ -85,46 +77,47 @@ export default function MultiquestionDetails() {
         <FaArrowLeft className="mr-2" />
         Vissza a kérdésekhez
       </Link>
+      <Suspense>
+        <div className="max-w-2xl mx-auto p-6 mt-6 bg-secondary rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold text-center mb-4">
+            {question.question}
+          </h2>
+          <AnswerPicker answers={question.answers} onPick={() => {}} />
+        </div>
 
-      <div className="max-w-2xl mx-auto p-6 mt-6 bg-secondary rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-center mb-4">
-          {question.question}
-        </h2>
-        <AnswerPicker answers={question.answers} onPick={() => {}} />
-      </div>
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onDelete={() => deleteMutation.mutate()}
+          isDeleting={deleteMutation.isPending}
+          itemName={question.question}
+        />
 
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onDelete={() => deleteMutation.mutate()}
-        isDeleting={deleteMutation.isPending}
-        itemName={question.question}
-      />
-
-      {isAuthenticated && (
-        <>
-          {/* Edit Button */}
-          <Link
-            to="/mquestions/$id/edit"
-            params={{ id: questionId.toString() }}
-            className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
+        {isAuthenticated && (
+          <>
+            {/* Edit Button */}
+            <Link
+              to="/mquestions/$id/edit"
+              params={{ id: questionId.toString() }}
+              className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
                        hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
-            title="Szerkeszd a kérdést"
-          >
-            <FaPen size={20} />
-          </Link>
+              title="Szerkeszd a kérdést"
+            >
+              <FaPen size={20} />
+            </Link>
 
-          {/* Delete Button */}
-          <button
-            onClick={() => setIsDeleteModalOpen(true)}
-            className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
+            {/* Delete Button */}
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
                        hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
-            title="Töröld a kérdést"
-          >
-            <FaTrash size={20} />
-          </button>
-        </>
-      )}
+              title="Töröld a kérdést"
+            >
+              <FaTrash size={20} />
+            </button>
+          </>
+        )}
+      </Suspense>
     </>
   );
 }

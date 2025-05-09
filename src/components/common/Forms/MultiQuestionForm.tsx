@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { z } from "zod";
 import type { Answer } from "../../../api/types";
-import FormContainer from "./FormContainer";
-import QuestionInput from "./QuestionInput";
-import AnswerInput from "./AnswerInput";
-import SubmitButton from "./SubmitButton";
+import React from "react";
+const AnswerInput = React.lazy(() => import("./AnswerInput"));
+const QuestionInput = React.lazy(() => import("./QuestionInput"));
+const FormContainer = React.lazy(() => import("./FormContainer"));
+const SubmitButton = React.lazy(() => import("./SubmitButton"));
 
 export const answerSchema = z.object({
   text: z.string().min(1, "A válasz szövege nem lehet üres"),
@@ -106,34 +107,36 @@ const MultiQuestionForm = ({
   };
 
   return (
-    <FormContainer
-      error={errorMessage ?? null}
-      success={successMessage ?? null}
-      label={formLabel}
-    >
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <QuestionInput
-          question={question}
-          setQuestion={setQuestion}
-          fieldErrors={fieldErrors}
-          touched={touched}
-        />
-        <div>
-          <label className="block text-sm font-medium mb-2">Válaszok</label>
-          {answers.map((answer, index) => (
-            <AnswerInput
-              key={index}
-              answer={answer}
-              index={index}
-              updateAnswer={updateAnswer}
-              fieldErrors={fieldErrors.answers[index]}
-              touched={touched.answers[index]}
-            />
-          ))}
-        </div>
-        <SubmitButton isPending={isPending} label={submitLabel} />
-      </form>
-    </FormContainer>
+    <Suspense>
+      <FormContainer
+        error={errorMessage ?? null}
+        success={successMessage ?? null}
+        label={formLabel}
+      >
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <QuestionInput
+            question={question}
+            setQuestion={setQuestion}
+            fieldErrors={fieldErrors}
+            touched={touched}
+          />
+          <div>
+            <label className="block text-sm font-medium mb-2">Válaszok</label>
+            {answers.map((answer, index) => (
+              <AnswerInput
+                key={index}
+                answer={answer}
+                index={index}
+                updateAnswer={updateAnswer}
+                fieldErrors={fieldErrors.answers[index]}
+                touched={touched.answers[index]}
+              />
+            ))}
+          </div>
+          <SubmitButton isPending={isPending} label={submitLabel} />
+        </form>
+      </FormContainer>
+    </Suspense>
   );
 };
 

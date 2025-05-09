@@ -1,1 +1,0 @@
-import{R as o}from"./Register-DO1dBR-Y.js";import{c as t}from"./index-Devi4yYS.js";import"./SubmitButton-blNto2aN.js";import"./InputField-BwGDGN5j.js";import"./repo-Br9-sPjB.js";const s=t("/register")({component:o});export{s as Route};

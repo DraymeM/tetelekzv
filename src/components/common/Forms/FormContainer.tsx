@@ -2,7 +2,6 @@ import { Suspense, type ReactNode } from "react";
 import { FaQuestionCircle } from "react-icons/fa";
 import FormError from "./FormError.tsx";
 import FormSuccess from "./FormSuccess.tsx";
-import Spinner from "@/components/Spinner.tsx";
 
 interface FormContainerProps {
   children: ReactNode;
@@ -18,7 +17,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
   label,
 }) => {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense>
       <div className="min-h-screen ">
         <div className="mx-auto p-6 mt-16">
           <h2 className="text-3xl font-bold text-forground mb-6 flex items-center gap-2 animate-in fade-in duration-500">

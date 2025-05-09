@@ -6,7 +6,7 @@ import Spinner from "./Spinner";
 import { fetchTetelek } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
 import React, { Suspense } from "react";
-const TetelekCard = React.lazy(() => import("./common/TetelCard"));
+const CardLink = React.lazy(() => import("./common/CardLink"));
 
 export default function Tetelek() {
   const { id } = useParams({ strict: false });
@@ -55,7 +55,12 @@ export default function Tetelek() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
             {(tetelek ?? []).map((tetel) => (
-              <TetelekCard key={tetel.id} id={tetel.id} name={tetel.name} />
+              <CardLink
+                key={tetel.id}
+                id={tetel.id}
+                title={tetel.name}
+                to="/tetelek/$id"
+              />
             ))}
           </div>
         )}
