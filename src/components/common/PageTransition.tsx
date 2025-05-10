@@ -1,4 +1,4 @@
-import React, { Fragment, type FC, type ReactNode } from "react";
+import { Fragment, type FC, type ReactNode } from "react";
 import { Transition } from "@headlessui/react";
 
 interface PageTransitionProps {

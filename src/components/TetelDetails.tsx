@@ -15,11 +15,9 @@ import { FaArrowLeft, FaBookOpen, FaPen, FaTrash } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import DeleteModal from "./common/Forms/DeleteModal";
-import React from "react";
 import PageTransition from "../components/common/PageTransition";
-const LearningMode = React.lazy(
-  () => import("./common/TetelDetails/LearningMode")
-);
+import LearningMode from "./common/TetelDetails/LearningMode";
+import MarkdownHandler from "./common/markdown/MarkdownHandler"; // Import the new component
 
 export default function TetelDetails() {
   const { isAuthenticated, isSuperUser } = useAuth();
@@ -44,11 +42,7 @@ export default function TetelDetails() {
 
   const deleteMutation = useMutation({
     mutationFn: () => {
-      if (!isAuthenticated) {
-        toast.error("Nincs engedélyed a művelethez");
-        throw new Error("Nincs engedélyed a művelethez");
-      }
-      if (!isSuperUser) {
+      if (!isAuthenticated || !isSuperUser) {
         toast.error("Nincs engedélyed a művelethez");
         throw new Error("Nincs engedélyed a művelethez");
       }
@@ -58,10 +52,6 @@ export default function TetelDetails() {
       queryClient.invalidateQueries({ queryKey: ["tetelek"] });
       toast.success("Sikeresen törölted a tételt.");
       navigate({ to: "/tetelek" });
-    },
-    onError: (error) => {
-      if (error.message === "Nincs engedélyed a művelethez") {
-      }
     },
   });
 
@@ -117,12 +107,11 @@ export default function TetelDetails() {
       <Suspense>
         <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
           <PageTransition>
+            {/* Header */}
             <div className="flex justify-between items-center mb-8">
               <Link
                 to="/tetelek"
-                className="inline-flex items-center px-3 py-2 border border-border rounded-md
-                       text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground
-                       focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
               >
                 <FaArrowLeft className="mr-2" />
                 Vissza a tételekhez
@@ -131,40 +120,41 @@ export default function TetelDetails() {
               {!learningMode && hasQuestions && (
                 <button
                   onClick={enterLearning}
-                  className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 
-                         rounded-md text-sm font-medium text-white hover:bg-purple-700 
-                         focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:cursor-pointer"
+                  className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 rounded-md text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:cursor-pointer"
                 >
                   <FaBookOpen className="mr-2" />
                   Tanulás
                 </button>
               )}
             </div>
+
+            {/* Title */}
             <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
               {tetel.name}
             </h1>
+
+            {/* Content */}
             {!learningMode ? (
               <div className="space-y-6">
                 {sections.map((section) => (
                   <div
                     key={section.id}
-                    className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent
-                           hover:border-border transition-colors"
+                    className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent hover:border-border transition-colors"
                   >
-                    <h2 className="text-xl font-semibold mb-4 text-foreground">
-                      {section.content}
-                    </h2>
+                    <div className="text-xl font-semibold mb-4 text-foreground">
+                      <MarkdownHandler content={section.content} />
+                    </div>
                     {section.subsections?.map((sub) => (
                       <div
                         key={sub.id}
                         className="ml-4 mb-4 p-4 bg-muted rounded-lg"
                       >
-                        <h3 className="font-medium text-foreground mb-2">
+                        <div className="font-medium text-foreground mb-2">
                           {sub.title}
-                        </h3>
-                        <p className="text-secondary-foreground">
-                          {sub.description}
-                        </p>
+                        </div>
+                        <div className="text-secondary-foreground prose prose-invert max-w-none">
+                          <MarkdownHandler content={sub.description} />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -175,9 +165,9 @@ export default function TetelDetails() {
                     <h2 className="text-2xl font-bold mb-4 text-foreground">
                       Összegzés
                     </h2>
-                    <p className="text-foreground whitespace-pre-line">
-                      {osszegzes.content}
-                    </p>
+                    <div className="text-foreground prose prose-invert max-w-none whitespace-pre-wrap">
+                      <MarkdownHandler content={osszegzes.content} />
+                    </div>
                   </div>
                 )}
               </div>
@@ -189,6 +179,8 @@ export default function TetelDetails() {
                 onExit={() => setLearningMode(false)}
               />
             )}
+
+            {/* Delete Modal */}
             <DeleteModal
               isOpen={isDeleteModalOpen}
               onClose={() => setIsDeleteModalOpen(false)}
@@ -197,19 +189,18 @@ export default function TetelDetails() {
               itemName={tetel.name}
             />
           </PageTransition>
+
+          {/* Floating Action Buttons */}
           {isAuthenticated && (
             <>
-              {/* Floating Action Buttons */}
               <Link
                 to="/tetelek/$id/edit"
                 params={{ id: tetelId.toString() }}
-                className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
-                  hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+                className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
                 title="Szerkeszd a tételt"
               >
                 <FaPen size={20} />
               </Link>
-
               <button
                 onClick={() => {
                   if (!isAuthenticated) {
@@ -218,8 +209,7 @@ export default function TetelDetails() {
                   }
                   setIsDeleteModalOpen(true);
                 }}
-                className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
-                 hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
+                className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
                 title="Töröld a tételt"
               >
                 <FaTrash size={20} />
