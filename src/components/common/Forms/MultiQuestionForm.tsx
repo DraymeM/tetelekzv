@@ -1,26 +1,11 @@
 import { useState, useEffect, Suspense } from "react";
-import { z } from "zod";
 import type { Answer } from "../../../api/types";
 import React from "react";
+import { multiQuestionSchema } from "../../../validator/questionSchema";
 const AnswerInput = React.lazy(() => import("./AnswerInput"));
 const QuestionInput = React.lazy(() => import("./QuestionInput"));
 const FormContainer = React.lazy(() => import("./FormContainer"));
 const SubmitButton = React.lazy(() => import("./SubmitButton"));
-
-export const answerSchema = z.object({
-  text: z.string().min(1, "A válasz szövege nem lehet üres"),
-  isCorrect: z.boolean(),
-});
-
-export const multiQuestionSchema = z.object({
-  question: z.string().min(1, "A kérdés megadása kötelező"),
-  answers: z
-    .array(answerSchema)
-    .length(4, "Pontosan négy válasz szükséges")
-    .refine((answers) => answers.some((ans) => ans.isCorrect), {
-      message: "Legalább egy válasznak helyesnek kell lennie",
-    }),
-});
 
 interface MultiQuestionFormProps {
   onSubmit: (data: { question: string; answers: Answer[] }) => void;
