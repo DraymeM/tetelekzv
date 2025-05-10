@@ -1,11 +1,9 @@
 import { defineConfig } from "vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     TanStackRouterVite({ autoCodeSplitting: true, target: "react" }),
@@ -13,10 +11,6 @@ export default defineConfig({
     tailwindcss(),
   ],
   base: "/tetelekzv/",
-  test: {
-    globals: true,
-    environment: "jsdom",
-  },
   build: {
     outDir: "tetelekzv",
     assetsDir: "assets",
@@ -34,6 +28,19 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/tetelekzv\/BackEnd/, "/BackEnd"),
         logLevel: "debug",
       },
+    },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    include: ["src/_tests_/**/*.test.{ts,tsx}"],
+    watch: false,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      include: ["src/validator/**"],
+      clean: false,
+      coverageDirectory: "coverage",
     },
   },
 });
