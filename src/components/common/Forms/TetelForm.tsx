@@ -8,7 +8,6 @@ import type {
   TetelFormData,
   Subsection,
 } from "../../../api/types";
-import Navbar from "@/components/Navbar";
 import Spinner from "@/components/Spinner";
 const FormContainer = React.lazy(() => import("./FormContainer"));
 const SubmitButton = React.lazy(() => import("./SubmitButton"));
