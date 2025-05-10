@@ -16,6 +16,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import DeleteModal from "./common/Forms/DeleteModal";
 import React from "react";
+import PageTransition from "../components/common/PageTransition";
 const LearningMode = React.lazy(
   () => import("./common/TetelDetails/LearningMode")
 );
@@ -112,89 +113,90 @@ export default function TetelDetails() {
 
   return (
     <>
+      <Navbar />
       <Suspense>
-        <Navbar />
         <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
-          <div className="flex justify-between items-center mb-8">
-            <Link
-              to="/tetelek"
-              className="inline-flex items-center px-3 py-2 border border-border rounded-md
+          <PageTransition>
+            <div className="flex justify-between items-center mb-8">
+              <Link
+                to="/tetelek"
+                className="inline-flex items-center px-3 py-2 border border-border rounded-md
                        text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground
                        focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-            >
-              <FaArrowLeft className="mr-2" />
-              Vissza a tételekhez
-            </Link>
+              >
+                <FaArrowLeft className="mr-2" />
+                Vissza a tételekhez
+              </Link>
 
-            {!learningMode && hasQuestions && (
-              <button
-                onClick={enterLearning}
-                className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 
+              {!learningMode && hasQuestions && (
+                <button
+                  onClick={enterLearning}
+                  className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 
                          rounded-md text-sm font-medium text-white hover:bg-purple-700 
                          focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:cursor-pointer"
-              >
-                <FaBookOpen className="mr-2" />
-                Tanulás
-              </button>
-            )}
-          </div>
-          <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
-            {tetel.name}
-          </h1>
-          {!learningMode ? (
-            <div className="space-y-6">
-              {sections.map((section) => (
-                <div
-                  key={section.id}
-                  className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent
-                           hover:border-border transition-colors"
                 >
-                  <h2 className="text-xl font-semibold mb-4 text-foreground">
-                    {section.content}
-                  </h2>
-                  {section.subsections?.map((sub) => (
-                    <div
-                      key={sub.id}
-                      className="ml-4 mb-4 p-4 bg-muted rounded-lg"
-                    >
-                      <h3 className="font-medium text-foreground mb-2">
-                        {sub.title}
-                      </h3>
-                      <p className="text-secondary-foreground">
-                        {sub.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ))}
-
-              {osszegzes?.content && (
-                <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
-                  <h2 className="text-2xl font-bold mb-4 text-foreground">
-                    Összegzés
-                  </h2>
-                  <p className="text-foreground whitespace-pre-line">
-                    {osszegzes.content}
-                  </p>
-                </div>
+                  <FaBookOpen className="mr-2" />
+                  Tanulás
+                </button>
               )}
             </div>
-          ) : (
-            <LearningMode
-              questions={questions}
-              currentIdx={currentIdx}
-              onNext={nextRandom}
-              onExit={() => setLearningMode(false)}
-            />
-          )}
-          <DeleteModal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
-            onDelete={() => deleteMutation.mutate()}
-            isDeleting={deleteMutation.isPending}
-            itemName={tetel.name}
-          />
+            <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
+              {tetel.name}
+            </h1>
+            {!learningMode ? (
+              <div className="space-y-6">
+                {sections.map((section) => (
+                  <div
+                    key={section.id}
+                    className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent
+                           hover:border-border transition-colors"
+                  >
+                    <h2 className="text-xl font-semibold mb-4 text-foreground">
+                      {section.content}
+                    </h2>
+                    {section.subsections?.map((sub) => (
+                      <div
+                        key={sub.id}
+                        className="ml-4 mb-4 p-4 bg-muted rounded-lg"
+                      >
+                        <h3 className="font-medium text-foreground mb-2">
+                          {sub.title}
+                        </h3>
+                        <p className="text-secondary-foreground">
+                          {sub.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ))}
 
+                {osszegzes?.content && (
+                  <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
+                    <h2 className="text-2xl font-bold mb-4 text-foreground">
+                      Összegzés
+                    </h2>
+                    <p className="text-foreground whitespace-pre-line">
+                      {osszegzes.content}
+                    </p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <LearningMode
+                questions={questions}
+                currentIdx={currentIdx}
+                onNext={nextRandom}
+                onExit={() => setLearningMode(false)}
+              />
+            )}
+            <DeleteModal
+              isOpen={isDeleteModalOpen}
+              onClose={() => setIsDeleteModalOpen(false)}
+              onDelete={() => deleteMutation.mutate()}
+              isDeleting={deleteMutation.isPending}
+              itemName={tetel.name}
+            />
+          </PageTransition>
           {isAuthenticated && (
             <>
               {/* Floating Action Buttons */}
@@ -202,7 +204,7 @@ export default function TetelDetails() {
                 to="/tetelek/$id/edit"
                 params={{ id: tetelId.toString() }}
                 className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
-                 hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+                  hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
                 title="Szerkeszd a tételt"
               >
                 <FaPen size={20} />

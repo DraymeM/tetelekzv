@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/../../core/bootstrap.php';
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Credentials: true");
+$pdo = require __DIR__ . '/../../core/init.php';
+
 require_once __DIR__ . '/../../models/Model.php';
 require_once __DIR__ . '/../../models/Osszegzes.php';
 require_once __DIR__ . '/../../models/Flashcard.php';
@@ -10,6 +13,7 @@ require_once __DIR__ . '/../../models/Tetel.php';
 use Models\Tetel;
 
 $data = json_decode(file_get_contents('php://input'), true);
+
 if (
     empty($data['name']) ||
     !isset($data['osszegzes'], $data['sections'], $data['flashcards']) ||
@@ -22,8 +26,8 @@ if (
 }
 
 try {
-    $t    = new Tetel($kapcsolat);
-    $id   = $t->createFull($data);
+    $t  = new Tetel($pdo);
+    $id = $t->createFull($data);
     echo json_encode(['success' => true, 'tetel_id' => $id]);
 } catch (\Exception $e) {
     http_response_code(500);

@@ -1,13 +1,13 @@
 <?php
-require_once __DIR__ . '/../../core/bootstrap.php';
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Credentials: true");
+$pdo = require __DIR__ . '/../../core/init.php';
 require_once __DIR__ . '/../../models/Model.php';
 require_once __DIR__ . '/../../models/Answer.php';
 require_once __DIR__ . '/../../models/Question.php';
 
 use Models\Question;
-
 $data = json_decode(file_get_contents('php://input'), true);
-
 if (
     empty($data['question']) ||
     ! is_string($data['question']) ||
@@ -19,22 +19,24 @@ if (
 }
 
 try {
-    // Ensure at least one correct answer
     $hasCorrect = array_reduce(
         $data['answers'],
-        fn($c, $a) => $c || (!empty($a['isCorrect'])),
+        fn($c, $a) => $c || (! empty($a['isCorrect'])),
         false
     );
     if (! $hasCorrect) {
-        throw new \Exception("Legalább egy válasznak helyesnek kell lennie");
+        throw new RuntimeException("Legalább egy válasznak helyesnek kell lennie");
     }
-
-    $qm    = new Question($kapcsolat);
+    $qm    = new Question($pdo);
     $newId = $qm->createWithAnswers($data['question'], $data['answers']);
     $out   = $qm->findById($newId);
-
     echo json_encode($out);
-} catch (\Exception $e) {
+
+} catch (InvalidArgumentException $e) {
+    http_response_code(400);
+    echo json_encode(['error' => $e->getMessage()]);
+
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }

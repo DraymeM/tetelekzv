@@ -7,6 +7,7 @@ import type { Answer } from "../api/types";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
 import React from "react";
+import PageTransition from "../components/common/PageTransition";
 const MultiQuestionForm = React.lazy(
   () => import("./common/Forms/MultiQuestionForm")
 );
@@ -45,29 +46,31 @@ const MultiQuestionEdit = () => {
   return (
     <>
       <Navbar />
-      {isBlocking && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
-        >
-          <Spinner />
-        </div>
-      )}
-      <Suspense>
-        <div className="max-w-4xl mx-auto mt-10">
-          <MultiQuestionForm
-            onSubmit={mutation.mutate}
-            isPending={mutation.isPending}
-            initialQuestion={data?.question}
-            initialAnswers={data?.answers}
-            submitLabel="Mentés"
-            formLabel="Kérdés szerkesztése"
-            successMessage={
-              mutation.isSuccess ? "Kérdés sikeresen frissítve!" : null
-            }
-          />
-        </div>
-      </Suspense>
+      <PageTransition>
+        {isBlocking && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
+          >
+            <Spinner />
+          </div>
+        )}
+        <Suspense>
+          <div className="max-w-4xl mx-auto mt-10">
+            <MultiQuestionForm
+              onSubmit={mutation.mutate}
+              isPending={mutation.isPending}
+              initialQuestion={data?.question}
+              initialAnswers={data?.answers}
+              submitLabel="Mentés"
+              formLabel="Kérdés szerkesztése"
+              successMessage={
+                mutation.isSuccess ? "Kérdés sikeresen frissítve!" : null
+              }
+            />
+          </div>
+        </Suspense>
+      </PageTransition>
     </>
   );
 };

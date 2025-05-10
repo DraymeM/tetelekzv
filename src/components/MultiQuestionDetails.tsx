@@ -15,6 +15,7 @@ import Spinner from "./Spinner";
 import { useAuth } from "../context/AuthContext";
 import DeleteModal from "./common/Forms/DeleteModal";
 import React from "react";
+import PageTransition from "../components/common/PageTransition";
 const AnswerPicker = React.lazy(
   () => import("../components/common/AnswerPicker")
 );
@@ -36,7 +37,8 @@ export default function MultiquestionDetails() {
   } = useQuery({
     queryKey: ["multiQuestions", questionId],
     queryFn: () => fetchMultiQuestionDetails(questionId),
-    enabled: !isNaN(questionId),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
   const deleteMutation = useMutation({
     mutationFn: () => {
@@ -70,54 +72,55 @@ export default function MultiquestionDetails() {
   return (
     <>
       <Navbar />
-      <Link
-        to="/mquestions"
-        className="inline-flex items-center px-3 py-2 border border-border mt-20 ml-10 rounded-md text-sm font-medium hover:bg-muted"
-      >
-        <FaArrowLeft className="mr-2" />
-        Vissza a kérdésekhez
-      </Link>
-      <Suspense>
-        <div className="max-w-2xl mx-auto p-6 mt-6 bg-secondary rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-center mb-4">
-            {question.question}
-          </h2>
-          <AnswerPicker answers={question.answers} onPick={() => {}} />
-        </div>
+      <PageTransition>
+        <Suspense>
+          <Link
+            to="/mquestions"
+            className="inline-flex items-center px-3 py-2 border border-border mt-20 ml-10 rounded-md text-sm font-medium hover:bg-muted"
+          >
+            <FaArrowLeft className="mr-2" />
+            Vissza a kérdésekhez
+          </Link>
+          <div className="max-w-2xl mx-auto p-6 mt-6 bg-secondary rounded-lg shadow-md">
+            <h2 className="text-2xl font-semibold text-center mb-4">
+              {question.question}
+            </h2>
+            <AnswerPicker answers={question.answers} onPick={() => {}} />
+          </div>
 
-        <DeleteModal
-          isOpen={isDeleteModalOpen}
-          onClose={() => setIsDeleteModalOpen(false)}
-          onDelete={() => deleteMutation.mutate()}
-          isDeleting={deleteMutation.isPending}
-          itemName={question.question}
-        />
-
-        {isAuthenticated && (
-          <>
-            {/* Edit Button */}
-            <Link
-              to="/mquestions/$id/edit"
-              params={{ id: questionId.toString() }}
-              className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
+          <DeleteModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onDelete={() => deleteMutation.mutate()}
+            isDeleting={deleteMutation.isPending}
+            itemName={question.question}
+          />
+        </Suspense>
+      </PageTransition>
+      {isAuthenticated && (
+        <>
+          {/* Edit Button */}
+          <Link
+            to="/mquestions/$id/edit"
+            params={{ id: questionId.toString() }}
+            className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
                        hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
-              title="Szerkeszd a kérdést"
-            >
-              <FaPen size={20} />
-            </Link>
+            title="Szerkeszd a kérdést"
+          >
+            <FaPen size={20} />
+          </Link>
 
-            {/* Delete Button */}
-            <button
-              onClick={() => setIsDeleteModalOpen(true)}
-              className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
+          {/* Delete Button */}
+          <button
+            onClick={() => setIsDeleteModalOpen(true)}
+            className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
                        hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
-              title="Töröld a kérdést"
-            >
-              <FaTrash size={20} />
-            </button>
-          </>
-        )}
-      </Suspense>
+            title="Töröld a kérdést"
+          >
+            <FaTrash size={20} />
+          </button>
+        </>
+      )}
     </>
   );
 }

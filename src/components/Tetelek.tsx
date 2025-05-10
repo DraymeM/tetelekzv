@@ -6,11 +6,13 @@ import Spinner from "./Spinner";
 import { fetchTetelek } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
 import React, { Suspense } from "react";
+import PageTransition from "../components/common/PageTransition";
 const CardLink = React.lazy(() => import("./common/CardLink"));
 
 export default function Tetelek() {
   const { id } = useParams({ strict: false });
   const { isAuthenticated } = useAuth();
+  const shouldFetch = !id;
   const {
     data: tetelek,
     isLoading,
@@ -18,8 +20,10 @@ export default function Tetelek() {
   } = useQuery({
     queryKey: ["tetelek"],
     queryFn: fetchTetelek,
+    enabled: shouldFetch,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
-
   if (id) return <Outlet />;
 
   if (isLoading) {
@@ -43,27 +47,29 @@ export default function Tetelek() {
   }
 
   return (
-    <Suspense fallback={<Spinner />}>
-      <div className="text-center pt-20">
-        <Navbar />
-        <h2 className="text-3xl font-bold mb-8">Tételek</h2>
+    <div className="text-center pt-20">
+      <Navbar />
+      <Suspense fallback={<Spinner />}>
+        <PageTransition>
+          <h2 className="text-3xl font-bold mb-8">Tételek</h2>
 
-        {(tetelek ?? []).length === 0 ? (
-          <p className="p-4 bg-secondary shadow-md rounded-md transition  text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform ">
-            Nincsenek tételek még.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
-            {(tetelek ?? []).map((tetel) => (
-              <CardLink
-                key={tetel.id}
-                id={tetel.id}
-                title={tetel.name}
-                to="/tetelek/$id"
-              />
-            ))}
-          </div>
-        )}
+          {(tetelek ?? []).length === 0 ? (
+            <p className="p-4 bg-secondary shadow-md rounded-md transition  text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform ">
+              Nincsenek tételek még.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
+              {(tetelek ?? []).map((tetel) => (
+                <CardLink
+                  key={tetel.id}
+                  id={tetel.id}
+                  title={tetel.name}
+                  to="/tetelek/$id"
+                />
+              ))}
+            </div>
+          )}
+        </PageTransition>
         {isAuthenticated && (
           <>
             <Link
@@ -75,7 +81,7 @@ export default function Tetelek() {
             </Link>
           </>
         )}
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }

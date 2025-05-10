@@ -7,10 +7,12 @@ import { fetchQuestions } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
 import { Suspense } from "react";
 import React from "react";
+import PageTransition from "../components/common/PageTransition";
 const CardLink = React.lazy(() => import("./common/CardLink"));
 
 export default function Questions() {
   const { id } = useParams({ strict: false });
+  const shouldFetch = !id;
   const { isAuthenticated } = useAuth();
   const {
     data: questions,
@@ -19,6 +21,9 @@ export default function Questions() {
   } = useQuery({
     queryKey: ["multiQuestions"],
     queryFn: fetchQuestions,
+    enabled: shouldFetch,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
 
   if (id || location.pathname.includes("pmchq")) {
@@ -49,25 +54,26 @@ export default function Questions() {
     <Suspense>
       <div className="text-center pt-20">
         <Navbar />
+        <PageTransition>
+          <h2 className="text-3xl font-bold mb-8">Kérdések</h2>
 
-        <h2 className="text-3xl font-bold mb-8">Kérdések</h2>
-
-        {(questions ?? []).length === 0 ? (
-          <p className="p-4 bg-secondary shadow-md rounded-md transition  text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform ">
-            Nincsenek kérdések még.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
-            {(questions ?? []).map((question) => (
-              <CardLink
-                key={question.id}
-                id={question.id}
-                title={question.question}
-                to="/mquestions/$id"
-              />
-            ))}
-          </div>
-        )}
+          {(questions ?? []).length === 0 ? (
+            <p className="p-4 bg-secondary shadow-md rounded-md transition  text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform ">
+              Nincsenek kérdések még.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
+              {(questions ?? []).map((question) => (
+                <CardLink
+                  key={question.id}
+                  id={question.id}
+                  title={question.question}
+                  to="/mquestions/$id"
+                />
+              ))}
+            </div>
+          )}
+        </PageTransition>
         <Link
           to="/mchoiceq"
           className="fixed bottom-7 right-7 p-3 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition-all transform hover:scale-105 flex items-center justify-center"

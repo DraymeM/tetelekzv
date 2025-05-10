@@ -5,13 +5,14 @@ import {
   createRouter,
   createHashHistory,
 } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import { routeTree } from "./routeTree.gen.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import Applayout from "./components/AppLayout.tsx";
 import Spinner from "./components/Spinner.tsx";
 import NotFoundPage from "./components/404.tsx";
+import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import type { RouterContext } from "./api/types";
@@ -32,6 +33,7 @@ const router = createRouter({
   defaultComponent: Applayout,
   defaultPendingComponent: Spinner,
   defaultNotFoundComponent: NotFoundPage,
+  defaultErrorComponent: ErrorBoundary,
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,

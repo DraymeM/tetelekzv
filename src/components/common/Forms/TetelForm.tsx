@@ -189,7 +189,6 @@ const TetelForm: React.FC<TetelFormProps> = ({
 
   return (
     <div>
-      <Navbar />
       <Suspense fallback={<Spinner />}>
         <div className="max-w-6xl mx-auto items-center">
           <FormContainer error={error} success={success} label={label}>
@@ -248,7 +247,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
                 <button
                   type="button"
                   onClick={handleAddSection}
-                  className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
+                  className="flex items-center justify-center p-2 rounded-full hover:cursor-pointer bg-emerald-600 text-white hover:bg-emerald-700"
                 >
                   <FaPlus size={15} />
                 </button>
@@ -281,7 +280,7 @@ const TetelForm: React.FC<TetelFormProps> = ({
                 <button
                   type="button"
                   onClick={handleAddFlashcard}
-                  className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700"
+                  className="flex items-center justify-center p-2 rounded-full hover:cursor-pointer bg-emerald-600 text-white hover:bg-emerald-700"
                 >
                   <FaPlus size={15} />
                 </button>

@@ -1,1 +1,0 @@
-import{P as o}from"./Profile-D_F6ptR0.js";import"./index-DaQSTSUC.js";import"./repo-WZqPlhe_.js";import"./index-mSkvzYyn.js";import"./FormContainer-D-XfWLqB.js";import"./InputField-DIwveRtj.js";import"./SubmitButton-BxYZtFUc.js";import"./use-resolve-button-type-DzkbLxqW.js";const a=o;export{a as component};

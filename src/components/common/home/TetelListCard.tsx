@@ -12,6 +12,8 @@ const TetelListCard: FC = () => {
   const { data, isLoading, error } = useQuery<Tetel[], Error>({
     queryKey: ["tetelek"],
     queryFn: fetchTetelek,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
 
   const firstThreeTetelek = Array.isArray(data) ? data.slice(0, 3) : [];

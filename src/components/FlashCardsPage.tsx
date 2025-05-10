@@ -7,6 +7,7 @@ import Spinner from "./Spinner";
 import { fetchRandomFlashcard } from "../api/repo";
 import type { Flashcard } from "../api/types";
 import React from "react";
+import PageTransition from "../components/common/PageTransition";
 const FlashCard = React.lazy(() => import("./common/FlashCard"));
 
 export default function FlashCardsPage() {
@@ -74,35 +75,37 @@ export default function FlashCardsPage() {
   return (
     <>
       <Navbar />
-      <Suspense>
-        <main className="flex flex-col items-center justify-center min-h-screen max-w-4xl mx-auto p-8 text-center">
-          <h1 className="text-3xl font-bold mb-6">Villámkérdések</h1>
+      <PageTransition>
+        <Suspense>
+          <main className="flex flex-col items-center justify-center min-h-screen max-w-4xl mx-auto p-8 text-center">
+            <h1 className="text-3xl font-bold mb-6">Villámkérdések</h1>
 
-          <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
-            <FlashCard
-              question={flashcard.question}
-              answer={flashcard.answer}
-            />
+            <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
+              <FlashCard
+                question={flashcard.question}
+                answer={flashcard.answer}
+              />
 
-            <TimerControls
-              onNext={pickRandom}
-              timerEnabled={timerEnabled}
-              setTimerEnabled={setTimerEnabled}
-              timerDuration={timerDuration}
-              setTimerDuration={(seconds) => {
-                setTimerDuration(seconds);
-                setTimeLeft(seconds);
-              }}
-            />
+              <TimerControls
+                onNext={pickRandom}
+                timerEnabled={timerEnabled}
+                setTimerEnabled={setTimerEnabled}
+                timerDuration={timerDuration}
+                setTimerDuration={(seconds) => {
+                  setTimerDuration(seconds);
+                  setTimeLeft(seconds);
+                }}
+              />
 
-            {timerEnabled && (
-              <div className="text-gray-400 text-sm mt-4">
-                Következő kérdés {timeLeft} másodperc múlva
-              </div>
-            )}
-          </div>
-        </main>
-      </Suspense>
+              {timerEnabled && (
+                <div className="text-gray-400 text-sm mt-4">
+                  Következő kérdés {timeLeft} másodperc múlva
+                </div>
+              )}
+            </div>
+          </main>
+        </Suspense>
+      </PageTransition>
     </>
   );
 }

@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import type { TetelFormData } from "../api/types";
 import { createTetel } from "../api/repo";
 import Spinner from "./Spinner";
+import Navbar from "./Navbar";
 const TetelForm = React.lazy(() => import("./common/Forms/TetelForm"));
 
 const TetelCreate: React.FC = () => {
@@ -42,27 +43,30 @@ const TetelCreate: React.FC = () => {
   };
 
   return (
-    <Suspense>
-      <div className="relative">
-        {isBlocking && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center"
-            style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
-          >
-            <Spinner />
-          </div>
-        )}
+    <>
+      <Navbar />
+      <Suspense>
+        <div className="relative">
+          {isBlocking && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
+            >
+              <Spinner />
+            </div>
+          )}
 
-        <TetelForm
-          onSubmit={handleSubmit}
-          isPending={mutation.isPending}
-          error={error}
-          success={success}
-          label="Új Tétel"
-          submitLabel="Tétel Létrehozása"
-        />
-      </div>
-    </Suspense>
+          <TetelForm
+            onSubmit={handleSubmit}
+            isPending={mutation.isPending}
+            error={error}
+            success={success}
+            label="Új Tétel"
+            submitLabel="Tétel Létrehozása"
+          />
+        </div>
+      </Suspense>
+    </>
   );
 };
 
