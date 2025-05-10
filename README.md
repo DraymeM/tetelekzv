@@ -8,7 +8,8 @@
 - [🚀 Getting Started](#-getting-started)  
 - [🧪 Example: Section Block Component](#-example-section-block-component)  
 - [✅ Validation with Zod](#-validation-with-zod)  
-- [DB Setup](#db-setup)  
+- [DB Setup](#db-setup)
+- [🧾 Additional Features](#-additional-features)  
 ---
 
 ## ✨ Features 
@@ -150,8 +151,17 @@ export const tetelSchema = z.object({
     .transform((val) => val || []),
 });
 ```
-
 ## DB setup
 I tried to make the setup as db agnostic as possible
 you will need a dev.env.php for the backend to coccect to your db and an env.php for production.
 connect.php contains a boolean thats switches between production and local file.
+
+## 🧾 Additional Features
+
+   - 🧪 ViteTest: Frontend component and logic testing
+
+  - ❗ Centralized error handling (backend)
+
+   - 🔐 Session-based authentication for secured access
+
+  - 📝 Markdown rendering (supports raw HTML like centered images or styled blocks)
