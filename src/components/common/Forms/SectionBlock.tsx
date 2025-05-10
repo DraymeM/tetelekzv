@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { FaTimes, FaPlus } from "react-icons/fa";
 import TextAreaField from "./TextAreaField";
 import type { Subsection } from "./SubsectionBlock";
-const SubsectionBlock = React.lazy(() => import("./SubsectionBlock"));
+import SubsectionBlock from "./SubsectionBlock";
 
 export interface Section {
   content: string;

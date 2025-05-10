@@ -7,3 +7,5 @@ BackEnd/env.php
 BackEnd/dev.env.php
 tetelekzv/BackEnd/env.php
 tetelekzv/BackEnd/dev.env.php
+tetelekzv/BackEnd/core/init.php
+tetelekzv/BackEnd/core/rateLimiter.php

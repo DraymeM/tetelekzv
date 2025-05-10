@@ -7,10 +7,10 @@ import { toast } from "react-toastify";
 import { updatePassword } from "@/api/repo";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import PasswordForm, { passwordSchema } from "./profil/PasswordForm";
+import PageTransition from "../PageTransition";
 
 const Sidebar = React.lazy(() => import("./profil/Sidebar"));
 const UserInfo = React.lazy(() => import("./profil/UserInfo"));
-
 const Profile: React.FC = () => {
   const { logout, isAuthenticated, isSuperUser, username } = useAuth();
   const navigate = useNavigate();
@@ -75,54 +75,56 @@ const Profile: React.FC = () => {
   return (
     <>
       <Navbar />
-      <Suspense>
-        <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50 overflow-hidden">
-          <button
-            className="p-2 border-border rounded-md focus:outline-none"
-            onClick={() => setIsSidebarOpen(true)}
-            aria-label="Open menu"
-          >
-            <FaArrowAltCircleRight size={36} />
-          </button>
-        </div>
-
-        <Tab.Group>
-          <div className="flex mt-4 relative">
-            <Sidebar
-              isOpen={isSidebarOpen}
-              onClose={() => setIsSidebarOpen(false)}
-            />
-
-            <div className="flex-1 p-8 ml-0 lg:mr-64 lg:ml-64">
-              <Tab.Panels>
-                <Tab.Panel>
-                  <UserInfo
-                    username={username || ""}
-                    isSuperUser={isSuperUser}
-                    isAuthenticated={isAuthenticated}
-                    onLogout={handleLogout}
-                  />
-                </Tab.Panel>
-
-                <Tab.Panel>
-                  <PasswordForm
-                    onSubmit={handlePasswordSubmit}
-                    errors={errors}
-                    isSubmitting={isSubmitting}
-                    successMessage={successMessage}
-                    currentPassword={currentPassword}
-                    newPassword={newPassword}
-                    confirmPassword={confirmPassword}
-                    setCurrentPassword={setCurrentPassword}
-                    setNewPassword={setNewPassword}
-                    setConfirmPassword={setConfirmPassword}
-                  />
-                </Tab.Panel>
-              </Tab.Panels>
-            </div>
+      <PageTransition>
+        <Suspense>
+          <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50 overflow-hidden">
+            <button
+              className="p-2 border-border rounded-md focus:outline-none"
+              onClick={() => setIsSidebarOpen(true)}
+              aria-label="Open menu"
+            >
+              <FaArrowAltCircleRight size={36} />
+            </button>
           </div>
-        </Tab.Group>
-      </Suspense>
+
+          <Tab.Group>
+            <div className="flex mt-4 relative">
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+              />
+
+              <div className="flex-1 p-8 ml-0 lg:mr-64 lg:ml-64">
+                <Tab.Panels>
+                  <Tab.Panel>
+                    <UserInfo
+                      username={username || ""}
+                      isSuperUser={isSuperUser}
+                      isAuthenticated={isAuthenticated}
+                      onLogout={handleLogout}
+                    />
+                  </Tab.Panel>
+
+                  <Tab.Panel>
+                    <PasswordForm
+                      onSubmit={handlePasswordSubmit}
+                      errors={errors}
+                      isSubmitting={isSubmitting}
+                      successMessage={successMessage}
+                      currentPassword={currentPassword}
+                      newPassword={newPassword}
+                      confirmPassword={confirmPassword}
+                      setCurrentPassword={setCurrentPassword}
+                      setNewPassword={setNewPassword}
+                      setConfirmPassword={setConfirmPassword}
+                    />
+                  </Tab.Panel>
+                </Tab.Panels>
+              </div>
+            </div>
+          </Tab.Group>
+        </Suspense>
+      </PageTransition>
     </>
   );
 };

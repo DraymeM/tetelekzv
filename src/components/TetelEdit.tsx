@@ -4,6 +4,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchTetelDetails, updateTetel } from "../api/repo";
 import type { TetelFormData } from "../api/types";
 import Spinner from "./Spinner";
+import Navbar from "./Navbar";
+import PageTransition from "../components/common/PageTransition";
 const TetelForm = React.lazy(() => import("./common/Forms/TetelForm"));
 
 const TetelEdit: React.FC = () => {
@@ -77,28 +79,33 @@ const TetelEdit: React.FC = () => {
   };
 
   return (
-    <Suspense>
-      <div className="relative">
-        {isBlocking && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center"
-            style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
-          >
-            <Spinner />
-          </div>
-        )}
+    <>
+      <Navbar />
+      <PageTransition>
+        <Suspense>
+          <div className="relative">
+            {isBlocking && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center"
+                style={{ backgroundColor: "rgba(25, 25, 30, 0.3)" }}
+              >
+                <Spinner />
+              </div>
+            )}
 
-        <TetelForm
-          initialData={initialData}
-          onSubmit={handleSubmit}
-          isPending={mutation.isPending}
-          error={error}
-          success={success}
-          label="Tétel szerkesztése"
-          submitLabel="Tétel mentése"
-        />
-      </div>
-    </Suspense>
+            <TetelForm
+              initialData={initialData}
+              onSubmit={handleSubmit}
+              isPending={mutation.isPending}
+              error={error}
+              success={success}
+              label="Tétel szerkesztése"
+              submitLabel="Tétel mentése"
+            />
+          </div>
+        </Suspense>
+      </PageTransition>
+    </>
   );
 };
 

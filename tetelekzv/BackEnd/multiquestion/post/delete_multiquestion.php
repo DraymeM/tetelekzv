@@ -1,16 +1,23 @@
 <?php
-require_once __DIR__ . '/../../core/bootstrap.php';
+header("Access-Control-Allow-Methods: DELETE");
+header("Access-Control-Allow-Credentials: true");
+
+$pdo = require __DIR__ . '/../../core/init.php';
+
 require_once __DIR__ . '/../../models/Model.php';
 require_once __DIR__ . '/../../models/Answer.php';
 require_once __DIR__ . '/../../models/Question.php';
 
 use Models\Question;
 
-// bootstrap already enforced session + superuser
-
 if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
     http_response_code(405);
     exit(json_encode(['error' => 'Csak DELETE kérés engedélyezett.']));
+}
+
+if (empty($_SESSION['superuser']) || $_SESSION['superuser'] !== true) {
+    http_response_code(403);
+    exit(json_encode(['error' => 'Nincs jogosultság a törléshez.']));
 }
 
 $payload = json_decode(file_get_contents('php://input'), true);
@@ -22,10 +29,10 @@ if (! $id) {
 }
 
 try {
-    $qm = new Question($kapcsolat);
+    $qm = new Question($pdo);
     $qm->deleteById($id);
     echo json_encode(['success' => true]);
-} catch (\Exception $e) {
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }
