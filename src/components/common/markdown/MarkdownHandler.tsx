@@ -51,6 +51,19 @@ const markdownComponents = {
     }
     return <code {...props}>{children}</code>;
   },
+  a({ href, children, ...props }: any) {
+    return (
+      <a
+        href={href}
+        {...props}
+        className="text-blue-600 hover:underline font-medium"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    );
+  },
 };
 
 interface MarkdownHandlerProps {
