@@ -1,1 +1,0 @@
-import{T as o}from"./Tetelek-CcbxBnEO.js";import"./index-exdmgrYU.js";import"./useQuery-Cf6yMO-_.js";import"./utils-km2FGkQ4.js";import"./repo-RFgb-yIJ.js";import"./PageTransition-BEMEog21.js";const n=o;export{n as component};
