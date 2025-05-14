@@ -1,1 +1,0 @@
-import{c as t}from"./index-exdmgrYU.js";import{M as o}from"./MultiquestionEdit-CZlQJtgV.js";import"./useQuery-Cf6yMO-_.js";import"./utils-km2FGkQ4.js";import"./useMutation-BLMH_BKs.js";import"./repo-RFgb-yIJ.js";import"./PageTransition-BEMEog21.js";const u=t("/mquestions/$id/edit")({component:o});export{u as Route};

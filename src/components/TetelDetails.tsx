@@ -150,7 +150,7 @@ export default function TetelDetails() {
                         className="ml-4 mb-4 p-4 bg-muted rounded-lg"
                       >
                         <div className="font-medium text-foreground mb-2">
-                          {sub.title}
+                          <MarkdownHandler content={sub.title} />
                         </div>
                         <div className="text-secondary-foreground prose prose-invert max-w-none">
                           <MarkdownHandler content={sub.description} />
