@@ -13,9 +13,9 @@ import { fetchMultiQuestionDetails, deleteMultiQuestion } from "../api/repo";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import { useAuth } from "../context/AuthContext";
-import DeleteModal from "./common/Forms/DeleteModal";
 import React from "react";
 import PageTransition from "../components/common/PageTransition";
+const DeleteModal = React.lazy(() => import("./common/Forms/DeleteModal"));
 const AnswerPicker = React.lazy(
   () => import("../components/common/AnswerPicker")
 );

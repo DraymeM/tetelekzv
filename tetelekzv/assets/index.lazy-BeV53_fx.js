@@ -1,0 +1,1 @@
+import{c as o}from"./index-CcgwBqJ8.js";import{H as t}from"./HomePage-BWhpbPoa.js";import"./Navbar-Dl1heMU1.js";import"./link-gbpF_jv7.js";import"./index-C1ZKtdgo.js";import"./PageTransition-DQrU03lL.js";const c=o("/")({component:t});export{c as Route};
