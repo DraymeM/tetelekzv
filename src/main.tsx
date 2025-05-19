@@ -1,30 +1,45 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import {
   RouterProvider,
   createRouter,
   createHashHistory,
 } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen.ts";
+import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./styles.css";
-import reportWebVitals from "./reportWebVitals.ts";
-import Applayout from "./components/AppLayout.tsx";
-import Spinner from "./components/Spinner.tsx";
-import NotFoundPage from "./components/404.tsx";
-import ErrorBoundary from "./components/ErrorBoundary.tsx";
+import reportWebVitals from "./reportWebVitals";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import type { RouterContext } from "./api/types";
+import Spinner from "./components/Spinner";
+
+const Applayout = lazy(() => import("./components/AppLayout"));
+const NotFoundPage = lazy(() => import("./components/404"));
+const ErrorBoundary = lazy(() => import("./components/ErrorBoundary"));
+
 const storedTheme = localStorage.getItem("theme") ?? "dark";
 document.documentElement.classList.add(storedTheme);
-const queryClient = new QueryClient();
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+// 🧭 Router setup
 const router = createRouter({
   routeTree,
   history: createHashHistory(),
   basepath: "/tetelekzv",
   defaultPreload: "intent",
+  scrollRestoration: true,
+  defaultStructuralSharing: true,
+  defaultPreloadStaleTime: 0,
   context: () =>
     ({
       isAuthenticated: false,
@@ -34,9 +49,6 @@ const router = createRouter({
   defaultPendingComponent: Spinner,
   defaultNotFoundComponent: NotFoundPage,
   defaultErrorComponent: ErrorBoundary,
-  scrollRestoration: true,
-  defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
 });
 
 declare module "@tanstack/react-router" {
@@ -60,10 +72,7 @@ const RouterWrapper = () => {
   return (
     <RouterProvider
       router={router}
-      context={{
-        isAuthenticated,
-        isSuperUser,
-      }}
+      context={{ isAuthenticated, isSuperUser }}
     />
   );
 };
@@ -72,12 +81,13 @@ const rootElement = document.getElementById("app");
 
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
-
   root.render(
     <StrictMode>
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
-          <RouterWrapper />
+          <Suspense fallback={<Spinner />}>
+            <RouterWrapper />
+          </Suspense>
           <ToastContainer
             position="bottom-right"
             autoClose={3000}
