@@ -1,0 +1,1 @@
+import{Q as o}from"./Questions-DimTtKe8.js";import{c as t}from"./index-CJoTLqJi.js";import"./link-Bh5fmOEO.js";import"./useQuery-GDa9LIFS.js";import"./utils-km2FGkQ4.js";import"./Navbar-Uar0lE5s.js";import"./index-ByUDIVLO.js";import"./repo-BOAoKCXZ.js";import"./PageTransition-FixFP9oY.js";const u=t("/mquestions")({component:o});export{u as Route};

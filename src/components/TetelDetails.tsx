@@ -17,7 +17,10 @@ import { toast } from "react-toastify";
 import DeleteModal from "./common/Forms/DeleteModal";
 import PageTransition from "../components/common/PageTransition";
 import LearningMode from "./common/TetelDetails/LearningMode";
-import MarkdownHandler from "./common/markdown/MarkdownHandler"; // Import the new component
+import React from "react";
+const MarkdownHandler = React.lazy(
+  () => import("./common/markdown/MarkdownHandler")
+);
 
 export default function TetelDetails() {
   const { isAuthenticated, isSuperUser } = useAuth();
