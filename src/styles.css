@@ -19,12 +19,9 @@ code {
 
 :root {
   --radius: 0.5rem;
-
-  /* Base theme */
   --background: #e9f4ff;
   --foreground: #1d212c;
   --primary: #1ab474;
-  /* Computed theme colors */
   --primary-foreground: color-mix(
     in srgb,
     var(--foreground) 88%,
@@ -52,16 +49,6 @@ code {
   --border: color-mix(in srgb, var(--foreground) 50%, var(--background));
   --input: var(--background);
   --ring: var(--border);
-
-  /* Sidebar variants */
-  --sidebar: var(--secondary);
-  --sidebar-foreground: var(--secondary-foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
 }
 .custom-toast {
   background-color: var(--secondary) !important;
@@ -112,14 +99,6 @@ code {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 .perspective {

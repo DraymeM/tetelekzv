@@ -1,8 +1,9 @@
 import React from "react";
-import { FaPlus, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import SectionBlock from "./SectionBlock";
 import type { Section, Subsection } from "../../../api/types";
 import PageTransition from "../PageTransition";
+import { HiChevronDown } from "react-icons/hi";
 
 interface SectionsListProps {
   sections: Section[];
@@ -55,7 +56,12 @@ const SectionsList: React.FC<SectionsListProps> = ({
             }
           >
             <span className="font-medium">Szekció #{i + 1}</span>
-            {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+            <HiChevronDown
+              className={`transform transition-transform duration-300 ${
+                isOpen ? "rotate-180" : "rotate-0"
+              }`}
+              size={30}
+            />
           </button>
           <PageTransition show={isOpen}>
             <div className="p-4 border border-border rounded-b-md">
