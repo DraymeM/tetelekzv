@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { toast } from "react-toastify";
-import ReactMarkdown from "react-markdown";
+const ReactMarkdown = React.lazy(() => import("react-markdown"));
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw"; // 👈 Enables raw HTML in markdown
 import rehypeHighlight from "rehype-highlight";
@@ -110,13 +110,15 @@ interface MarkdownHandlerProps {
 
 const MarkdownHandler: React.FC<MarkdownHandlerProps> = ({ content }) => {
   return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw, rehypeHighlight]} // 👈 raw HTML support added here
-      components={markdownComponents}
-    >
-      {content}
-    </ReactMarkdown>
+    <Suspense>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw, rehypeHighlight]} // 👈 raw HTML support added here
+        components={markdownComponents}
+      >
+        {content}
+      </ReactMarkdown>
+    </Suspense>
   );
 };
 
