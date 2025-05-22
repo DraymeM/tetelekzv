@@ -103,17 +103,24 @@ export async function deleteMultiQuestion(id: number): Promise<void> {
   }
 }
 
-export async function fetchQuestions(): Promise<IQuestion[]> {
-  const res = await apiClient.get<IQuestion[]>(
-    "/multiquestion/get/get_multiquestion_list.php"
+export async function fetchQuestions({
+  page = 1,
+  limit = 35,
+}): Promise<{ data: IQuestion[]; total: number }> {
+  const res = await apiClient.get(
+    "/multiquestion/get/get_multiquestion_list.php",
+    {
+      params: { page, limit },
+    }
   );
-  if (!Array.isArray(res.data)) {
-    throw new Error(
-      "Expected an array of questions, received: " + JSON.stringify(res.data)
-    );
+
+  if (!res.data || !Array.isArray(res.data.data)) {
+    throw new Error("Unexpected response from backend");
   }
+
   return res.data;
 }
+
 export async function fetchMultiQuestionDetails(
   id: number
 ): Promise<IMultiQuestion> {
