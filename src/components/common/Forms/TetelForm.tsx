@@ -41,25 +41,25 @@ export default function TetelForm({
     updateSub,
     removeSub,
   } = useSections(initialData?.sections);
+
   const { flashcards, addFlashcard, updateFlashcard, removeFlashcard } =
     useFlashcards(initialData?.flashcards);
+
   const [name, setName] = useState(initialData?.name || "");
   const [osszegzes, setOsszegzes] = useState(initialData?.osszegzes || "");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  // Controlled open/closed state
   const [openSections, setOpenSections] = useState<Record<number, boolean>>(
     () => sections.reduce((m, s, i) => ({ ...m, [s.id!]: i === 0 }), {})
   );
+
   const [openFlashcards, setOpenFlashcards] = useState<Record<number, boolean>>(
     () => flashcards.reduce((m, f) => ({ ...m, [f.id!]: false }), {})
   );
 
-  // Live-preview toggle
   const [isPreview, setIsPreview] = useState(false);
 
-  // Validation effect
   useEffect(() => {
     const result = tetelSchema.safeParse({
       name,
@@ -78,12 +78,10 @@ export default function TetelForm({
     }
   }, [name, osszegzes, sections, flashcards]);
 
-  // Scroll into view on top-level errors/success
   useEffect(() => {
     if (error || success) window.scrollTo({ top: 0, behavior: "smooth" });
   }, [error, success]);
 
-  // Submit handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({
@@ -99,11 +97,13 @@ export default function TetelForm({
       sections,
       flashcards,
     });
+
     if (!result.success) {
       toast.error("Javítsd ki a hibákat mielőtt mentenél!");
-      // Open panels with errors
+
       const secErrs = new Set<number>();
       const fcErrs = new Set<number>();
+
       result.error.errors.forEach((err) => {
         const [which, idx] = err.path;
         if (which === "sections") {
@@ -115,16 +115,19 @@ export default function TetelForm({
           if (id != null) fcErrs.add(id);
         }
       });
+
       setOpenSections((o) => {
         const next = { ...o };
         secErrs.forEach((id) => (next[id] = true));
         return next;
       });
+
       setOpenFlashcards((o) => {
         const next = { ...o };
         fcErrs.forEach((id) => (next[id] = true));
         return next;
       });
+
       return;
     }
 
@@ -132,15 +135,23 @@ export default function TetelForm({
     toast.success("Sikeres mentés!");
   };
 
+  const handleAddSection = () => {
+    const newSection = addSection();
+    setOpenSections((prev) => ({ ...prev, [newSection.id!]: true }));
+  };
+  const handleAddFlashcard = () => {
+    const newCard = addFlashcard();
+    setOpenFlashcards((prev) => ({ ...prev, [newCard.id!]: true }));
+  };
+
   return (
     <div>
       <Suspense fallback={<Spinner />}>
         <div className="max-w-6xl mx-auto">
-          {/* Preview toggle */}
           <div className="flex justify-end mb-4">
             <button
               onClick={() => setIsPreview((p) => !p)}
-              className="fixed hover:cursor-pointer bottom-7 right-7 p-3 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              className="fixed bottom-7 right-7 p-3 bg-purple-600 text-white rounded-full hover:bg-purple-700 hover:scale-105 transition-all z-50"
               title={isPreview ? "Vissza szerkesztéshez" : "Előnézet"}
             >
               {isPreview ? <FaPen size={20} /> : <FaEye size={20} />}
@@ -175,7 +186,7 @@ export default function TetelForm({
                     sections={sections}
                     openSections={openSections}
                     setOpenSections={setOpenSections}
-                    addSection={addSection}
+                    addSection={handleAddSection}
                     removeSection={removeSection}
                     updateSection={updateSection}
                     addSub={addSub}
@@ -188,7 +199,7 @@ export default function TetelForm({
                     flashcards={flashcards}
                     openFlashcards={openFlashcards}
                     setOpenFlashcards={setOpenFlashcards}
-                    addFlashcard={addFlashcard}
+                    addFlashcard={handleAddFlashcard}
                     removeFlashcard={removeFlashcard}
                     updateFlashcard={updateFlashcard}
                     fieldErrors={fieldErrors}

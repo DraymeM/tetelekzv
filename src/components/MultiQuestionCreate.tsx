@@ -24,8 +24,10 @@ const MultiQuestionCreate: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
       toast.success("Kérdés létrehozva!");
-      setIsBlocking(false);
-      setTimeout(() => navigate({ to: "/mquestions" }), 2000);
+      setTimeout(() => {
+        navigate({ to: "/mquestions" });
+        setIsBlocking(false);
+      }, 2000);
     },
     onError: () => {
       toast.error("Nem sikerült a kérdés létrehozása!");

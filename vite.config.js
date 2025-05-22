@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import viteReact from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
@@ -7,13 +7,17 @@ import { resolve } from "node:path";
 export default defineConfig({
   plugins: [
     TanStackRouterVite({ autoCodeSplitting: true, target: "react" }),
-    viteReact(),
+    react(),
     tailwindcss(),
   ],
   base: "/tetelekzv/",
   build: {
     outDir: "tetelekzv",
     assetsDir: "assets",
+    target: "esnext",
+    cssCodeSplit: true,
+    sourcemap: false,
+    minify: "esbuild",
   },
   resolve: {
     alias: {

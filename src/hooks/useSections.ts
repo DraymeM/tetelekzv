@@ -23,9 +23,10 @@ export function useSections(initialSections?: Section[]) {
     initialSections?.map(makeSection) ?? [makeSection()]
   );
 
-  const addSection = () => {
+  const addSection = (): Section => {
     const sec = makeSection();
     setSections((s) => [...s, sec]);
+    return sec;
   };
 
   const removeSection = (id: number) =>

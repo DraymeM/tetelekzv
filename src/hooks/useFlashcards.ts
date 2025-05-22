@@ -18,9 +18,10 @@ export function useFlashcards(initialFlashcards?: Flashcard[]) {
     initialFlashcards?.map(makeFlashcard) ?? []
   );
 
-  const addFlashcard = () => {
+  const addFlashcard = (): Flashcard => {
     const fc = makeFlashcard();
     setFlashcards((f) => [...f, fc]);
+    return fc;
   };
 
   const updateFlashcard = (id: number, field: keyof Flashcard, val: string) =>

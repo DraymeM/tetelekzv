@@ -1,8 +1,9 @@
 import React from "react";
-import { FaPlus, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import FlashcardBlock from "./FlashcardBlock";
 import type { Flashcard } from "../../../api/types";
 import PageTransition from "../PageTransition";
+import { HiChevronDown } from "react-icons/hi";
 interface FlashcardsListProps {
   flashcards: Flashcard[];
   openFlashcards: Record<number, boolean>;
@@ -43,7 +44,12 @@ const FlashcardsList: React.FC<FlashcardsListProps> = ({
             }
           >
             <span className="font-medium">Flashcard #{i + 1}</span>
-            {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+            <HiChevronDown
+              className={`transform transition-transform duration-300 ${
+                isOpen ? "rotate-180" : "rotate-0"
+              }`}
+              size={30}
+            />
           </button>
           <PageTransition show={isOpen}>
             <div className="p-4 border border-secondary rounded-b-md">
