@@ -7,6 +7,8 @@ import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import PageTransition from "../components/common/PageTransition";
 import { FaDice, FaPlus } from "react-icons/fa";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import { LimitDropdown, Pagination } from "./common/PaginationControls";
 
 const CardLink = lazy(() => import("./common/CardLink"));
@@ -14,7 +16,7 @@ const CardLink = lazy(() => import("./common/CardLink"));
 export default function Questions() {
   const { id } = useParams({ strict: false });
   const { isAuthenticated } = useAuth();
-
+  const isOnline = useOnlineStatus();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(35);
 
@@ -31,7 +33,13 @@ export default function Questions() {
   if (id || location.pathname.includes("pmchq")) {
     return <Outlet />;
   }
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   if (isLoading) {
     return (
       <>

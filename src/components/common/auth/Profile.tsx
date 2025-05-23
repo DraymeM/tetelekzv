@@ -8,7 +8,8 @@ import { updatePassword } from "@/api/repo";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import PasswordForm, { passwordSchema } from "./profil/PasswordForm";
 import PageTransition from "../PageTransition";
-
+import OfflinePlaceholder from "../../OfflinePlaceholder";
+import { useOnlineStatus } from "../../../hooks/useOnlineStatus";
 const Sidebar = React.lazy(() => import("./profil/Sidebar"));
 const UserInfo = React.lazy(() => import("./profil/UserInfo"));
 const Profile: React.FC = () => {
@@ -23,7 +24,7 @@ const Profile: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
+  const isOnline = useOnlineStatus();
   const handleLogout = async () => {
     try {
       await logout();
@@ -71,7 +72,13 @@ const Profile: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   return (
     <>
       <Navbar />

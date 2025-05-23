@@ -3,6 +3,8 @@ import { z } from "zod";
 import { useNavigate } from "@tanstack/react-router";
 import { register } from "../../../api/repo";
 import { toast } from "react-toastify";
+import OfflinePlaceholder from "../../OfflinePlaceholder";
+import { useOnlineStatus } from "../../../hooks/useOnlineStatus";
 const FormContainer = React.lazy(() => import("../Forms/FormContainer"));
 const InputField = React.lazy(() => import("../Forms/InputField"));
 const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
@@ -17,7 +19,7 @@ const Register: React.FC = () => {
   const [isPending, setIsPending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-
+  const isOnline = useOnlineStatus();
   const registerSchema = z
     .object({
       username: z.string().min(3, "Legalább 3 karakter"),
@@ -69,7 +71,13 @@ const Register: React.FC = () => {
       setIsPending(false);
     }
   };
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   return (
     <Suspense>
       <div>

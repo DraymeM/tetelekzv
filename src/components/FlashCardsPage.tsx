@@ -8,6 +8,8 @@ import { fetchRandomFlashcard } from "../api/repo";
 import type { Flashcard } from "../api/types";
 import React from "react";
 import PageTransition from "../components/common/PageTransition";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const FlashCard = React.lazy(() => import("./common/FlashCard"));
 
 export default function FlashCardsPage() {
@@ -26,7 +28,7 @@ export default function FlashCardsPage() {
   const pickRandom = () => {
     queryClient.invalidateQueries({ queryKey: ["randomFlashcard"] });
   };
-
+  const isOnline = useOnlineStatus();
   const {
     timerEnabled,
     setTimerEnabled,
@@ -43,7 +45,13 @@ export default function FlashCardsPage() {
       queryClient.invalidateQueries({ queryKey: ["randomFlashcard"] });
     }
   }, []);
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   if (isLoading)
     return (
       <>

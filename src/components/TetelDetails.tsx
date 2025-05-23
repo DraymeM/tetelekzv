@@ -24,6 +24,7 @@ import DeleteModal from "./common/Forms/DeleteModal";
 import PageTransition from "../components/common/PageTransition";
 import LearningMode from "./common/TetelDetails/LearningMode";
 import React from "react";
+import OfflinePlaceholder from "./OfflinePlaceholder";
 const MarkdownHandler = React.lazy(
   () => import("./common/markdown/MarkdownHandler")
 );
@@ -108,10 +109,21 @@ export default function TetelDetails() {
   }
 
   if (error) {
+    if (!navigator.onLine) {
+      return (
+        <>
+          <OfflinePlaceholder />
+        </>
+      );
+    }
+
     return (
-      <div className="p-10 text-red-500 text-center">
-        Hiba történt: {error.message}
-      </div>
+      <>
+        <Navbar />
+        <div className="p-10 text-red-500 text-center">
+          Hiba történt: {error.message}
+        </div>
+      </>
     );
   }
 

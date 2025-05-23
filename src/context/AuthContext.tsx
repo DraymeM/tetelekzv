@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import apiClient from "../api/index";
-import RateLimit from "../components/RateLimit"; // your rate‐limit UI
+import RateLimit from "../components/RateLimit";
 import Spinner from "@/components/Spinner";
 
 interface AuthContextType {

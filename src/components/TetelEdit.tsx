@@ -6,6 +6,8 @@ import type { TetelFormData } from "../api/types";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
 import PageTransition from "../components/common/PageTransition";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const TetelForm = React.lazy(() => import("./common/Forms/TetelForm"));
 
 const TetelEdit: React.FC = () => {
@@ -16,7 +18,7 @@ const TetelEdit: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isBlocking, setIsBlocking] = useState(false);
-
+  const isOnline = useOnlineStatus();
   const { data, isLoading } = useQuery({
     queryKey: ["tetelDetail", tetelId],
     queryFn: () => fetchTetelDetails(tetelId),
@@ -60,7 +62,14 @@ const TetelEdit: React.FC = () => {
       })),
     });
   };
-
+  if (!isOnline) {
+    return (
+      <>
+        <Navbar />
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   if (isLoading)
     return (
       <div className="p-10 text-center text-gray-300">

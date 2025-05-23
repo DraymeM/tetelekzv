@@ -7,6 +7,8 @@ import type { Answer } from "../api/types";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
 import React from "react";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import PageTransition from "../components/common/PageTransition";
 const MultiQuestionForm = React.lazy(
   () => import("./common/Forms/MultiQuestionForm")
@@ -16,7 +18,7 @@ const MultiQuestionCreate: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isBlocking, setIsBlocking] = useState(false);
-
+  const isOnline = useOnlineStatus();
   const mutation = useMutation({
     mutationFn: (newQuestion: { question: string; answers: Answer[] }) =>
       createMultiQuestion(newQuestion),
@@ -34,7 +36,13 @@ const MultiQuestionCreate: React.FC = () => {
       setIsBlocking(false);
     },
   });
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   return (
     <>
       <Navbar />

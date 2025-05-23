@@ -2,10 +2,13 @@ import React, { Suspense } from "react";
 import Navbar from "./Navbar";
 import { FaBookOpen, FaQuestionCircle } from "react-icons/fa";
 import PageTransition from "../components/common/PageTransition";
-import { Link } from "@tanstack/react-router"; // Import Link from TanStack Router
+import { Link } from "@tanstack/react-router";
+import WarningCard from "./common/WarningCard";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const TetelListCard = React.lazy(() => import("./common/home/TetelListCard"));
 
 const HomePage: React.FC = () => {
+  const isOnline = useOnlineStatus();
   return (
     <div>
       <Navbar />
@@ -25,18 +28,17 @@ const HomePage: React.FC = () => {
           {/* Tartalomszekció */}
           <section className="py-12">
             <div className="max-w-7xl mx-auto px-6">
+              {!isOnline && (
+                <WarningCard message="Offline módban vagy, ilyenkor csak a lementett tételeket tudod megnézni." />
+              )}
               <h2 className="text-3xl font-semibold text-center mb-8">
                 Fedezd fel a tartalmat
               </h2>
 
-              {/* Javított Grid Elrendezés */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Bal oldali: Tetel List */}
                 <TetelListCard />
 
-                {/* Jobb oldali: 2 kis kártya egymásra rakva */}
                 <div className="flex flex-col space-y-8">
-                  {/* Kidolgozott Tételek Kártya */}
                   <Link to="/tetelek" className="cursor-pointer">
                     <div className="bg-secondary shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2 p-6 flex-1">
                       <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
@@ -52,7 +54,6 @@ const HomePage: React.FC = () => {
                     </div>
                   </Link>
 
-                  {/* Tételekhez Kérdések Kártya */}
                   <Link to="/mchoiceq" className="cursor-pointer">
                     <div className="bg-secondary shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2 p-6 flex-1">
                       <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
