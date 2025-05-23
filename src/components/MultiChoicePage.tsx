@@ -16,6 +16,8 @@ import {
 } from "react-icons/fa";
 import { fetchRandomMultiQuestion } from "../api/repo";
 import PageTransition from "../components/common/PageTransition";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 
 export default function MultiChoicePage() {
   const queryClient = useQueryClient();
@@ -29,7 +31,7 @@ export default function MultiChoicePage() {
     retry: 2,
     refetchOnWindowFocus: false,
   });
-
+  const isOnline = useOnlineStatus();
   const [score, setScore] = useState(0);
   const [questionsAnswered, setQuestionsAnswered] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -76,7 +78,13 @@ export default function MultiChoicePage() {
     setHasAnswered(false);
     pickRandom();
   };
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   if (isLoading)
     return (
       <>

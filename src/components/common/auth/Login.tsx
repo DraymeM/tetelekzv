@@ -3,6 +3,8 @@ import { z } from "zod";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../context/AuthContext";
+import OfflinePlaceholder from "../../OfflinePlaceholder";
+import { useOnlineStatus } from "../../../hooks/useOnlineStatus";
 const FormContainer = React.lazy(() => import("../Forms/FormContainer"));
 const InputField = React.lazy(() => import("../Forms/InputField"));
 const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
@@ -15,7 +17,7 @@ const Login: React.FC = () => {
   const [isPending, setIsPending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-
+  const isOnline = useOnlineStatus();
   const loginSchema = z.object({
     username: z.string().min(1, "Kötelező mező"),
     password: z.string().min(1, "Kötelező mező"),
@@ -57,7 +59,13 @@ const Login: React.FC = () => {
       setTouched({});
     }
   };
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   return (
     <Suspense>
       <div>

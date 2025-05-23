@@ -5,6 +5,8 @@ import type { TetelFormData } from "../api/types";
 import { createTetel } from "../api/repo";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const TetelForm = React.lazy(() => import("./common/Forms/TetelForm"));
 
 const TetelCreate: React.FC = () => {
@@ -13,7 +15,7 @@ const TetelCreate: React.FC = () => {
   const [isBlocking, setIsBlocking] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
+  const isOnline = useOnlineStatus();
   const mutation = useMutation({
     mutationFn: (data: TetelFormData) => createTetel(data),
     onMutate: () => {
@@ -41,6 +43,13 @@ const TetelCreate: React.FC = () => {
     setError(null);
     mutation.mutate(data);
   };
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
 
   return (
     <>

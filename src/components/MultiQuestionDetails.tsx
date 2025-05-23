@@ -15,6 +15,8 @@ import Spinner from "./Spinner";
 import { useAuth } from "../context/AuthContext";
 import React from "react";
 import PageTransition from "../components/common/PageTransition";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const DeleteModal = React.lazy(() => import("./common/Forms/DeleteModal"));
 const AnswerPicker = React.lazy(
   () => import("../components/common/AnswerPicker")
@@ -25,7 +27,7 @@ export default function MultiquestionDetails() {
   const questionId = Number(id);
   const location = useLocation();
   const isEditMode = location.pathname.includes("/edit");
-
+  const isOnline = useOnlineStatus();
   const { isAuthenticated, isSuperUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -59,7 +61,13 @@ export default function MultiquestionDetails() {
     },
     onError: () => {},
   });
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   if (isEditMode) return <Outlet />;
   if (isLoading) return <Spinner />;
   if (error || !question)

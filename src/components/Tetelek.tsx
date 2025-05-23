@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import PageTransition from "../components/common/PageTransition";
 import { FaPlus } from "react-icons/fa";
 import { LimitDropdown, Pagination } from "./common/PaginationControls";
-
+import OfflinePlaceholder from "./OfflinePlaceholder";
 const CardLink = React.lazy(() => import("./common/CardLink"));
 
 export default function Tetelek() {
@@ -40,11 +40,23 @@ export default function Tetelek() {
     );
   }
 
-  if (error instanceof Error) {
+  if (error) {
+    if (!navigator.onLine) {
+      return (
+        <>
+          <Navbar />
+          <OfflinePlaceholder />
+        </>
+      );
+    }
+
     return (
-      <div className="text-center mt-10 text-red-500">
-        Hiba: {error.message}
-      </div>
+      <>
+        <Navbar />
+        <div className="p-10 text-red-500 text-center">
+          Hiba történt: {error.message}
+        </div>
+      </>
     );
   }
 

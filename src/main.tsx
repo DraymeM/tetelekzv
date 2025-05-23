@@ -7,12 +7,16 @@ import {
 } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import type { RouterContext } from "./api/types";
 import Spinner from "./components/Spinner";
+
+// PWA registration import
+import { registerSW } from "virtual:pwa-register";
 
 const Applayout = lazy(() => import("./components/AppLayout"));
 const NotFoundPage = lazy(() => import("./components/404"));
@@ -27,6 +31,33 @@ const queryClient = new QueryClient({
       staleTime: 5 * 60 * 1000,
       retry: 1,
       refetchOnWindowFocus: false,
+    },
+  },
+});
+
+// Manual localStorage persister:
+const localStoragePersister = {
+  persistClient: async (client: unknown) => {
+    localStorage.setItem("REACT_QUERY_OFFLINE_CACHE", JSON.stringify(client));
+  },
+  restoreClient: async () => {
+    const cacheString = localStorage.getItem("REACT_QUERY_OFFLINE_CACHE");
+    if (!cacheString) return undefined;
+    return JSON.parse(cacheString);
+  },
+  removeClient: async () => {
+    localStorage.removeItem("REACT_QUERY_OFFLINE_CACHE");
+  },
+};
+
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+  maxAge: 1000 * 60 * 60 * 24, // 24 hours
+  dehydrateOptions: {
+    shouldDehydrateQuery: (query) => {
+      const key = query.queryKey?.[0];
+      return key === "tetelek" || key === "tetelDetail";
     },
   },
 });
@@ -108,3 +139,14 @@ if (rootElement && !rootElement.innerHTML) {
 }
 
 reportWebVitals();
+
+// Register PWA service worker
+registerSW({
+  onNeedRefresh() {
+    // Optional: prompt user to refresh when a new SW is available
+    console.log("New content available, please refresh.");
+  },
+  onOfflineReady() {
+    console.log("App is ready to work offline.");
+  },
+});

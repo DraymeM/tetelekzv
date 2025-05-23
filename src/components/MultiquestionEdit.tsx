@@ -7,6 +7,8 @@ import type { Answer } from "../api/types";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
 import React from "react";
+import OfflinePlaceholder from "./OfflinePlaceholder";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import PageTransition from "../components/common/PageTransition";
 const MultiQuestionForm = React.lazy(
   () => import("./common/Forms/MultiQuestionForm")
@@ -18,7 +20,7 @@ const MultiQuestionEdit = () => {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [isBlocking, setIsBlocking] = useState(false);
-
+  const isOnline = useOnlineStatus();
   const { data, isLoading } = useQuery({
     queryKey: ["multiQuestions", questionId],
     queryFn: () => fetchMultiQuestionDetails(questionId),
@@ -42,7 +44,13 @@ const MultiQuestionEdit = () => {
   });
 
   if (isLoading) return <Spinner />;
-
+  if (!isOnline) {
+    return (
+      <>
+        <OfflinePlaceholder />
+      </>
+    );
+  }
   return (
     <>
       <Navbar />
