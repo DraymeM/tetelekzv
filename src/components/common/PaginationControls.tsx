@@ -126,7 +126,7 @@ export function Pagination({ page, setPage, total, limit }: PaginationProps) {
       )}
 
       <button
-        className="p-2 rounded border bg-muted disabled:opacity-50"
+        className="p-2 rounded border bg-muted disabled:opacity-50 hover:cursor-pointer"
         onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
         disabled={page === pageCount}
         aria-label="Next page"

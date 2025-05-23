@@ -5,18 +5,23 @@ import { Disclosure } from "@headlessui/react";
 import { FaChevronDown, FaSpinner, FaListUl } from "react-icons/fa";
 import { fetchTetelek } from "../../../api/repo";
 import type { Tetel } from "../../../api/types";
+
 const TetelListCard: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const { data, isLoading, error } = useQuery<Tetel[], Error>({
-    queryKey: ["tetelek"],
-    queryFn: fetchTetelek,
+  const { data, isLoading, error } = useQuery<
+    {
+      data: Tetel[];
+      total: number;
+    },
+    Error
+  >({
+    queryKey: ["tetelek", 1, 3], // track page + limit for caching
+    queryFn: () => fetchTetelek({ page: 1, limit: 3 }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
-
-  const firstThreeTetelek = Array.isArray(data) ? data.slice(0, 3) : [];
 
   const handleDisclosureClick = () => {
     startTransition(() => {
@@ -65,8 +70,8 @@ const TetelListCard: FC = () => {
                     <p className="text-red-400">Hiba: {error.message}</p>
                   ) : (
                     <ol className="pl-6 text-foreground0 space-y-2">
-                      {firstThreeTetelek.length > 0 ? (
-                        firstThreeTetelek.map((tétel, index) => (
+                      {(data?.data?.length ?? 0) > 0 ? (
+                        data?.data?.map((tétel, index) => (
                           <li key={tétel.id} className="hover:text-foreground">
                             <span className="text-secondary-foreground">
                               {index + 1}.{" "}

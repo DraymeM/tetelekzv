@@ -135,4 +135,26 @@ class Tetel extends Model
 
         $this->db->commit();
     }
+
+    public function findPaginated(int $limit, int $offset): array
+{
+    $stmt = $this->db->prepare(
+        "SELECT id, name FROM {$this->table} LIMIT :limit OFFSET :offset"
+    );
+    $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+    $stmt->execute();
+
+    return array_map(fn($r) => [
+        'id' => (int)$r['id'],
+        'name' => $r['name']
+    ], $stmt->fetchAll(\PDO::FETCH_ASSOC));
+}
+
+public function countAll(): int
+{
+    return (int) $this->db
+        ->query("SELECT COUNT(*) FROM {$this->table}")
+        ->fetchColumn();
+}
 }
