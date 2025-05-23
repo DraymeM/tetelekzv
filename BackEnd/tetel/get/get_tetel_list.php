@@ -11,7 +11,15 @@ require_once __DIR__ . '/../../models/Tetel.php';
 
 use Models\Tetel;
 
-$t = new Tetel($pdo);
-$list = $t->findAll();
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = isset($_GET['limit']) ? max(1, (int)$_GET['limit']) : 35;
+$offset = ($page - 1) * $limit;
 
-echo json_encode($list);
+$t = new Tetel($pdo);
+$data = $t->findPaginated($limit, $offset);
+$total = $t->countAll();
+
+echo json_encode([
+    'data' => $data,
+    'total' => $total
+]);

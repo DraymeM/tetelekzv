@@ -9,13 +9,23 @@ import type {
   Flashcard,
 } from "./types";
 
-export async function fetchTetelek(): Promise<Tetel[]> {
-  const res = await apiClient.get<Tetel[]>("/tetel/get/get_tetel_list.php");
-  if (!Array.isArray(res.data)) {
+export async function fetchTetelek({
+  page = 1,
+  limit = 35,
+}: {
+  page?: number;
+  limit?: number;
+}): Promise<{ data: Tetel[]; total: number }> {
+  const res = await apiClient.get("/tetel/get/get_tetel_list.php", {
+    params: { page, limit },
+  });
+
+  if (!res.data || !Array.isArray(res.data.data)) {
     throw new Error(
-      "Expected an array of tetelek, received: " + JSON.stringify(res.data)
+      "Unexpected response from backend: " + JSON.stringify(res.data)
     );
   }
+
   return res.data;
 }
 
