@@ -1,0 +1,1 @@
+import{M as o}from"./MultiQuestionCreate-BfrU-3bR.js";import{c as t}from"./index-C5suzcpx.js";import"./useMutation-YLi9uHDh.js";import"./utils-km2FGkQ4.js";import"./repo-BfVv8K4d.js";import"./Navbar-BUM_BvCX.js";import"./link-DfXfZ5aI.js";import"./index-Crw9cMvJ.js";import"./PageTransition-DrbtWe0G.js";const u=t("/pmchq")({component:o});export{u as Route};

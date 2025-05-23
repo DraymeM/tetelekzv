@@ -1,4 +1,5 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, Fragment } from "react";
+import { Transition } from "@headlessui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import Navbar from "./Navbar";
@@ -15,6 +16,7 @@ import {
 } from "react-icons/fa";
 import { fetchRandomMultiQuestion } from "../api/repo";
 import PageTransition from "../components/common/PageTransition";
+
 export default function MultiChoicePage() {
   const queryClient = useQueryClient();
   const {
@@ -124,67 +126,102 @@ export default function MultiChoicePage() {
               Csak egy válaszlehetőség jó!
             </p>
 
-            {/* Scoreboard */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6 text-muted-foreground text-sm">
-              <div className="flex items-center gap-2">
-                <FaCheckCircle className="text-green-500" />
-                <span>
-                  Helyes válaszok:{" "}
-                  <span className="font-semibold">{score}</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaClipboardList className="text-blue-500" />
-                <span>
-                  Megválaszolt kérdések:{" "}
-                  <span className="font-semibold">{questionsAnswered}</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaTrophy className="text-yellow-500" />
-                <span>
-                  Sorozat: <span className="font-semibold">{streak}</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Current Question */}
-            <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
-              <div className="p-4 sm:p-6 rounded-lg bg-secondary text-foreground w-full overflow-auto max-h-[80vh]">
-                <h2 className="text-xl font-semibold mb-4">
-                  {currentQuestion.question}
-                </h2>
-                <AnswerPicker
-                  answers={currentQuestion.answers}
-                  onPick={handleAnswerPick}
-                />
-              </div>
-
-              <TimerControls
-                onNext={pickRandom}
-                timerEnabled={timerEnabled}
-                setTimerEnabled={setTimerEnabled}
-                timerDuration={timerDuration}
-                setTimerDuration={(duration) => {
-                  setTimerDuration(duration);
-                  setTimeLeft(duration);
-                }}
-              />
-
-              {timerEnabled && (
-                <div className="text-gray-400 text-sm mt-4">
-                  Következő kérdés {timeLeft} másodperc múlva
+            {/* Scoreboard with fade-in transition */}
+            <Transition
+              as={Fragment}
+              show={true}
+              appear={true}
+              enter="transition ease-out duration-500"
+              enterFrom="opacity-0 translate-y-2"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in duration-300"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-2"
+            >
+              <div className="flex flex-row gap-6 mb-6 text-muted-foreground text-sm justify-center">
+                {/* Score */}
+                <div className="flex items-center md:gap-2 bg-green-100/20 px-4 py-2 rounded-md shadow-sm">
+                  <FaCheckCircle className="text-green-500" />
+                  <span>
+                    Válaszok:{" "}
+                    <span className="font-semibold text-green-500">
+                      {score}
+                    </span>
+                  </span>
                 </div>
-              )}
 
-              <button
-                className="mt-1 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:scale-105 flex items-center gap-2"
-                onClick={handleReset}
-              >
-                <FaRedo />
-                Újrakezdés
-              </button>
-            </div>
+                {/* Questions answered */}
+                <div className="flex items-center md:gap-2 bg-blue-100/20 px-4 py-2 rounded-md shadow-sm">
+                  <FaClipboardList className="text-blue-500" />
+                  <span>
+                    Kérdések:{" "}
+                    <span className="font-semibold text-blue-500">
+                      {questionsAnswered}
+                    </span>
+                  </span>
+                </div>
+
+                {/* Streak */}
+                <div className="flex items-center md:gap-2 bg-yellow-100/20 px-4 py-2 rounded-md shadow-sm">
+                  <FaTrophy className="text-yellow-500" />
+                  <span>
+                    Sorozat:{" "}
+                    <span className="font-semibold text-yellow-500">
+                      {streak}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </Transition>
+
+            {/* Current Question with slide and fade */}
+            <Transition
+              as={Fragment}
+              show={!!currentQuestion}
+              enter="transition ease-out duration-500 transform"
+              enterFrom="opacity-0 translate-x-4"
+              enterTo="opacity-100 translate-x-0"
+              leave="transition ease-in duration-300 transform"
+              leaveFrom="opacity-100 translate-x-0"
+              leaveTo="opacity-0 translate-x-4"
+            >
+              <div className="flex flex-col items-center gap-6 w-full max-w-2xl">
+                <div className="p-6 rounded-lg bg-secondary text-foreground w-full overflow-auto max-h-[80vh] shadow-md">
+                  <h2 className="text-xl font-semibold mb-4">
+                    {currentQuestion.question}
+                  </h2>
+                  <AnswerPicker
+                    answers={currentQuestion.answers}
+                    onPick={handleAnswerPick}
+                  />
+                </div>
+
+                <TimerControls
+                  onNext={pickRandom}
+                  timerEnabled={timerEnabled}
+                  setTimerEnabled={setTimerEnabled}
+                  timerDuration={timerDuration}
+                  setTimerDuration={(duration) => {
+                    setTimerDuration(duration);
+                    setTimeLeft(duration);
+                  }}
+                />
+
+                {timerEnabled && (
+                  <div className="text-gray-400 text-sm mt-4">
+                    Következő kérdés {timeLeft} másodperc múlva
+                  </div>
+                )}
+
+                <button
+                  className="mt-1 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:scale-105 flex items-center gap-2"
+                  onClick={handleReset}
+                >
+                  <FaRedo />
+                  Újrakezdés
+                </button>
+              </div>
+            </Transition>
           </main>
         </Suspense>
       </PageTransition>

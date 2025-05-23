@@ -11,7 +11,13 @@ import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import { fetchTetelDetails, deleteTetel } from "../api/repo";
 import type { TetelDetailsResponse } from "../api/types";
-import { FaArrowLeft, FaBookOpen, FaPen, FaTrash } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaBookOpen,
+  FaPen,
+  FaRegClock,
+  FaTrash,
+} from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import DeleteModal from "./common/Forms/DeleteModal";
@@ -21,6 +27,38 @@ import React from "react";
 const MarkdownHandler = React.lazy(
   () => import("./common/markdown/MarkdownHandler")
 );
+
+// Helper to estimate reading time
+function calculateReadingTime(
+  sections: TetelDetailsResponse["sections"],
+  osszegzes?: TetelDetailsResponse["osszegzes"]
+): number {
+  const getTextFromMarkdown = (markdown: string) =>
+    markdown
+      .replace(/[#_*>\-`]/g, "")
+      .replace(/\[.*?\]\(.*?\)/g, "")
+      .replace(/!\[.*?\]\(.*?\)/g, "")
+      .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  let totalText = "";
+
+  sections.forEach((section) => {
+    totalText += " " + getTextFromMarkdown(section.content);
+    section.subsections?.forEach((sub) => {
+      totalText += " " + getTextFromMarkdown(sub.title || "");
+      totalText += " " + getTextFromMarkdown(sub.description || "");
+    });
+  });
+
+  if (osszegzes?.content) {
+    totalText += " " + getTextFromMarkdown(osszegzes.content);
+  }
+
+  const wordCount = totalText.split(" ").filter(Boolean).length;
+  return Math.ceil(wordCount / 200); // ~200 WPM
+}
 
 export default function TetelDetails() {
   const { isAuthenticated, isSuperUser } = useAuth();
@@ -88,6 +126,7 @@ export default function TetelDetails() {
 
   const hasQuestions = questions.length > 0;
   const canRandomize = questions.length > 1;
+  const readingMinutes = calculateReadingTime(sections, osszegzes);
 
   const nextRandom = () => {
     if (!canRandomize) return;
@@ -120,15 +159,23 @@ export default function TetelDetails() {
                 Vissza a tételekhez
               </Link>
 
-              {!learningMode && hasQuestions && (
-                <button
-                  onClick={enterLearning}
-                  className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 rounded-md text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:cursor-pointer"
-                >
-                  <FaBookOpen className="mr-2" />
-                  Tanulás
-                </button>
-              )}
+              <div className="flex items-center gap-4">
+                {!learningMode && (
+                  <span className="text-sm mx-auto text-secondary-foreground">
+                    <FaRegClock className="inline mr-1" size={15} />
+                    {readingMinutes} perc
+                  </span>
+                )}
+                {!learningMode && hasQuestions && (
+                  <button
+                    onClick={enterLearning}
+                    className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 rounded-md text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:cursor-pointer"
+                  >
+                    <FaBookOpen className="mr-2" />
+                    Tanulás
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Title */}
