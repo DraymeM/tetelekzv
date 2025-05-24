@@ -20,6 +20,7 @@
   - **Superusers**: create, read, edit, and delete tételek
 - 🚦 **Rate limit protection** on backend
 - 🧪 Component/unit tests with ViteTest
+- ⚙️ **Custom PHP ORM** and minimal backend by design due to server limitations
 
 ---
 
@@ -31,7 +32,7 @@
 | Styling/UI       | TailwindCSS, Headless UI, Toastify, Icons |
 | State/Caching    | React Query, Zod for schema validation     |
 | Markdown Support | react-markdown, rehype-highlight           |
-| Backend (Minimal)| PHP (vanilla), file-based env config       |
+| Backend (Minimal)| PHP (vanilla), custom ORM, env config      |
 | Auth             | Session-based authentication with roles    |
 | Testing          | ViteTest                                   |
 | PWA              | vite-plugin-pwa, service workers           |
@@ -42,7 +43,7 @@
 
 ### 🔧 Clone & Setup
 
-```
+```bash
 git clone https://github.com/DraymeM/tetelekzv.git
 cd tetelekzv
 ```
@@ -107,12 +108,13 @@ php -S localhost:8000
 
 ---
 
-## 🔒 Backend & Rate Limit
+## 🔒 Backend, ORM & Rate Limit
 
-- Minimal PHP API
-- Environment-specific DB files (local/production)
+- Minimal **PHP** backend due to hosting limitations
+- Fully custom **ORM** to abstract DB access
+- Uses simple env config switching (`dev.env.php` / `env.php`)
 - Rate limit logic to prevent overload
-- Toast-based error notifications
+- Graceful fallback UI via toast notifications
 
 ---
 
@@ -125,7 +127,7 @@ php -S localhost:8000
 
 ## 🧾 Sample Component
 
-```ts
+```jsx
 <Disclosure>
   <Disclosure.Button>
     <FaChevronDown />
@@ -144,5 +146,3 @@ php -S localhost:8000
 - 🧪 Self-test with flashcards before exams
 - ✍️ Rich markdown content for definitions and examples
 - 👨‍🎓 Designed for university students prepping for ZH, vizsga, or thesis defense
-
----
