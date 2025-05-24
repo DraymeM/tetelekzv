@@ -14,6 +14,7 @@
 - ✍️ **Markdown-rich content** rendered from database
 - 🧠 Flashcard system (add, edit, learn)
 - 👥 **User-driven content with authentication**
+- 🧩 **Multichoice quiz game** with user-created questions, streak, and progress tracking
 - 🔐 **Role-based permissions**:
   - **Unauthenticated users**: read-only access
   - **Simple users**: create, read, and edit tételek
@@ -78,6 +79,20 @@ php -S localhost:8000
 
 - Follows system preference or manual toggle
 - Applies to all UI and markdown content
+
+### 🎮 Multichoice Quiz Game
+
+- Users can create, edit, and play multichoice quizzes
+
+- Questions are stored per topic
+
+- Progress is tracked per user
+
+- Streaks and performance data are saved for learning insights
+
+- Fast-paced, game-style review method
+
+- Optional timer function
 
 ### ✍️ Markdown Editor
 
