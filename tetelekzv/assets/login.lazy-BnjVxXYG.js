@@ -1,0 +1,1 @@
+import{c as o}from"./index-DPYyAyTg.js";import{L as t}from"./Login-CB46-Pnl.js";import"./OfflinePlaceholder-tZHCTSRw.js";import"./index-C5vUaE_u.js";import"./useOnlineStatus-DSuyr0gS.js";import"./types-CZYGTQuY.js";const a=o("/login")({component:t});export{a as Route};
