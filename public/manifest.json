@@ -1,6 +1,6 @@
 {
-  "short_name": "TanStack App",
-  "name": "Create TanStack App Sample",
+  "short_name": "TetelekZV",
+  "name": "Tetelek Zaro Vizsgara",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,7 +18,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/tetelekzv/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
