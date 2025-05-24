@@ -18,6 +18,9 @@ import Spinner from "./components/Spinner";
 // PWA registration import
 import { registerSW } from "virtual:pwa-register";
 
+// Import idb-keyval for IndexedDB access
+import { set, get, del } from "idb-keyval";
+
 const Applayout = lazy(() => import("./components/AppLayout"));
 const NotFoundPage = lazy(() => import("./components/404"));
 const ErrorBoundary = lazy(() => import("./components/ErrorBoundary"));
@@ -35,24 +38,38 @@ const queryClient = new QueryClient({
   },
 });
 
-// Manual localStorage persister:
-const localStoragePersister = {
+const QUERY_CACHE_KEY = "REACT_QUERY_OFFLINE_CACHE";
+
+// IndexedDB persister for React Query cache
+const idbPersister = {
   persistClient: async (client: unknown) => {
-    localStorage.setItem("REACT_QUERY_OFFLINE_CACHE", JSON.stringify(client));
+    try {
+      await set(QUERY_CACHE_KEY, client);
+    } catch (error) {
+      console.error("Error persisting query client to IndexedDB:", error);
+    }
   },
   restoreClient: async () => {
-    const cacheString = localStorage.getItem("REACT_QUERY_OFFLINE_CACHE");
-    if (!cacheString) return undefined;
-    return JSON.parse(cacheString);
+    try {
+      const cache = await get(QUERY_CACHE_KEY);
+      return cache ?? undefined;
+    } catch (error) {
+      console.error("Error restoring query client from IndexedDB:", error);
+      return undefined;
+    }
   },
   removeClient: async () => {
-    localStorage.removeItem("REACT_QUERY_OFFLINE_CACHE");
+    try {
+      await del(QUERY_CACHE_KEY);
+    } catch (error) {
+      console.error("Error removing query client from IndexedDB:", error);
+    }
   },
 };
 
 persistQueryClient({
   queryClient,
-  persister: localStoragePersister,
+  persister: idbPersister,
   maxAge: 1000 * 60 * 60 * 24, // 24 hours
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
@@ -143,7 +160,6 @@ reportWebVitals();
 // Register PWA service worker
 registerSW({
   onNeedRefresh() {
-    // Optional: prompt user to refresh when a new SW is available
     console.log("New content available, please refresh.");
   },
   onOfflineReady() {
