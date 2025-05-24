@@ -1,6 +1,6 @@
 # TételekZV 📚
 
-**TételekZV** is a modern full-stack web application for organizing and preparing **tételek** (topics) for oral or written exams. Built with **React + TypeScript** and a **PHP backend**, it provides a sleek, form-based interface to structure learning into sections, subsections, and flashcards.
+**TételekZV** is a modern, offline-ready full-stack application designed to help students organize, study, and practice tételek (exam topics) for university oral or written exams. It features a form-based interface with support for flashcards, markdown content, offline mode, and progressive web app (PWA) installability.
 
 ## 🌐 Live Demo
 
@@ -18,7 +18,8 @@ Check out the live demo: [TételekZV Live Demo](https://danielmarkus.web.elte.hu
 ---
 
 ## ✨ Features 
-
+- 📱 Progressive Web App (PWA): installable on mobile/desktop
+- ⚠️ Offline mode (cache-persisted tételek via React Query)
 - ✅ **Create, edit, and manage** tételek with nested structure
 - ✍️ Markdown-style rich text editing (WIP)
 - 📦 Section/subsection logic with validation using [Zod](https://zod.dev)
@@ -26,7 +27,8 @@ Check out the live demo: [TételekZV Live Demo](https://danielmarkus.web.elte.hu
 - 💅 [Headless UI](https://headlessui.com/) for accessible, animated components
 - 🔄 Modular structure with reusable form components
 - 🚀 Minimal PHP backend for persistence (WIP)
-
+- 🧪 Frontend test coverage with ViteTest
+- 📛 Rate limit handling for server overload protection
 ---
 
 ## 🧑‍💻 Tech Stack
@@ -156,17 +158,43 @@ export const tetelSchema = z.object({
     .transform((val) => val || []),
 });
 ```
-## DB setup
+## 🛢️ DB setup
 I tried to make the setup as db agnostic as possible
 you will need a dev.env.php for the backend to coccect to your db and an env.php for production.
 connect.php contains a boolean thats switches between production and local file.
 
-## 🧾 Additional Features
+## ⚙️ Advanced Capabilities
+📲 PWA Support
 
-   - 🧪 ViteTest: Frontend component and logic testing
+  - Installable via "Add to Home Screen"
 
-  - ❗ Centralized error handling (backend)
+  - Custom mobile install prompt (optional)
 
-   - 🔐 Session-based authentication for secured access
+  - Works offline via persistQueryClient + React Query cache
 
-  - 📝 Markdown rendering (supports raw HTML like centered images or styled blocks)
+  - Service Worker registered via Vite PWA plugin
+
+✍️ Markdown Renderer
+
+   - Built-in markdown support with HTML passthrough
+
+   - Ideal for formatted answers, code, and images
+
+   - Can style blocks, add alignment, and enhance flashcards
+
+🚦 Rate Limit Handling
+
+   - Custom rate limit logic on backend (PHP)
+
+   - Graceful fallback with toast error messages
+
+🧪 Testing
+
+  -  Component/unit testing with ViteTest
+
+  -  Hooks and logic are covered in isolation
+    
+## 🎓 Use Cases
+ - Topic breakdowns with structured sub-content
+ - Flashcard-based revision and practice
+ - Univeristy students preparing for ZH/vizsga
