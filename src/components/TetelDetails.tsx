@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   useParams,
   useLocation,
@@ -25,11 +25,7 @@ import PageTransition from "../components/common/PageTransition";
 import LearningMode from "./common/TetelDetails/LearningMode";
 import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
-const MarkdownHandler = React.lazy(
-  () => import("./common/markdown/MarkdownHandler")
-);
 
-// Helper to estimate reading time
 function calculateReadingTime(
   sections: TetelDetailsResponse["sections"],
   osszegzes?: TetelDetailsResponse["osszegzes"]
@@ -82,6 +78,12 @@ export default function TetelDetails() {
     refetchOnWindowFocus: false,
   });
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" }); // or "smooth"
+  }, [location.pathname]);
+  const MarkdownHandler = React.lazy(
+    () => import("./common/markdown/MarkdownHandler")
+  );
   const deleteMutation = useMutation({
     mutationFn: () => {
       if (!isAuthenticated || !isSuperUser) {
