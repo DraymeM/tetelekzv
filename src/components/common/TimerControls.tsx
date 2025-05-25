@@ -21,8 +21,8 @@ export default function TimerControls({
       {/* Next Question Button */}
       <button
         onClick={onNext}
-        className="inline-flex items-center px-4 py-2 bg-orange-500 hover:cursor-pointer hover:bg-orange-400 text-white rounded-md 
-                   transition focus:outline-none focus:ring-2 focus:ring-orange-500"
+        className="inline-flex items-center px-4 py-2 bg-amber-700 hover:cursor-pointer text-sm hover:bg-amber-600 text-white font-bold rounded-md 
+                   transition focus:outline-none "
       >
         <FaSyncAlt className="mr-2 animate-spin" />
         Következő kérdés
@@ -31,12 +31,12 @@ export default function TimerControls({
       {/* Toggle Timer Button */}
       <button
         onClick={() => setTimerEnabled(!timerEnabled)}
-        className={`inline-flex items-center px-4 py-2 rounded-md text-sm hover:cursor-pointer font-medium transition 
-          focus:outline-none focus:ring-2 focus:ring-indigo-500
+        className={`inline-flex items-center  px-4 py-2 rounded-md text-sm hover:cursor-pointer font-bold transition 
+          focus:outline-none 
           ${
             timerEnabled
-              ? "bg-red-600 hover:bg-red-500 text-white"
-              : "bg-green-600 hover:bg-green-500 text-white"
+              ? "bg-red-700 hover:bg-red-600 text-white"
+              : "bg-green-700 hover:bg-green-600 text-white"
           }`}
       >
         <FaRegClock className="mr-2" />

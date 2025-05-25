@@ -45,6 +45,8 @@ const Navbar: FC = () => {
         <div className="flex items-center w-full mx-auto justify-between">
           <Link
             to="/"
+            aria-label="Kezdőlap"
+            title="Kezdőlap"
             className={`flex items-center hover:animate-pulse font-semibold transition-all duration-300 ${
               isHomeActive ? "text-primary" : "text-foreground"
             }`}

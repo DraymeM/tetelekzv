@@ -150,7 +150,7 @@ export default function MultiChoicePage() {
                 {/* Score */}
                 <div className="flex items-center md:gap-2 bg-green-100/20 px-4 py-2 rounded-md shadow-sm">
                   <FaCheckCircle className="text-green-500" />
-                  <span>
+                  <span className="text-foreground">
                     Válaszok:{" "}
                     <span className="font-semibold text-green-500">
                       {score}
@@ -161,7 +161,7 @@ export default function MultiChoicePage() {
                 {/* Questions answered */}
                 <div className="flex items-center md:gap-2 bg-blue-100/20 px-4 py-2 rounded-md shadow-sm">
                   <FaClipboardList className="text-blue-500" />
-                  <span>
+                  <span className="text-foreground">
                     Kérdések:{" "}
                     <span className="font-semibold text-blue-500">
                       {questionsAnswered}
@@ -172,7 +172,7 @@ export default function MultiChoicePage() {
                 {/* Streak */}
                 <div className="flex items-center md:gap-2 bg-yellow-100/20 px-4 py-2 rounded-md shadow-sm">
                   <FaTrophy className="text-yellow-500" />
-                  <span>
+                  <span className="text-foreground">
                     Sorozat:{" "}
                     <span className="font-semibold text-yellow-500">
                       {streak}
@@ -222,7 +222,7 @@ export default function MultiChoicePage() {
                 )}
 
                 <button
-                  className="mt-1 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:scale-105 flex items-center gap-2"
+                  className="mt-1 px-6 py-3 rounded bg-red-600 hover:bg-red-700 text-white transition-all transform hover:cursor-pointer flex items-center gap-2"
                   onClick={handleReset}
                 >
                   <FaRedo />
