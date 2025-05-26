@@ -9,6 +9,7 @@
 ## 📌 Highlights
 
 - 💾 **Offline-first** PWA (React Query + service worker cache)
+- 📊 Dashboard with Live Progress Stats
 - 📱 **Installable** mobile/desktop app
 - 🎨 **Light/Dark Mode** toggle with Tailwind
 - ✍️ **Markdown-rich content** rendered from database
@@ -74,6 +75,22 @@ php -S localhost:8000
 - Installable on mobile and desktop
 - Works offline (cached tételek)
 - Service worker support with Vite PWA plugin
+
+### 📊 Dashboard with Total Content Stats
+
+- New dashboard displaying total number of created items:
+
+  - 📚 Tételek (topics)
+
+  - 🧠 Flashcards
+
+  - ❓ Quiz questions
+
+- Uses CountUp.js for animated counters
+
+- Includes custom Tailwind-styled cards for a clean, responsive UI
+
+- Gives users a quick overview of overall platform content and growth
 
 ### 🌓 Dark/Light Mode
 
