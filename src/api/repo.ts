@@ -157,6 +157,13 @@ export async function fetchRandomFlashcard(): Promise<Flashcard> {
   return res.data;
 }
 
+export async function fetchFlashcardCount(): Promise<{ total: number }> {
+  const res = await apiClient.get<{ total: number }>(
+    "/tetel/get/get_total_flashcards.php"
+  );
+  return res.data;
+}
+
 /*------------------------------------------------------AUTH---------------------------------------------------------------*/
 
 export async function register(username: string, password: string) {

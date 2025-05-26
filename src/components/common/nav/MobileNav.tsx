@@ -3,7 +3,7 @@ import { Menu } from "@headlessui/react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { FaUser, FaSignInAlt, FaMoon, FaSun } from "react-icons/fa";
 import type { NavLink } from "./NavLinkItem";
-
+import { FiMenu } from "react-icons/fi";
 interface Props {
   navLinks: NavLink[];
   theme: string;
@@ -28,21 +28,13 @@ const MobileNav: FC<Props> = ({
       >
         {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
       </button>
-      <Menu.Button className="p-1 rounded-md border-2 transition-colors duration-300 text-foreground border-border">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          className="h-6 w-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
+      <Menu.Button
+        type="button"
+        aria-label="Menü megnyitása"
+        title="Menü megnyitása"
+        className="p-1 rounded-md border-2 transition-colors duration-300 text-foreground border-border"
+      >
+        <FiMenu className="h-6 w-6" aria-hidden="true" focusable="false" />
       </Menu.Button>
       <Menu.Items className="absolute right-0 w-56 mt-2 border-2 shadow-lg transition-all transform bg-muted text-foreground z-50">
         {navLinks.map((link) => {

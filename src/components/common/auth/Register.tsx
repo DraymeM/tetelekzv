@@ -85,7 +85,8 @@ const Register: React.FC = () => {
           <FormContainer error={error} success={success} label="Register">
             <form onSubmit={handleSubmit} className="space-y-4">
               <InputField
-                label="Username"
+                id="username"
+                label="Felhasználónév"
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
@@ -95,7 +96,8 @@ const Register: React.FC = () => {
               />
 
               <InputField
-                label="Password"
+                id="password"
+                label="Jelszó"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -106,7 +108,8 @@ const Register: React.FC = () => {
               />
 
               <InputField
-                label="Confirm Password"
+                id="confirm password"
+                label="Jelszó megerősítése"
                 value={confirmPassword}
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
