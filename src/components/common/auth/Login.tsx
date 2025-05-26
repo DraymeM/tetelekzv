@@ -73,6 +73,7 @@ const Login: React.FC = () => {
           <FormContainer error={null} success={null} label="Bejelentkezés">
             <form onSubmit={handleSubmit} className="space-y-4">
               <InputField
+                id="username"
                 label="Felhasználónév"
                 value={username}
                 onChange={(e) => {
@@ -83,6 +84,7 @@ const Login: React.FC = () => {
               />
 
               <InputField
+                id="password"
                 label="Jelszó"
                 value={password}
                 onChange={(e) => {

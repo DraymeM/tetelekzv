@@ -3,53 +3,58 @@ import Navbar from "./Navbar";
 import { FaBookOpen, FaQuestionCircle } from "react-icons/fa";
 import PageTransition from "../components/common/PageTransition";
 import { Link } from "@tanstack/react-router";
-import WarningCard from "./common/WarningCard";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
+import Spinner from "./Spinner";
+import WarningCard from "./common/WarningCard";
+const LogoIcon = React.lazy(() => import("./common/nav/LogoIcon"));
 const TetelListCard = React.lazy(() => import("./common/home/TetelListCard"));
-
+const DashboardOverview = React.lazy(
+  () => import("./common/home/DashboardOverview")
+);
 const HomePage: React.FC = () => {
   const isOnline = useOnlineStatus();
   return (
     <div>
       <Navbar />
       <PageTransition>
-        <Suspense>
+        <Suspense fallback={<Spinner />}>
           {/* Hőszekció */}
-          <section className="text-center mt-5 py-16">
-            <h1 className="text-4xl font-bold text-foreground">
-              Tétel lista és Kidolgozott Tételek
-            </h1>
+          <section className="text-center mt-15 py-5">
+            <div className="flex justify-center items-center">
+              <LogoIcon className="w-18 h-18 text-primary  " />
+              <h1 className="text-5xl font-bold italic text-primary -translate-x-[17px] translate-y-[15px] tracking-tight skew-x-[2deg]">
+                iomi
+              </h1>
+            </div>
             <p className="mt-4 text-lg text-foreground">
-              Az oldal az ELTE IK tételeit tartalmazza, kidolgozott válaszokkal
-              és interaktív kérdésekkel.
+              Készíts, tanulj és ossz meg tananyagot, tételeket, kártyákat,
+              kérdéseke, bárhol, bármikor.
             </p>
           </section>
 
           {/* Tartalomszekció */}
-          <section className="py-12">
+          <section className="py-6">
             <div className="max-w-7xl mx-auto px-6">
               {!isOnline && (
                 <WarningCard message="Offline módban vagy, ilyenkor csak a lementett tételeket tudod megnézni." />
               )}
-              <h2 className="text-3xl font-semibold text-center mb-8">
-                Fedezd fel a tartalmat
-              </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <DashboardOverview />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <TetelListCard />
 
-                <div className="flex flex-col space-y-8">
+                <div className="flex flex-col space-y-6">
                   <Link to="/tetelek" className="cursor-pointer">
                     <div className="bg-secondary shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2 p-6 flex-1">
                       <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
                         <FaBookOpen size={24} />
-                        Kidolgozott Tételek
+                        Tananyagok és Kártyacsomagok
                       </h3>
                       <div className="h-0.5 bg-border w-full mb-4" />
                       <p className="text-foreground">
-                        Itt találhatók a részletes válaszokkal és
-                        magyarázatokkal rendelkező kidolgozott tételek, amelyek
-                        segítenek a vizsga előkészítésében.
+                        Böngéssz vagy hozz létre tananyagokat: kidolgozott
+                        tételek, jegyzetek, kártyák és egyéb oktatási
+                        segédletek.
                       </p>
                     </div>
                   </Link>
@@ -58,12 +63,12 @@ const HomePage: React.FC = () => {
                     <div className="bg-secondary shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2 p-6 flex-1">
                       <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
                         <FaQuestionCircle size={24} />
-                        Tételekhez Kérdések
+                        Gyakorló Kérdések
                       </h3>
                       <div className="h-0.5 bg-border w-full mb-4" />
                       <p className="text-foreground">
-                        Az interaktív kérdések segítségével tesztelheted tudásod
-                        a tételek témaköreiben.
+                        Teszteld tudásod interaktív kérdésekkel és válaszokkal –
+                        önállóan vagy csoportban.
                       </p>
                     </div>
                   </Link>

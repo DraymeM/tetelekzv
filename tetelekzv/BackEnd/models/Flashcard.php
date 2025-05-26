@@ -65,4 +65,10 @@ class Flashcard extends Model
     {
         return $this->delete("id = :id", [':id' => $id]);
     }
+
+public function countAll(): int
+{
+    $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table}");
+    return $stmt ? (int) $stmt->fetchColumn() : 0;
+}
 }

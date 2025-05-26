@@ -74,7 +74,13 @@ persistQueryClient({
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
       const key = query.queryKey?.[0];
-      return key === "tetelek" || key === "tetelDetail";
+      return (
+        key === "tetelek" ||
+        key === "tetelDetail" ||
+        key === "tetel-count" ||
+        key === "question-count" ||
+        key === "flashcard-count"
+      );
     },
   },
 });
@@ -83,7 +89,7 @@ persistQueryClient({
 const router = createRouter({
   routeTree,
   history: createHashHistory(),
-  basepath: "/tetelekzv",
+  basepath: "/",
   defaultPreload: "intent",
   scrollRestoration: true,
   defaultStructuralSharing: true,
