@@ -1,6 +1,6 @@
-# 📚 TételekZV – Interactive Exam Preparation App
+# 📚 Tiomi – Interactive Exam Preparation App
 
-**TételekZV** is an offline-ready, installable full-stack **progressive web app (PWA)** designed to help university students prepare for exams using collaborative tételek (topic) creation, markdown editing, and flashcard-based revision.
+**Tiomi** is an offline-ready, installable full-stack **progressive web app (PWA)** designed to help university students prepare for exams using collaborative tételek (topic) creation, markdown editing, and flashcard-based revision.
 
 > 🔗 **Live Demo**: [danielmarkus.web.elte.hu/tetelekzv](https://danielmarkus.web.elte.hu/tetelekzv/)
 
