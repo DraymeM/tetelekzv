@@ -25,6 +25,7 @@ import PageTransition from "../components/common/PageTransition";
 import LearningMode from "./common/TetelDetails/LearningMode";
 import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
+import SpeechController from "./common/SpeechController";
 
 function calculateReadingTime(
   sections: TetelDetailsResponse["sections"],
@@ -141,6 +142,23 @@ export default function TetelDetails() {
   const hasQuestions = questions.length > 0;
   const canRandomize = questions.length > 1;
   const readingMinutes = calculateReadingTime(sections, osszegzes);
+  const isDesktopBrowser =
+    !/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) &&
+    !(
+      "standalone" in window.navigator && (window.navigator as any).standalone
+    ) &&
+    !window.matchMedia("(display-mode: standalone)").matches;
+
+  const textToSpeak = [
+    tetel.name,
+    ...sections.map((s) => s.content),
+    ...sections.flatMap(
+      (s) => s.subsections?.flatMap((sub) => [sub.title, sub.description]) ?? []
+    ),
+    osszegzes?.content ?? "",
+  ]
+    .filter(Boolean)
+    .join(". ");
 
   const nextRandom = () => {
     if (!canRandomize) return;
@@ -168,25 +186,31 @@ export default function TetelDetails() {
               <Link
                 to="/tetelek"
                 className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                aria-label="Vissza a tételekhez"
+                title="Vissza a tételekhez"
               >
                 <FaArrowLeft className="mr-2" />
-                Vissza a tételekhez
+                Tételekhez
               </Link>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center md:gap-4 gap-1">
                 {!learningMode && (
                   <span className="text-sm mx-auto text-secondary-foreground">
                     <FaRegClock className="inline mr-1" size={15} />
                     {readingMinutes} perc
                   </span>
                 )}
+                {!learningMode && isDesktopBrowser && (
+                  <SpeechController text={textToSpeak} />
+                )}
                 {!learningMode && hasQuestions && (
                   <button
                     onClick={enterLearning}
                     className="inline-flex items-center px-4 py-2 bg-purple-600 border-purple-500 rounded-md text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors hover:cursor-pointer"
+                    aria-label="Tanulás"
+                    title="Tanulás"
                   >
-                    <FaBookOpen className="mr-2" />
-                    Tanulás
+                    <FaBookOpen size={20} />
                   </button>
                 )}
               </div>
@@ -234,6 +258,15 @@ export default function TetelDetails() {
                     </div>
                   </div>
                 )}
+                <Link
+                  to="/tetelek"
+                  className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                  aria-label="Vissza a tételekhez"
+                  title="Vissza a tételekhez"
+                >
+                  <FaArrowLeft className="mr-2" />
+                  Tételekhez
+                </Link>
               </div>
             ) : (
               <LearningMode
