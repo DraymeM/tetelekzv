@@ -1,1 +1,0 @@
-import{j as e}from"./index-I-Q4DUn1.js";const r=({error:t})=>e.jsxs("div",{className:"flex flex-col items-center justify-center h-screen p-4 text-center",children:[e.jsx("h1",{className:"text-3xl font-bold text-red-600 mb-2",children:"Hiba"}),e.jsx("p",{className:"text-lg",children:t.message})]});export{r as default};
