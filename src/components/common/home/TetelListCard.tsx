@@ -17,7 +17,7 @@ const TetelListCard: FC = () => {
     },
     Error
   >({
-    queryKey: ["tetelek", 1, 3], // track page + limit for caching
+    queryKey: ["tetel-list-home", 1, 3],
     queryFn: () => fetchTetelek({ page: 1, limit: 3 }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

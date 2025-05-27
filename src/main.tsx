@@ -79,7 +79,8 @@ persistQueryClient({
         key === "tetelDetail" ||
         key === "tetel-count" ||
         key === "question-count" ||
-        key === "flashcard-count"
+        key === "flashcard-count" ||
+        key === "tetel-list-home"
       );
     },
   },
