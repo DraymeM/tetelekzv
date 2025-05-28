@@ -10,6 +10,7 @@
 
 - 💾 **Offline-first**: Caching and React Query ensure content works even without internet
 - 📊 **Dashboard**: Live animated progress stats with CountUp.js
+- 🗣️ Text-to-speech reader (desktop only)
 - 📱 **Installable** as a native-like app on mobile and desktop
 - 🌓 **Light/Dark Mode** toggle based on system or user preference
 - ✍️ **Markdown editor** with support for syntax highlighting, code blocks, and custom styling
@@ -94,6 +95,25 @@ php -S localhost:8000
 
 - Built with vite-plugin-pwa and service workers for seamless install flow and background updates
 
+### 🗣️ Text-to-Speech Reader (Desktop Only)
+
+ - Adds auditory access to study materials via browser-native speech synthesis
+
+ - Reads full topic content in correct structure: main sections followed by their subsections
+
+ - Especially helpful for:
+
+    -  🧑‍🦯 Users with vision impairments
+
+    - 🧠 Learners with dyslexia or reading fatigue
+
+    -  🎧 Those who prefer auditory learning
+
+  - Seamlessly integrated and available on desktop browsers
+
+  - Automatically disabled on mobile/PWA standalone mode to avoid inconsistent support
+
+   > 📌 Note: The speech reader uses the browser's native text-to-speech API and is only available on desktop browsers (not on mobile apps or standalone PWAs).
 
 ### 📊 Dashboard & Stats
 
