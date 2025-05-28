@@ -151,10 +151,11 @@ export default function TetelDetails() {
 
   const textToSpeak = [
     tetel.name,
-    ...sections.map((s) => s.content),
-    ...sections.flatMap(
-      (s) => s.subsections?.flatMap((sub) => [sub.title, sub.description]) ?? []
-    ),
+    ...sections.flatMap((section) => [
+      section.content,
+      ...(section.subsections?.flatMap((sub) => [sub.title, sub.description]) ??
+        []),
+    ]),
     osszegzes?.content ?? "",
   ]
     .filter(Boolean)
