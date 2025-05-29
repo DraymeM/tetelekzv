@@ -156,7 +156,9 @@ export default function TetelDetails() {
       ...(section.subsections?.flatMap((sub) => [sub.title, sub.description]) ??
         []),
     ]),
+    "Összegzés:",
     osszegzes?.content ?? "",
+    "Vége",
   ]
     .filter(Boolean)
     .join(". ");
@@ -179,7 +181,7 @@ export default function TetelDetails() {
   return (
     <>
       <Navbar />
-      <Suspense>
+      <Suspense fallback={<Spinner />}>
         <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
           <PageTransition>
             {/* Header */}
@@ -230,21 +232,33 @@ export default function TetelDetails() {
                     key={section.id}
                     className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent hover:border-border transition-colors"
                   >
-                    <div className="text-xl font-semibold mb-4 text-foreground">
-                      <MarkdownHandler content={section.content} />
-                    </div>
-                    {section.subsections?.map((sub) => (
-                      <div
-                        key={sub.id}
-                        className="ml-4 mb-4 p-4 bg-muted rounded-lg"
-                      >
-                        <div className="font-medium text-foreground mb-2">
-                          <MarkdownHandler content={sub.title} />
-                        </div>
-                        <div className="text-secondary-foreground prose prose-invert max-w-none">
-                          <MarkdownHandler content={sub.description} />
-                        </div>
+                    <Suspense
+                      fallback={
+                        <div className="bg-secondary rounded-lg p-6 shadow-xl animate-pulse " />
+                      }
+                    >
+                      <div className="text-xl font-semibold mb-4 text-foreground">
+                        <MarkdownHandler content={section.content} />
                       </div>
+                    </Suspense>
+                    {section.subsections?.map((sub) => (
+                      <Suspense
+                        fallback={
+                          <div className="bg-muted rounded-lg p-6 shadow-xl animate-pulse " />
+                        }
+                      >
+                        <div
+                          key={sub.id}
+                          className="ml-4 mb-4 p-4 bg-muted rounded-lg"
+                        >
+                          <div className="font-medium text-foreground mb-2">
+                            <MarkdownHandler content={sub.title} />
+                          </div>
+                          <div className="text-secondary-foreground prose prose-invert max-w-none">
+                            <MarkdownHandler content={sub.description} />
+                          </div>
+                        </div>
+                      </Suspense>
                     ))}
                   </div>
                 ))}

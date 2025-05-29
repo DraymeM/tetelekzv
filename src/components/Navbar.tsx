@@ -41,7 +41,7 @@ const Navbar: FC = () => {
 
   return (
     <Suspense>
-      <nav className="fixed top-0 w-full mb-10 h-16 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
+      <nav className="fixed top-0 w-full mb-10 h-13 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
         <div className="flex items-center w-full mx-auto justify-between">
           <Link
             to="/"
@@ -51,7 +51,7 @@ const Navbar: FC = () => {
               isHomeActive ? "text-primary" : "text-foreground"
             }`}
           >
-            <LogoIcon className="w-6 h-6 mr-2" />
+            <LogoIcon className="w-6 h-6  mr-2" />
           </Link>
 
           <DesktopNav
