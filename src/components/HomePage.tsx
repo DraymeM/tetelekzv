@@ -38,8 +38,13 @@ const HomePage: React.FC = () => {
               {!isOnline && (
                 <WarningCard message="Offline módban vagy, ilyenkor csak a lementett tételeket tudod megnézni." />
               )}
-
-              <DashboardOverview />
+              <Suspense
+                fallback={
+                  <div className="bg-secondary shadow-md rounded-lg"></div>
+                }
+              >
+                <DashboardOverview />
+              </Suspense>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <TetelListCard />
 
