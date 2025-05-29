@@ -104,6 +104,8 @@ const NavLinkItem: FC<Props> = ({ link }) => {
         <HiChevronDown
           width={20}
           height={20}
+          aria-label="Továbbiak"
+          title="Továbbiak"
           className={`w-5 h-5 transform transition-transform ${
             open ? "rotate-180" : ""
           }`}
