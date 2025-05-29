@@ -1,8 +1,9 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Menu } from "@headlessui/react";
-import { FaChevronDown, FaStop } from "react-icons/fa";
+import { FaChevronDown, FaSpinner, FaStop } from "react-icons/fa";
 import { useSpeech } from "../../hooks/useSpeech";
-import Spinner from "../Spinner";
+
+import { isMobileOrPWA } from "../../utils/platform";
 const PlayPauseControls = lazy(() => import("./speech/PlayPauseControls"));
 const VoiceSelector = lazy(() => import("./speech/VoiceSelector"));
 const SpeechSliders = lazy(() => import("./speech/SpeechSliders"));
@@ -16,6 +17,10 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
   text,
   className,
 }) => {
+  if (typeof window !== "undefined" && isMobileOrPWA()) {
+    return null;
+  }
+
   const { voices, speak, pause, resume, stop, isSpeaking, isPaused } =
     useSpeech();
   const [selectedVoice, setSelectedVoice] = useState<string>();
@@ -66,7 +71,13 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
       {({ open }) => (
         <>
           <div className="flex space-x-0">
-            <Suspense fallback={<Spinner />}>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center">
+                  <FaSpinner className="animate-spin text-primary text-3xl" />
+                </div>
+              }
+            >
               <PlayPauseControls
                 isSpeaking={isSpeaking}
                 isPaused={isPaused}
@@ -87,7 +98,13 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
           </div>
 
           <Menu.Items className="absolute right-0 mt-2 w-64 bg-secondary border border-border rounded-md shadow-lg p-4 space-y-4 max-h-[400px] overflow-auto z-50">
-            <Suspense fallback={<Spinner />}>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center">
+                  <FaSpinner className="animate-spin text-primary min-h-[300px] max-w-[50px] text-4xl" />
+                </div>
+              }
+            >
               <VoiceSelector
                 voices={voices}
                 selectedVoice={selectedVoice}

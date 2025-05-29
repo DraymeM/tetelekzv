@@ -20,20 +20,20 @@ code {
 :root {
   --radius: 0.5rem;
   --background: #e9f4ff;
-  --foreground: #1d212c;
+  --foreground: #1c1b2b;
   --primary: #1ab474;
   --primary-foreground: color-mix(
     in srgb,
     var(--foreground) 88%,
     var(--background)
   );
-  --secondary: color-mix(in srgb, var(--background) 93%, var(--foreground));
+  --secondary: color-mix(in srgb, var(--background) 92%, var(--foreground));
   --secondary-foreground: color-mix(
     in srgb,
     var(--foreground) 85%,
     var(--background)
   );
-  --muted: color-mix(in srgb, var(--background) 88%, var(--foreground));
+  --muted: color-mix(in srgb, var(--background) 85%, var(--foreground));
   --muted-foreground: color-mix(
     in srgb,
     var(--foreground) 60%,

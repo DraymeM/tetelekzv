@@ -140,15 +140,7 @@ export default function TetelDetails() {
   const questions = data?.questions ?? [];
 
   const hasQuestions = questions.length > 0;
-  const canRandomize = questions.length > 1;
   const readingMinutes = calculateReadingTime(sections, osszegzes);
-  const isDesktopBrowser =
-    !/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) &&
-    !(
-      "standalone" in window.navigator && (window.navigator as any).standalone
-    ) &&
-    !window.matchMedia("(display-mode: standalone)").matches;
-
   const textToSpeak = [
     tetel.name,
     ...sections.flatMap((section) => [
@@ -162,15 +154,6 @@ export default function TetelDetails() {
   ]
     .filter(Boolean)
     .join(". ");
-
-  const nextRandom = () => {
-    if (!canRandomize) return;
-    let idx = currentIdx;
-    while (idx === currentIdx) {
-      idx = Math.floor(Math.random() * questions.length);
-    }
-    setCurrentIdx(idx);
-  };
 
   const enterLearning = () => {
     if (!hasQuestions) return;
@@ -203,9 +186,7 @@ export default function TetelDetails() {
                     {readingMinutes} perc
                   </span>
                 )}
-                {!learningMode && isDesktopBrowser && (
-                  <SpeechController text={textToSpeak} />
-                )}
+                {!learningMode && <SpeechController text={textToSpeak} />}
                 {!learningMode && hasQuestions && (
                   <button
                     onClick={enterLearning}
@@ -243,14 +224,12 @@ export default function TetelDetails() {
                     </Suspense>
                     {section.subsections?.map((sub) => (
                       <Suspense
+                        key={sub.id} // ✅ move key here
                         fallback={
                           <div className="bg-muted rounded-lg p-6 shadow-xl animate-pulse " />
                         }
                       >
-                        <div
-                          key={sub.id}
-                          className="ml-4 mb-4 p-4 bg-muted rounded-lg"
-                        >
+                        <div className="ml-4 mb-4 p-4 bg-muted rounded-lg">
                           <div className="font-medium text-foreground mb-2">
                             <MarkdownHandler content={sub.title} />
                           </div>
@@ -285,9 +264,8 @@ export default function TetelDetails() {
               </div>
             ) : (
               <LearningMode
+                key={currentIdx}
                 questions={questions}
-                currentIdx={currentIdx}
-                onNext={nextRandom}
                 onExit={() => setLearningMode(false)}
               />
             )}

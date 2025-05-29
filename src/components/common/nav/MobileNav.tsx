@@ -25,10 +25,10 @@ const MobileNav: FC<Props> = ({
         <>
           <button
             onClick={toggleTheme}
-            className="mr-4 p-2 rounded-full transition-colors border border-border text-foreground bg-muted"
+            className="mr-4 p-2 rounded-full transition-colors border border-border text-foreground"
             title="Toggle theme"
           >
-            {theme === "dark" ? <FaSun size={18} /> : <FaMoon size={18} />}
+            {theme === "dark" ? <FaMoon size={18} /> : <FaSun size={18} />}
           </button>
           <Menu.Button
             type="button"

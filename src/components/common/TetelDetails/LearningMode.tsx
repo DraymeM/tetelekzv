@@ -1,24 +1,27 @@
-// src/components/common/LearningMode.tsx
-import React from "react";
+import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
 import FlashCard from "../FlashCard";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaArrowLeft, FaRegHandPointer } from "react-icons/fa";
+import { IoArrowRedoSharp } from "react-icons/io5";
 
 export interface LearningModeProps {
   questions: { question: string; answer: string }[];
-  currentIdx: number;
-  onNext: () => void;
   onExit: () => void;
 }
 
 export const LearningMode: React.FC<LearningModeProps> = ({
   questions,
-  currentIdx,
-  onNext,
   onExit,
 }) => {
-  const hasQuestions = questions.length > 0;
-  const canRandomize = questions.length > 1;
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [focusedIdx, setFocusedIdx] = useState<number | null>(null);
+
+  const selectCard = (idx: number) => setSelectedIdx(idx);
+
+  const putBackToDeck = () => {
+    setSelectedIdx(null);
+    setFocusedIdx(null);
+  };
 
   return (
     <Transition
@@ -31,30 +34,105 @@ export const LearningMode: React.FC<LearningModeProps> = ({
       leaveTo="opacity-0"
       as="div"
     >
-      <div className="flex flex-col items-center gap-6 mt-10">
-        {hasQuestions && (
-          <>
-            <FlashCard
-              question={questions[currentIdx]?.question ?? ""}
-              answer={questions[currentIdx]?.answer ?? ""}
-            />
-            <div className="flex gap-4">
-              {canRandomize && (
-                <button
-                  onClick={onNext}
-                  className="px-6 py-3 bg-orange-400 text-white rounded-lg hover:cursor-pointer
-                             hover:bg-orange-600 transition-colors flex items-center"
+      <div className="flex flex-col items-center gap-6">
+        {/* Deck is always visible */}
+        <div className="w-full md:max-w-[450px] overflow-x-auto scrollbar-hide touch-pan-x">
+          <div className="flex flex-row items-center space-x-[-30px] px-2 py-6 select-none">
+            {questions.map((card, idx) => {
+              const midpoint = Math.floor(questions.length / 2);
+              const isRightHalf = idx > midpoint;
+              const isFocused = focusedIdx === idx;
+
+              const handleCardClick = () => {
+                if (isFocused) {
+                  selectCard(idx); // second tap selects
+                } else {
+                  setFocusedIdx(idx); // first tap focuses
+                }
+              };
+
+              const translateX = isFocused
+                ? isRightHalf
+                  ? "-translate-x-8"
+                  : "translate-x-8"
+                : "";
+
+              const hoverTranslate = !isFocused
+                ? isRightHalf
+                  ? "hover:-translate-x-8"
+                  : "hover:translate-x-8"
+                : "";
+
+              return (
+                <div
+                  key={card.question}
+                  onClick={handleCardClick}
+                  className={`relative w-48 h-32 bg-secondary border border-border rounded-md shadow-md flex items-center justify-center p-4
+                    text-center font-semibold text-foreground cursor-pointer transition-transform duration-300 ease-in-out
+                    ${isFocused ? `z-50 ${translateX} scale-125 border-primary text-primary shadow-lg bg-muted` : ""}
+                    ${hoverTranslate} hover:z-50 hover:scale-125 hover:shadow-lg hover:border-primary hover:text-primary`}
+                  style={{ transform: "skewY(-10deg)" }}
+                  title={`Card ${idx + 1}`}
                 >
-                  <FaSyncAlt className="mr-2 animate-spin" />
-                  Következő kérdés
-                </button>
-              )}
+                  <div className="relative text-lg font-bold">
+                    {idx + 1}
+                    {isFocused && (
+                      <FaRegHandPointer className="absolute -top-6 left-1/2 -translate-x-1/2 text-primary text-xl" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {selectedIdx !== null && (
+          <>
+            <button
+              onClick={putBackToDeck}
+              className="inline-flex items-center hover:cursor-pointer px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              aria-label="Put card back to deck"
+              title="Put card back to deck"
+            >
+              <IoArrowRedoSharp
+                className="mr-2"
+                style={{ transform: "rotate(-90deg)" }}
+              />
+              Vissza rak
+            </button>
+
+            <FlashCard
+              question={questions[selectedIdx]?.question ?? ""}
+              answer={questions[selectedIdx]?.answer ?? ""}
+            />
+            <div className="flex gap-4 mt-1">
               <button
                 onClick={onExit}
-                className="px-6 py-3 border border-border text-muted-foreground hover:text-foreground hover:cursor-pointer
-                             rounded-lg hover:bg-secondary transition-colors"
+                className="inline-flex items-center hover:cursor-pointer px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                aria-label="Vissza a tételekhez"
+                title="Vissza a tételhez"
               >
-                Vissza
+                <FaArrowLeft className="mr-2" />
+                Tételhez
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedIdx((prev) => {
+                    const next =
+                      prev !== null && prev < questions.length - 1
+                        ? prev + 1
+                        : 0;
+                    setFocusedIdx(next);
+                    return next;
+                  });
+                }}
+                className="px-6 py-2 bg-amber-700 text-white rounded-lg hover:cursor-pointer hover:bg-amber-600 transition-colors flex items-center"
+              >
+                <FaArrowLeft
+                  className="mr-2"
+                  style={{ transform: "rotate(180deg)" }}
+                />
+                Következő
               </button>
             </div>
           </>
