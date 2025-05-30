@@ -165,7 +165,7 @@ export default function TetelDetails() {
     <>
       <Navbar />
       <Suspense fallback={<Spinner />}>
-        <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 py-10 text-left">
+        <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
           <PageTransition>
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
@@ -281,7 +281,7 @@ export default function TetelDetails() {
           </PageTransition>
 
           {/* Floating Action Buttons */}
-          {isAuthenticated && (
+          {isAuthenticated && !learningMode && (
             <>
               <Link
                 to="/tetelek/$id/edit"

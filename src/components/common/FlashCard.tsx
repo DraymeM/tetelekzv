@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { FaQuestionCircle, FaCheckCircle, FaSpinner } from "react-icons/fa";
 
 interface FlashCardProps {
+  id?: string;
   question: string;
   answer: string;
 }
 
-export default function FlashCard({ question, answer }: FlashCardProps) {
+export default function FlashCard({ id, question, answer }: FlashCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +26,7 @@ export default function FlashCard({ question, answer }: FlashCardProps) {
   };
 
   return (
-    <div className="w-80 h-48 perspective" onClick={handleFlip}>
+    <div id={id} className="w-80 h-48 perspective" onClick={handleFlip}>
       <div
         className={`relative w-full h-full duration-500 transform-style-preserve-3d ${
           flipped ? "rotate-y-180" : ""

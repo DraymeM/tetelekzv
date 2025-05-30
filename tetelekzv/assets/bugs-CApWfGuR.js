@@ -1,1 +1,0 @@
-import{aS as i,aT as l}from"./index-kmHkZ3G4.js";function f(t){let e=t.parentElement,r=null;for(;e&&!i(e);)l(e)&&(r=e),e=e.parentElement;let n=e?.getAttribute("disabled")==="";return n&&u(r)?!1:n}function u(t){if(!t)return!1;let e=t.previousElementSibling;for(;e!==null;){if(l(e))return!1;e=e.previousElementSibling}return!0}export{f as s};
