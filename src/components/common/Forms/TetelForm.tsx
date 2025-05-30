@@ -1,17 +1,19 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { FaPen, FaEye } from "react-icons/fa";
+import { FaPen, FaEye, FaQuestion } from "react-icons/fa";
 import { tetelSchema } from "../../../validator/tetelSchema";
 import { toast } from "react-toastify";
 import type { TetelFormData } from "../../../api/types";
 import Spinner from "@/components/Spinner";
 import TetelPreview from "./TetelPreview";
-const FormContainer = React.lazy(() => import("./FormContainer"));
-const SubmitButton = React.lazy(() => import("./SubmitButton"));
 import TetelFormHeader from "./TetelFormHeader";
 import SectionsList from "./SectionsList";
 import FlashcardsList from "./FlashcardsList";
 import { useSections } from "../../../hooks/useSections.ts";
 import { useFlashcards } from "../../../hooks/useFlashcards.ts";
+import { tutorialSteps } from "../../../tutorials/TetelFormTutorial";
+const FormContainer = React.lazy(() => import("./FormContainer"));
+const SubmitButton = React.lazy(() => import("./SubmitButton"));
+const Tutorial = React.lazy(() => import("../Tutorial"));
 
 interface TetelFormProps {
   initialData?: TetelFormData;
@@ -44,7 +46,7 @@ export default function TetelForm({
 
   const { flashcards, addFlashcard, updateFlashcard, removeFlashcard } =
     useFlashcards(initialData?.flashcards);
-
+  const [showTutorial, setShowTutorial] = useState(false);
   const [name, setName] = useState(initialData?.name || "");
   const [osszegzes, setOsszegzes] = useState(initialData?.osszegzes || "");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -150,6 +152,14 @@ export default function TetelForm({
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-end mb-4">
             <button
+              className="fixed top-20 right-7 p-3 bg-blue-600 hover:cursor-pointer text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 z-50"
+              onClick={() => setShowTutorial(true)}
+              title="Segítség a használathoz"
+            >
+              <FaQuestion size={20} />
+            </button>
+            <button
+              id="preview"
               onClick={() => setIsPreview((p) => !p)}
               className="fixed bottom-7 right-7 p-3 bg-purple-600 text-white rounded-full hover:bg-purple-700 hover:scale-105 transition-all z-50"
               title={isPreview ? "Vissza szerkesztéshez" : "Előnézet"}
@@ -211,6 +221,11 @@ export default function TetelForm({
             </form>
           </FormContainer>
         </div>
+        <Tutorial
+          open={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          steps={tutorialSteps}
+        />
       </Suspense>
     </div>
   );

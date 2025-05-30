@@ -21,12 +21,14 @@ const TetelFormHeader: React.FC<TetelFormHeaderProps> = ({
 }) => (
   <div>
     <InputField
+      id="tetelcime"
       label="Tétel címe"
       value={name}
       onChange={handleNameChange}
       error={errorName}
     />
     <TextAreaField
+      id="osszegzes"
       label="Összegzés"
       value={osszegzes}
       onChange={handleOsszegzesChange}

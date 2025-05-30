@@ -31,12 +31,14 @@ const SubsectionBlock: React.FC<SubsectionBlockProps> = ({
         <FaTimes className="w-5 h-5" />
       </button>
       <InputField
+        id="subsectioncim"
         label="Cím"
         value={subsection.title}
         onChange={(e) => onUpdate("title", e.target.value)}
         error={errors.title}
       />
       <TextAreaField
+        id="subsectionleiras"
         label="Leírás"
         value={subsection.description}
         onChange={(e) => onUpdate("description", e.target.value)}

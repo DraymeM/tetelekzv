@@ -44,6 +44,7 @@ const SectionBlock: React.FC<SectionBlockProps> = ({
       </button>
 
       <TextAreaField
+        id="section"
         label="Szekció tartalma"
         value={section.content}
         onChange={(e) => onUpdateContent(e.target.value)}
@@ -51,7 +52,9 @@ const SectionBlock: React.FC<SectionBlockProps> = ({
       />
 
       <div className="mt-4 space-y-3">
-        <h4 className="text-md font-medium text-foreground">Alszekciók</h4>
+        <h4 id="alszekciotitle" className="text-md font-medium text-foreground">
+          Alszekciók
+        </h4>
 
         {section.subsections.map((sub, idx) => (
           <SubsectionBlock
@@ -69,6 +72,7 @@ const SectionBlock: React.FC<SectionBlockProps> = ({
         {/* single “Add Subsection” button below all existing subsections */}
         <div className="flex items-center space-x-2 text-emerald-600">
           <button
+            id="ujalszekcio"
             type="button"
             onClick={onAddSubsection}
             className="flex items-center justify-center p-2 rounded-full bg-emerald-600 hover:cursor-pointer text-white hover:bg-emerald-700"

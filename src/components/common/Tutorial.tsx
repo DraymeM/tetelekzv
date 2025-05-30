@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { IoArrowUndoSharp } from "react-icons/io5";
 
 const Tutorial = ({
@@ -12,29 +12,81 @@ const Tutorial = ({
     title: string;
     content: string;
     selector: string;
+    requiresInteraction?: boolean;
   }[];
 }) => {
   const [step, setStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
+  const [interactionComplete, setInteractionComplete] = useState(false);
+  const interactionListenerRef = useRef<((e: MouseEvent) => void) | null>(null);
 
   const margin = 10;
   const modalWidth = 320;
   const modalHeight = 140;
   const iconSize = 50;
 
+  // Prevent scrolling when tutorial is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }
+  }, [open]);
+
   useEffect(() => {
     if (!open) {
       setStep(0);
       setTargetRect(null);
+      setInteractionComplete(false);
       return;
     }
 
-    const el = document.querySelector(steps[step]?.selector || "");
+    const currentStep = steps[step];
+    const el = document.querySelector(currentStep?.selector || "");
+
+    // Cleanup previous interaction listener
+    if (interactionListenerRef.current) {
+      document.removeEventListener("click", interactionListenerRef.current);
+      interactionListenerRef.current = null;
+    }
+
+    // Reset interaction state based on step requirements
+    setInteractionComplete(!currentStep?.requiresInteraction);
+
     if (el) {
-      setTargetRect(el.getBoundingClientRect());
+      // Setup interaction listener if needed
+      if (currentStep?.requiresInteraction) {
+        const handleInteraction = (e: MouseEvent) => {
+          if (el.contains(e.target as Node)) {
+            setInteractionComplete(true);
+          }
+        };
+
+        document.addEventListener("click", handleInteraction);
+        interactionListenerRef.current = handleInteraction;
+      }
+
+      // Scroll to element
+      el.scrollIntoView({
+        behavior: "auto",
+        block: "center",
+        inline: "center",
+      });
+
+      // Get position after scrolling
+      const rect = el.getBoundingClientRect();
+      setTargetRect(rect);
     } else {
       setTargetRect(null);
     }
+
+    return () => {
+      if (interactionListenerRef.current) {
+        document.removeEventListener("click", interactionListenerRef.current);
+      }
+    };
   }, [step, open, steps]);
 
   if (!open || !targetRect) return null;
@@ -65,37 +117,57 @@ const Tutorial = ({
     modalWidth - iconSize * 2
   );
 
-  const overlayStyle: React.CSSProperties = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(0,0,0,0.6)",
-    pointerEvents: "auto",
-    zIndex: 99998,
-    clipPath: `polygon(
-      0 0,
-      100% 0,
-      100% 100%,
-      0 100%,
-      0 0,
-      ${targetRect.left}px ${targetRect.top}px,
-      ${targetRect.right}px ${targetRect.top}px,
-      ${targetRect.right}px ${targetRect.bottom}px,
-      ${targetRect.left}px ${targetRect.bottom}px,
-      ${targetRect.left}px ${targetRect.top}px
-    )`,
-  };
+  // Calculate overlay regions
+  const regions = [
+    {
+      top: 0,
+      left: 0,
+      width: window.innerWidth,
+      height: Math.max(0, targetRect.top),
+    },
+    {
+      top: targetRect.top,
+      left: 0,
+      width: Math.max(0, targetRect.left),
+      height: targetRect.height,
+    },
+    {
+      top: targetRect.top,
+      left: targetRect.right,
+      width: Math.max(0, window.innerWidth - targetRect.right),
+      height: targetRect.height,
+    },
+    {
+      top: targetRect.bottom,
+      left: 0,
+      width: window.innerWidth,
+      height: Math.max(0, window.innerHeight - targetRect.bottom),
+    },
+  ];
 
   return (
     <>
-      {/* Overlay */}
-      <div style={overlayStyle} aria-hidden="true" />
+      {/* Render overlay regions */}
+      {regions.map(
+        (region, index) =>
+          region.width > 0 &&
+          region.height > 0 && (
+            <div
+              key={index}
+              className="fixed bg-black/60 pointer-events-auto"
+              style={{
+                top: region.top,
+                left: region.left,
+                width: region.width,
+                height: region.height,
+              }}
+            />
+          )
+      )}
 
-      {/* Modal */}
+      {/* Tutorial Modal */}
       <div
-        className="fixed z-[99999] w-[320px] rounded-xl bg-secondary text-foreground shadow-2xl p-4 font-sans"
+        className="fixed z-[99999] w-[320px] border-border border-2 rounded-xl bg-secondary text-foreground shadow-2xl p-4 font-sans"
         style={{
           top: modalTop,
           left: modalLeft,
@@ -107,7 +179,7 @@ const Tutorial = ({
         <div className="flex justify-between gap-2">
           <button
             onClick={onClose}
-            className="px-3 py-1 rounded bg-rose-700 hover:bg-rose-800 text-sm"
+            className="px-3 py-1 rounded text-white hover:cursor-pointer bg-rose-700 hover:bg-rose-800 text-sm"
           >
             Kilépés
           </button>
@@ -129,7 +201,12 @@ const Tutorial = ({
                 if (step === steps.length - 1) onClose();
                 else setStep((s) => s + 1);
               }}
-              className="px-3 py-1 rounded hover:cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-sm"
+              disabled={steps[step].requiresInteraction && !interactionComplete}
+              className={`px-3 py-1 rounded text-white text-sm ${
+                steps[step].requiresInteraction && !interactionComplete
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 hover:cursor-pointer"
+              }`}
             >
               {step === steps.length - 1 ? "Befejezés" : "Következő"}
             </button>
@@ -137,9 +214,9 @@ const Tutorial = ({
         </div>
       </div>
 
-      {/* Arrow Icon */}
+      {/* Arrow pointing to the element */}
       <div
-        className={`fixed z-[99999] text-foreground  ${
+        className={`fixed z-[99999] text-white mt-5  ${
           pointerDirection === "down" ? "-rotate-90" : "rotate-90"
         }`}
         style={{
@@ -156,4 +233,5 @@ const Tutorial = ({
     </>
   );
 };
+
 export default Tutorial;

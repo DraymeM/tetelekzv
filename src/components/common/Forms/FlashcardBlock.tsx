@@ -20,8 +20,9 @@ const FlashcardBlock: React.FC<FlashcardBlockProps> = ({
   onRemove,
   errors = {},
 }) => (
-  <div className="space-y-2 relative group">
+  <div id="flashcardblock" className="space-y-2 relative group">
     <button
+      id="flashcardblockx"
       type="button"
       onClick={onRemove}
       className="absolute -top-3 -right-3 text-red-500 bg-secondary rounded-full p-1 hover:bg-red-500/20 hover:cursor-pointer"
@@ -30,12 +31,14 @@ const FlashcardBlock: React.FC<FlashcardBlockProps> = ({
     </button>
     <hr className="border-t-2 border-border w-full my-2" />
     <InputField
+      id="kerdescard"
       label="Kérdés"
       value={flashcard.question}
       onChange={(e) => onUpdate("question", e.target.value)}
       error={errors.question}
     />
     <InputField
+      id="valaszcard"
       label="Válasz"
       value={flashcard.answer}
       onChange={(e) => onUpdate("answer", e.target.value)}
