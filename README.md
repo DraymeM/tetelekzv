@@ -249,6 +249,9 @@ then in the parent you initialize the component:
 ## 📈 Performance & Lighthouse
 
 - ✅ **Lighthouse scores**: 95–100 in all categories
+  - [TopicDetail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ow9fsp10rs?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [HomePage](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/5ez963k9ki?hl=hu&form_factor=mobile)
+  - [MultiQuestionGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/kl3et3z9mi?hl=hu&form_factor=desktop)
 - ⚡ Responsive, fast, SEO-optimized
 - 📦 Fully PWA-compliant: installable and offline-ready
 
