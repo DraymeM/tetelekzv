@@ -165,7 +165,7 @@ export default function TetelDetails() {
     <>
       <Navbar />
       <Suspense fallback={<Spinner />}>
-        <main className="relative md:max-w-7xl max-w-full mx-auto min-h-screen mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
+        <main className="relative md:max-w-7xl max-w-full mx-auto  mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
           <PageTransition>
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
@@ -254,7 +254,7 @@ export default function TetelDetails() {
                 )}
                 <Link
                   to="/tetelek"
-                  className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                  className="inline-flex items-center px-3 py-2 border border-border mb-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                   aria-label="Vissza a tételekhez"
                   title="Vissza a tételekhez"
                 >

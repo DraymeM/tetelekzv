@@ -8,11 +8,11 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => (
   <div
-    className={`w-64 p-6 space-y-4 bg-secondary transition-all duration-300 transform lg:h-[110dvh] mt-13 h-full fixed z-40 top-0 lg:relative ${
+    className={`w-64 p-6 space-y-4 bg-secondary transition-all duration-300 transform lg:h-[95dvh] border-r-1 border-border mt-6 h-full fixed z-40 top-0 lg:relative ${
       isOpen ? "translate-x-0" : "-translate-x-full"
     } lg:translate-x-0`}
   >
-    <div className="lg:hidden flex justify-end mb-4">
+    <div className="lg:hidden flex justify-end mt-4 mb-4">
       <button
         className="text-foreground bg-muted p-1 rounded"
         onClick={onClose}
