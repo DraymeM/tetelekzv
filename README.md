@@ -14,7 +14,8 @@
 - 📱 **Installable** as a native-like app on mobile and desktop
 - 🌓 **Light/Dark Mode** toggle based on system or user preference
 - ✍️ **Markdown editor** with support for syntax highlighting, code blocks, and custom styling
-- 🧠 **Flashcard system** for spaced repetition learning
+- 🧠 **Flashcard system** Flashcards with spaced repetition, difficulty rating
+- 🧭 Step-by-step tutorials for key features (agnostic & reusable)
 - 🎮 **Gamified quiz engine** with streak tracking and performance feedback
 - 👥 **Authentication & user roles** with dynamic permissions:
   - Guests: read-only
@@ -50,7 +51,8 @@ Unlike Anki, Quizlet, or Notion, Tiomi is:
 - 🎮 Gamified for active recall through quizzes
 - 🧩 Organized with **nested topics and subtopics**
 - 🌐 Works **offline** using IndexedDB
-- 🔧 Open-source and **self-hostable**
+- 🧭 Interactive step-by-step tutorials to guide new users
+
 
 ---
 
@@ -153,10 +155,43 @@ php -S localhost:8000
   - Superusers → admin powers (delete, manage users)
 
 ### 🧠 Flashcards
+- Each card can be rated after answering:
 
+    - ✅ Easy → shown less frequently
+
+    - ⚖️ Medium → shown with moderate delay
+
+    - ❌ Hard → shown again soon
+
+   - 6 levels of dificculty, these above just the gude lines.
+   - Ratings influence deck order dynamically
+- Deck reordering logic is designed for fast recall training
 - Create and organize cards linked to topics
 - Add/edit/delete cards easily
 - Ideal for spaced repetition and exam review workflows
+
+### 🧭 Universal Tutorial System
+- Modular, reusable step-by-step tutorials
+- Based on user onboarding patterns
+ example for the tutorial steps:
+```ts
+const flashcardTutorialSteps = [
+  {
+    title: "Kártyapakli",
+    content: "Kattints egy kártyára a fókuszhoz.",
+    selector: "#card-deck",
+  },
+  ...
+];
+```
+then in the parent you initialize the component:
+```ts
+<CardTutorial
+  open={showTutorial}
+  onClose={() => setShowTutorial(false)}
+  steps={flashcardTutorialSteps}
+/>
+```
 
 ### ✅ Form Validation
 
