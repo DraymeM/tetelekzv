@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FaBook, FaClone, FaQuestion } from "react-icons/fa";
+import { FaBook, FaClone, FaQuestion, FaSpinner } from "react-icons/fa";
 import CountUp from "react-countup";
 import { fetchQuestions, fetchTetelek, fetchFlashcardCount } from "@/api/repo";
 const StackedCards = React.lazy(() => import("./StackedCards"));
@@ -151,7 +151,9 @@ const DashboardOverview = () => {
               <span>Flashcards</span>
             </div>
             {loadingFlashcards ? (
-              <Spinner />
+              <div className="flex items-center justify-center ">
+                <FaSpinner className="animate-spin text-primary text-5xl" />
+              </div>
             ) : (
               <StackedCards
                 count={flashcardCount}

@@ -1,6 +1,7 @@
 import React from "react";
 
 export interface TextAreaFieldProps {
+  id?: string;
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -8,6 +9,7 @@ export interface TextAreaFieldProps {
 }
 
 const TextAreaField: React.FC<TextAreaFieldProps> = ({
+  id,
   label,
   value,
   onChange,
@@ -18,6 +20,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
       {label}
     </label>
     <textarea
+      id={id}
       rows={4}
       className={`w-full p-2 rounded bg-secondary text-foreground focus:outline-none focus:ring-2 focus:ring-primary ${
         error ? "border border-red-500" : "border border-border"

@@ -37,6 +37,7 @@ const FlashcardsList: React.FC<FlashcardsListProps> = ({
       return (
         <div key={fc.id}>
           <button
+            id="flascardcollapse"
             type="button"
             className="w-full flex justify-between p-4 bg-secondary rounded-md hover:cursor-pointer"
             onClick={() =>
@@ -66,6 +67,7 @@ const FlashcardsList: React.FC<FlashcardsListProps> = ({
     })}
     <div className="flex items-center space-x-2 text-emerald-600">
       <button
+        id="ujflashcard"
         type="button"
         onClick={addFlashcard}
         className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700 hover:cursor-pointer"

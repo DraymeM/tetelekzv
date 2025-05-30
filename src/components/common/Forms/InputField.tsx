@@ -11,6 +11,7 @@ export interface InputFieldProps {
 }
 
 const InputField: React.FC<InputFieldProps> = ({
+  id,
   label,
   value,
   onChange,
@@ -24,7 +25,7 @@ const InputField: React.FC<InputFieldProps> = ({
       <label className="block text-sm font-medium text-foreground mb-2">
         {label}
       </label>
-      <div className="relative">
+      <div className="relative" id={id}>
         <input
           type={
             enablePasswordToggle ? (showPassword ? "text" : "password") : "text"

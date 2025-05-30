@@ -49,6 +49,7 @@ const SectionsList: React.FC<SectionsListProps> = ({
       return (
         <div key={sec.id}>
           <button
+            id="sectioncollapse"
             type="button"
             className="w-full flex justify-between p-4 bg-secondary rounded-md hover:cursor-pointer"
             onClick={() =>
@@ -84,6 +85,7 @@ const SectionsList: React.FC<SectionsListProps> = ({
     })}
     <div className="flex items-center space-x-2 text-emerald-600">
       <button
+        id="ujszekcio"
         type="button"
         onClick={addSection}
         className="flex items-center justify-center p-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-700 hover:cursor-pointer"
