@@ -261,6 +261,6 @@ const flashcardTutorialSteps = [
 ## 🔮 Future Plans
 
 - Migrate backend to a more scalable stack:
-  - ✳️ Slim PHP / Lumen (Laravel) / Express.js
-- Move toward **microservices architecture**
-- Expand modularity, real-time sync, and API integrations
+  - ✳️ Slim PHP / Lumen (Laravel) / Express.js / Actix
+- Group feature with their own adminsown permissions
+- Offline sync actions when connectivity is back
