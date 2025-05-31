@@ -1,4 +1,9 @@
-# 📚 Tiomi – Interactive Learning App
+<p align="center">
+  <img src="public/logo192.png" alt="Tiomi Logo" width="100"/>
+</p>
+
+<h1 align="center">Tiomi – Interactive Learning App</h1>
+
 
 **Tiomi** is a full-stack, installable, offline-ready **Progressive Web App (PWA)** designed for learners of all kinds. Whether you're preparing for university exams, language certifications, coding interviews, or personal enrichment, Tiomi helps you organize knowledge through topic-based notes, flashcards, and interactive quizzes.
 
