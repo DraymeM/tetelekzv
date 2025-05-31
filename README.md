@@ -239,6 +239,9 @@ then in the parent you initialize the component:
 - 📖 Structure course materials into nested, linked topics
 - 🧪 Review content with flashcards and quizzes
 - ✍️ Write markdown-powered notes with examples and formatting
+- Any kind of tobic learning enchanced by self test via
+  - Flashcards
+  - Questions 
 
 ---
 
