@@ -239,10 +239,6 @@ then in the parent you initialize the component:
 - 📖 Structure course materials into nested, linked topics
 - 🧪 Review content with flashcards and quizzes
 - ✍️ Write markdown-powered notes with examples and formatting
-- 👨‍🎓 Ideal for Hungarian university students preparing for:
-  - ZH (zhárthelyi dolgozat)
-  - Vizsga (exams)
-  - Thesis defense prep
 
 ---
 
