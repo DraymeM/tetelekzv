@@ -10,20 +10,20 @@
 
 - 💾 **Offline-first**: Caching and React Query ensure content works even without internet
 - 📊 **Dashboard**: Live animated progress stats with CountUp.js
-- 🗣️ Text-to-speech reader (desktop only)
+- 🗣️ **Text-to-speech reader** (desktop only)
 - 📱 **Installable** as a native-like app on mobile and desktop
 - 🌓 **Light/Dark Mode** toggle based on system or user preference
-- ✍️ **Markdown editor** with support for syntax highlighting, code blocks, and custom styling
-- 🧠 **Flashcard system** Flashcards with spaced repetition, difficulty rating
-- 🧭 Step-by-step tutorials for key features (agnostic & reusable)
-- 🎮 **Gamified quiz engine** with streak tracking and performance feedback
-- 👥 **Authentication & user roles** with dynamic permissions:
+- ✍️ **Markdown editor** with syntax highlighting and custom styling
+- 🧠 **Flashcard system** with spaced repetition and difficulty-based prioritization
+- 🧭 **Step-by-step tutorials** for key features (modular and reusable)
+- 🎮 **Gamified quiz engine** with streaks and performance tracking
+- 👥 **Authentication & role-based access**:
   - Guests: read-only
   - Users: create, read, edit
   - Superusers: full CRUD access
-- 🔐 **Rate limiting** on backend to prevent misuse
-- 🧪 **Unit and component testing** via ViteTest
-- ⚙️ **Minimal PHP backend** with custom-built ORM due to shared hosting constraints
+- 🔐 **Backend rate limiting** to prevent misuse
+- 🧪 **Unit/component testing** via ViteTest
+- ⚙️ **Minimal PHP backend** with custom-built ORM (due to shared hosting)
 
 ---
 
@@ -46,13 +46,12 @@
 
 Unlike Anki, Quizlet, or Notion, Tiomi is:
 
-- ✍️ Focused on **structured, rich markdown** notes for academic or technical use
-- 🧠 Designed for **contextual flashcards** tied to content
-- 🎮 Gamified for active recall through quizzes
-- 🧩 Organized with **nested topics and subtopics**
-- 🌐 Works **offline** using IndexedDB
-- 🧭 Interactive step-by-step tutorials to guide new users
-
+- ✍️ Focused on **structured, rich-markdown** notes for academic/technical use
+- 🧠 Designed for **contextual flashcards** linked to content
+- 🎮 Gamified for **active recall** via quizzes
+- 🧩 Built around **nested topic organization**
+- 🌐 Fully **offline-ready** using IndexedDB
+- 🧭 Includes **interactive tutorials** for onboarding
 
 ---
 
@@ -79,7 +78,7 @@ cd BackEnd
 php -S localhost:8000
 ```
 
-> ⚙️ Don't forget to configure `dev.env.php` and `env.php` with your database credentials.
+> ⚙️ Configure `dev.env.php` and `env.php` with your DB credentials.
 
 ---
 
@@ -87,93 +86,90 @@ php -S localhost:8000
 
 ### 🔥 PWA Capabilities
 
-- Fully installable on mobile and desktop
+- Installable on mobile/desktop
+- Works offline via:
+  - IndexedDB caching of API responses
+  - Manual critical resource caching
+- Built using vite-plugin-pwa and service workers
 
-- Works offline thanks to:
+---
 
-   - Custom IndexedDB caching for selected API responses
+### 🗣️ Text-to-Speech Reader
 
-   - Manual selection of critical resources for offline use
+- Uses browser-native speech synthesis
+- Reads entire topics (main + subsections)
+- Great for:
+  - 🧑‍🦯 Accessibility
+  - 🧠 Learners with dyslexia
+  - 🎧 Auditory learners
+- **Desktop only** (disabled on mobile/PWA mode)
 
-- Built with vite-plugin-pwa and service workers for seamless install flow and background updates
-
-### 🗣️ Text-to-Speech Reader (Desktop Only)
-
- - Adds auditory access to study materials via browser-native speech synthesis
-
- - Reads full topic content in correct structure: main sections followed by their subsections
-
- - Especially helpful for:
-
-    -  🧑‍🦯 Users with vision impairments
-
-    - 🧠 Learners with dyslexia or reading fatigue
-
-    -  🎧 Those who prefer auditory learning
-
-  - Seamlessly integrated and available on desktop browsers
-
-  - Automatically disabled on mobile/PWA standalone mode to avoid inconsistent support
-
-   > 📌 Note: The speech reader uses the browser's native text-to-speech API and is only available on desktop browsers (not on mobile apps or standalone PWAs).
+---
 
 ### 📊 Dashboard & Stats
 
-- Displays total created items:
+- Counts for:
   - 📚 Topics (Tételek)
   - 🧠 Flashcards
   - ❓ Quiz questions
-- Animated counters via CountUp.js
-- Tailwind-based UI with card layout and responsive design
+- Animated via CountUp.js
+- Responsive Tailwind layout
+
+---
 
 ### 🌓 Light/Dark Mode
 
-- Automatic theme detection or manual toggle
-- Applies consistently across UI and markdown-rendered content
+- System theme detection + manual toggle
+- Applies across UI and markdown content
+
+---
 
 ### 🎮 Quiz System
 
-- Users can create and attempt multichoice quizzes
-- Tracks user progress and quiz performance
-- Includes streaks, score analytics, and optional timers
-- Designed for fast-paced learning and revision
+- Create/attempt multiple-choice quizzes
+- Tracks progress, scores, and streaks
+- Optional timer mode for challenge sessions
+
+---
 
 ### ✍️ Markdown Editor
 
-- Markdown is stored in the DB and rendered with:
+- Markdown saved in DB
+- Rendered with:
   - HTML passthrough
   - Syntax-highlighted code blocks
-  - Alignment and style support
-- Optimized for academic use: structured answers, code, nested blocks
+  - Custom styles
+- Perfect for structured, academic content
+
+---
 
 ### 👥 User Roles & Auth
 
-- Users register and log in via a secure session-based flow
-- Role-based access:
-  - Unauthenticated users → view-only
-  - Users → full content creation/editing
-  - Superusers → admin powers (delete, manage users)
+- Secure, session-based login
+- Role permissions:
+  - Guests → read-only
+  - Users → can create/edit
+  - Superusers → full admin CRUD
+
+---
 
 ### 🧠 Flashcards
-- Each card can be rated after answering:
 
-    - ✅ Easy → shown less frequently
+- Rate each card after answer:
+  - ✅ Easy → delay increases
+  - ⚖️ Medium → shown moderately
+  - ❌ Hard → shown soon again
+- 6 difficulty levels (custom scale)
+- Linked to topic hierarchy
+- Dynamic spaced repetition order
 
-    - ⚖️ Medium → shown with moderate delay
-
-    - ❌ Hard → shown again soon
-
-   - 6 levels of dificculty, these above just the gude lines.
-   - Ratings influence deck order dynamically
-- Deck reordering logic is designed for fast recall training
-- Create and organize cards linked to topics
-- Add/edit/delete cards easily
-- Ideal for spaced repetition and exam review workflows
+---
 
 ### 🧭 Universal Tutorial System
-- Modular, reusable step-by-step tutorials
-- Based on user onboarding patterns
- example for the tutorial steps:
+
+- Modular, reusable steps for user onboarding
+- Example setup:
+
 ```ts
 const flashcardTutorialSteps = [
   {
@@ -183,9 +179,8 @@ const flashcardTutorialSteps = [
   },
   ...
 ];
-```
-then in the parent you initialize the component:
-```ts
+
+// Inside parent:
 <CardTutorial
   open={showTutorial}
   onClose={() => setShowTutorial(false)}
@@ -193,29 +188,31 @@ then in the parent you initialize the component:
 />
 ```
 
+---
+
 ### ✅ Form Validation
 
-- All forms validated using **Zod**
-- Inline error messages ensure quick user feedback
+- Built using **Zod** schemas
+- Realtime inline error feedback
 
 ---
 
 ## 🔒 Backend & Rate Limiting
 
-- Built using minimal **vanilla PHP** to fit server limitations
-- Includes a custom lightweight ORM for DB operations
-- Supports `.env` configs for different environments
-- Backend includes rate limiter with toast notifications for graceful fallback
+- Lightweight **vanilla PHP** (due to hosting limits)
+- Custom mini ORM for DB operations
+- Supports `.env` configs
+- Rate limiter with toast feedback for end users
 
 ---
 
 ## 🧪 Testing
 
-- Includes component and hook-level tests with **ViteTest**
+- Unit/component testing via **ViteTest**
 - Covers:
-  - Form logic
-  - Schema validation
-  - UI rendering and behavior
+  - Forms
+  - Zod schemas
+  - UI components and logic
 
 ---
 
@@ -236,21 +233,29 @@ then in the parent you initialize the component:
 
 ## 🧠 Use Cases
 
-- 📖 Structure course materials into nested, linked topics
-- 🧪 Review content with flashcards and quizzes
-- ✍️ Write markdown-powered notes with examples and formatting
-- Any kind of tobic learning enchanced by self test via
-  - Flashcards
-  - Questions 
+- 📖 Organize study materials into nested topics
+- 🧪 Self-test with flashcards & quizzes
+- ✍️ Markdown-powered note-taking
+- Ideal for structured learning with:
+  - Linked flashcards
+  - Active recall testing
 
 ---
 
 ## 📈 Performance & Lighthouse
 
-- ✅ **Lighthouse scores**: 95–100 in all categories
-  - [TopicDetail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ow9fsp10rs?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [HomePage](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/5ez963k9ki?hl=hu&form_factor=mobile)
-  - [MultiQuestionGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/kl3et3z9mi?hl=hu&form_factor=desktop)
-- ⚡ Responsive, fast, SEO-optimized
-- 📦 Fully PWA-compliant: installable and offline-ready
+- ✅ Lighthouse: 95–100 across categories
+  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ow9fsp10rs)
+  - [Home Page](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/5ez963k9ki)
+  - [Quiz Game](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/kl3et3z9mi)
+- ⚡ Fast, responsive, SEO-optimized
+- 📦 Full PWA compliance (installable, background updates)
 
+---
+
+## 🔮 Future Plans
+
+- Migrate backend to a more scalable stack:
+  - ✳️ Slim PHP / Lumen (Laravel) / Express.js
+- Move toward **microservices architecture**
+- Expand modularity, real-time sync, and API integrations
