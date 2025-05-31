@@ -26,6 +26,7 @@
   - Guests: read-only
   - Users: create, read, edit
   - Superusers: full CRUD access
+  - Collaborative platform everything open like wikipedia (for now)
 - 🔐 **Backend rate limiting** to prevent misuse
 - 🧪 **Unit/component testing** via ViteTest
 - ⚙️ **Minimal PHP backend** with custom-built ORM (due to shared hosting)
