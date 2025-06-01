@@ -46,7 +46,7 @@ const PasswordForm = ({
     success={successMessage}
     label="Jelszó módosítása"
   >
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form onSubmit={onSubmit} className="space-y-6 max-h-[90dvh]">
       <InputField
         label="Jelenlegi jelszó"
         value={currentPassword}

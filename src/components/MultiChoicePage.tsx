@@ -119,13 +119,13 @@ export default function MultiChoicePage() {
       <PageTransition>
         <Suspense fallback={<Spinner />}>
           <Link
-            to="/mquestions"
+            to="/tetelek"
             className="inline-flex items-center px-3 py-2 border border-border mt-20 md:ml-10 ml-1 rounded-md
                                text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground
                                focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
           >
             <FaArrowLeft className="mr-2" />
-            Vissza a kérdésekhez
+            Vissza a tételekhez
           </Link>
           <main className="flex flex-col items-center justify-center max-w-4xl mx-auto p-4 text-center">
             <h1 className="text-3xl font-bold mb-3">Felelet Választás</h1>

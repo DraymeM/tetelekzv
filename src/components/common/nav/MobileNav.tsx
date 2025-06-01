@@ -25,7 +25,7 @@ const MobileNav: FC<Props> = ({
         <>
           <button
             onClick={toggleTheme}
-            className="mr-4 p-2 rounded-full transition-colors border border-border text-foreground"
+            className="mr-4 p-2 rounded-full transition-colors border bg-muted border-border text-foreground"
             title="Toggle theme"
           >
             {theme === "dark" ? <FaMoon size={18} /> : <FaSun size={18} />}

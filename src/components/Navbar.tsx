@@ -2,7 +2,6 @@ import type { FC } from "react";
 import React, { Suspense } from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { FaScroll, FaPlus } from "react-icons/fa";
-import { MdQuiz } from "react-icons/md";
 import { GiCardPick } from "react-icons/gi";
 import { FaDice } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
@@ -20,14 +19,6 @@ const navLinks: NavLink[] = [
     children: [
       { name: "Tétel", to: "/tetelcreate", icon: FaPlus },
       { name: "FlashCards", to: "/flashcards", icon: GiCardPick },
-    ],
-  },
-  {
-    name: "Kérdések",
-    to: "/mquestions",
-    icon: MdQuiz,
-    children: [
-      { name: "Kérdés", to: "/pmchq", icon: FaPlus },
       { name: "Random", to: "/mchoiceq", icon: FaDice },
     ],
   },

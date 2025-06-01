@@ -1,0 +1,16 @@
+[01-Jun-2025 16:49:34 UTC] Request received: tetel_id=2, payload={"question":"rerererer","answers":[{"text":"wewqe","isCorrect":false},{"text":"wqeqwwqeqtzrtrt","isCorrect":true},{"text":"gfdfdd","isCorrect":false},{"text":"dgdfdfdfdf","isCorrect":false}]}
+[01-Jun-2025 16:49:34 UTC] Exception: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'danielmarkus.tetelek' doesn't exist
+Stack trace: #0 C:\Users\Dani.DESKTOP-J0LINH7\Desktop\ELTE PROG.INF\repos\tetelekzv\BackEnd\multiquestion\post\create_multiquestion.php(61): PDO->prepare('SELECT COUNT(*)...')
+#1 {main}
+[01-Jun-2025 16:51:47 UTC] Request received: tetel_id=2, payload={"question":"fdsfsdfsdf","answers":[{"text":"ztutzutz","isCorrect":false},{"text":"ztfghfgh","isCorrect":true},{"text":"hgfhfwqeqw","isCorrect":false},{"text":"fsdsdfsdfsd","isCorrect":false}]}
+[01-Jun-2025 16:51:47 UTC] Question created successfully: ID=179
+[01-Jun-2025 17:42:56 UTC] Request received: tetel_id=2, payload={"question":"dsfgsdfsdf","answers":[{"text":"sdfsdfsdf","isCorrect":false},{"text":"sdfsdfsd","isCorrect":false},{"text":"sfdfsdfs","isCorrect":true},{"text":"dfsdfsdfsdfsdf","isCorrect":false}]}
+[01-Jun-2025 17:42:56 UTC] Question created successfully: ID=180
+[01-Jun-2025 18:05:58 UTC] Request received: tetel_id=1, payload={"question":"uj tesz","answers":[{"text":"ez nem j\u00f3","isCorrect":false},{"text":"ez igen","isCorrect":true},{"text":"ez nem","isCorrect":false},{"text":"ez sem","isCorrect":false}]}
+[01-Jun-2025 18:05:58 UTC] Question created successfully: ID=181
+[01-Jun-2025 18:08:52 UTC] Request received: tetel_id=1, payload={"question":"j\u00f3\u00f3\u00f3","answers":[{"text":"mob","isCorrect":false},{"text":"job","isCorrect":false},{"text":"gob","isCorrect":true},{"text":"dob","isCorrect":false}]}
+[01-Jun-2025 18:08:52 UTC] Question created successfully: ID=182
+[01-Jun-2025 18:16:17 UTC] Request received: tetel_id=1, payload={"question":"tesztel\u00fcnk","answers":[{"text":"ez az","isCorrect":false},{"text":"ez is","isCorrect":false},{"text":"ez nem","isCorrect":true},{"text":"ez igen","isCorrect":false}]}
+[01-Jun-2025 18:16:17 UTC] Question created successfully: ID=183
+[01-Jun-2025 18:21:14 UTC] Request received: tetel_id=1, payload={"question":"gub","answers":[{"text":"blugy","isCorrect":false},{"text":"dsfsdf","isCorrect":true},{"text":"dfsd","isCorrect":false},{"text":"fsdfsdf","isCorrect":false}]}
+[01-Jun-2025 18:21:14 UTC] Question created successfully: ID=184

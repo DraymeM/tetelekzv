@@ -64,19 +64,26 @@ class Question extends Model
      * Create a question plus its answers in one transaction.
      * Ensures FK integrity.
      */
-    public function createWithAnswers(string $text, array $answers): int
+public function createWithAnswers(string $text, array $answers, int $tetel_id): int
     {
         if (count($answers) < 2) {
             throw new Exception("At least two answers required");
         }
         $this->db->beginTransaction();
-        $qid = $this->execute(
-            "INSERT INTO {$this->table} (question) VALUES (:q)",
-            [':q' => $text]
-        );
-        $this->answerModel->createBulk($qid, $answers);
-        $this->db->commit();
-        return $qid;
+        try {
+            $stmt = $this->db->prepare(
+                "INSERT INTO {$this->table} (question, tetel_id) VALUES (:q, :tetel_id)"
+            );
+            $stmt->execute([':q' => $text, ':tetel_id' => $tetel_id]);
+            $qid = (int)$this->db->lastInsertId();
+            $this->answerModel->createBulk($qid, $answers);
+            $this->db->commit();
+            return $qid;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            error_log("Question::createWithAnswers failed: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     /** Delete question and its answers together */

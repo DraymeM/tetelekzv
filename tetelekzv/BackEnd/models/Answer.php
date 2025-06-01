@@ -22,17 +22,20 @@ class Answer extends Model
             'isCorrect' => (bool)$r['is_correct']
         ], $rows);
     }
-    public function createBulk(int $questionId, array $answers): void
+public function createBulk(int $questionId, array $answers): void
     {
         $stmt = $this->db->prepare(
             "INSERT INTO {$this->table}
              (question_id, answer_text, is_correct)
              VALUES (:qid, :txt, :corr)"
         );
-        foreach ($answers as $ans) {
+        foreach ($answers as $index => $ans) {
+            if (!isset($ans['text']) || !isset($ans['isCorrect'])) {
+                throw new InvalidArgumentException("Invalid answer format at index $index");
+            }
             $stmt->execute([
-                ':qid'  => $questionId,
-                ':txt'  => $ans['text'],
+                ':qid' => $questionId,
+                ':txt' => $ans['text'],
                 ':corr' => $ans['isCorrect'] ? 1 : 0
             ]);
         }

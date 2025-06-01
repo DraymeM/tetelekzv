@@ -13,18 +13,22 @@ import { fetchMultiQuestionDetails, deleteMultiQuestion } from "../api/repo";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import { useAuth } from "../context/AuthContext";
-import React from "react";
 import PageTransition from "../components/common/PageTransition";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
+import React from "react";
+
 const DeleteModal = React.lazy(() => import("./common/Forms/DeleteModal"));
 const AnswerPicker = React.lazy(
   () => import("../components/common/AnswerPicker")
 );
 
 export default function MultiquestionDetails() {
-  const { id } = useParams({ strict: false });
-  const questionId = Number(id);
+  // Capture tetelId ($id) and questionId ($qid) from the route
+  const { id: tetelId, qid } = useParams({
+    from: "/tetelek/$id/questions/$qid",
+  });
+  const questionId = Number(qid);
   const location = useLocation();
   const isEditMode = location.pathname.includes("/edit");
   const isOnline = useOnlineStatus();
@@ -32,6 +36,7 @@ export default function MultiquestionDetails() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const {
     data: question,
     isLoading,
@@ -42,6 +47,7 @@ export default function MultiquestionDetails() {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
+
   const deleteMutation = useMutation({
     mutationFn: () => {
       if (!isAuthenticated) {
@@ -55,27 +61,45 @@ export default function MultiquestionDetails() {
       return deleteMultiQuestion(questionId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
+      queryClient.invalidateQueries({ queryKey: ["tetelQuestions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["multiQuestions", questionId],
+      });
       toast.success("Sikeresen törölted a kérdést.");
-      navigate({ to: "/mquestions" });
+      navigate({
+        to: "/tetelek/$id/questions",
+        params: { id: tetelId },
+      });
     },
     onError: () => {},
   });
+
   if (!isOnline) {
-    return (
-      <>
-        <OfflinePlaceholder />
-      </>
-    );
+    return <OfflinePlaceholder />;
   }
+
   if (isEditMode) return <Outlet />;
+
   if (isLoading) return <Spinner />;
-  if (error || !question)
+
+  if (error || !question) {
     return (
       <div className="p-10 text-center text-red-500">
         Hiba történt a kérdés betöltése közben.
       </div>
     );
+  }
+
+  if (!tetelId || isNaN(Number(tetelId))) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-10 text-center text-red-500">
+          Érvénytelen tétel ID
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -83,7 +107,8 @@ export default function MultiquestionDetails() {
       <PageTransition>
         <Suspense>
           <Link
-            to="/mquestions"
+            to="/tetelek/$id/questions"
+            params={{ id: tetelId }}
             className="inline-flex items-center px-3 py-2 border border-border mt-20 ml-10 rounded-md text-sm font-medium hover:bg-muted"
           >
             <FaArrowLeft className="mr-2" />
@@ -109,9 +134,9 @@ export default function MultiquestionDetails() {
         <>
           {/* Edit Button */}
           <Link
-            to="/mquestions/$id/edit"
-            params={{ id: questionId.toString() }}
-            className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full 
+            to="/tetelek/$id/questions/$qid/edit"
+            params={{ id: tetelId, qid }}
+            className="fixed bottom-20 right-7 p-3 bg-blue-600 text-white rounded-full 
                        hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
             title="Szerkeszd a kérdést"
           >

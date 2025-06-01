@@ -70,10 +70,11 @@ export async function createTetel(formData: TetelFormData): Promise<void> {
 }
 /*-----------------------------------------------------Kérdések--------------------------------------------------------------- */
 export async function createMultiQuestion(
-  data: NewMultiQuestion
+  data: NewMultiQuestion,
+  tetelId: number
 ): Promise<IMultiQuestion> {
   const res = await apiClient.post<IMultiQuestion>(
-    "/multiquestion/post/create_multiquestion.php",
+    `/multiquestion/post/create_multiquestion.php?tetelid=${tetelId}`,
     data,
     {
       headers: {
@@ -121,6 +122,29 @@ export async function fetchQuestions({
     "/multiquestion/get/get_multiquestion_list.php",
     {
       params: { page, limit },
+    }
+  );
+
+  if (!res.data || !Array.isArray(res.data.data)) {
+    throw new Error("Unexpected response from backend");
+  }
+
+  return res.data;
+}
+
+export async function fetchQuestionsByTetelId({
+  tetelId,
+  page = 1,
+  limit = 35,
+}: {
+  tetelId: number;
+  page?: number;
+  limit?: number;
+}): Promise<{ data: IQuestion[]; total: number }> {
+  const res = await apiClient.get(
+    "/multiquestion/get/get_multiquestions_by_tetel.php",
+    {
+      params: { tetel_id: tetelId, page, limit },
     }
   );
 

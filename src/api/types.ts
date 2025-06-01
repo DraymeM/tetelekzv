@@ -53,14 +53,14 @@ export interface IMultiQuestion {
 export interface IQuestion {
   id: number;
   question: string;
+  tetel_id?: number;
 }
+export type NewMultiQuestion = Omit<IMultiQuestion, "id">;
 
 export interface Answer {
   text: string;
   isCorrect: boolean;
 }
-
-export type NewMultiQuestion = Omit<IMultiQuestion, "id">;
 
 export type RouterContext = {
   isAuthenticated: boolean | false;

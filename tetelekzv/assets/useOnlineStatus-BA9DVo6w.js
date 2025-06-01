@@ -1,0 +1,1 @@
+import{r as i}from"./index-NwrGM-P6.js";const r=()=>{const[o,e]=i.useState(navigator.onLine);return i.useEffect(()=>{const n=()=>e(!0),t=()=>e(!1);return window.addEventListener("online",n),window.addEventListener("offline",t),()=>{window.removeEventListener("online",n),window.removeEventListener("offline",t)}},[]),o};export{r as u};
