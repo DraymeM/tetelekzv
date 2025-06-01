@@ -1,48 +1,77 @@
 import { Suspense, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import { createMultiQuestion } from "../api/repo";
-import type { Answer } from "../api/types";
+import type { Answer, NewMultiQuestion } from "../api/types";
 import Spinner from "./Spinner";
 import Navbar from "./Navbar";
 import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import PageTransition from "../components/common/PageTransition";
+
 const MultiQuestionForm = React.lazy(
   () => import("./common/Forms/MultiQuestionForm")
 );
 
 const MultiQuestionCreate: React.FC = () => {
+  const { id } = useParams({ strict: false });
+  const tetelId = Number(id);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isBlocking, setIsBlocking] = useState(false);
   const isOnline = useOnlineStatus();
+
   const mutation = useMutation({
     mutationFn: (newQuestion: { question: string; answers: Answer[] }) =>
-      createMultiQuestion(newQuestion),
+      createMultiQuestion(
+        {
+          question: newQuestion.question,
+          answers: newQuestion.answers.map((ans) => ({
+            text: ans.text,
+            isCorrect: ans.isCorrect,
+          })),
+        } as NewMultiQuestion,
+        tetelId
+      ),
     onMutate: () => setIsBlocking(true),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
+      queryClient.invalidateQueries({ queryKey: ["tetelQuestions", tetelId] });
       toast.success("Kérdés létrehozva!");
       setTimeout(() => {
-        navigate({ to: "/mquestions" });
+        navigate({
+          to: "/tetelek/$id/questions",
+          params: { id: id ?? "" },
+        });
         setIsBlocking(false);
-      }, 2000);
+      }, 200);
     },
-    onError: () => {
-      toast.error("Nem sikerült a kérdés létrehozása!");
+    onError: (error: any) => {
+      const errorMessage =
+        error?.response?.data?.error || "Nem sikerült a kérdés létrehozása!";
+      toast.error(errorMessage);
+      console.error("Error creating question:", errorMessage, error);
       setIsBlocking(false);
     },
   });
+
   if (!isOnline) {
+    return <OfflinePlaceholder />;
+  }
+
+  if (!id || isNaN(tetelId) || tetelId <= 0) {
     return (
       <>
-        <OfflinePlaceholder />
+        <Navbar />
+        <div className="text-center mt-10 text-red-500">
+          Érvénytelen tétel ID
+        </div>
       </>
     );
   }
+
   return (
     <>
       <Navbar />
@@ -55,7 +84,7 @@ const MultiQuestionCreate: React.FC = () => {
             <Spinner />
           </div>
         )}
-        <Suspense>
+        <Suspense fallback={<Spinner />}>
           <div className="max-w-4xl mx-auto items-center mt-10">
             <MultiQuestionForm
               onSubmit={mutation.mutate}

@@ -170,13 +170,14 @@ export default function TetelDetails() {
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
               <Link
-                to="/tetelek"
+                to="/tetelek/$id"
+                params={{ id: tetelId.toString() }}
                 className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-                aria-label="Vissza a tételekhez"
-                title="Vissza a tételekhez"
+                aria-label="Vissza a tételhez"
+                title="Vissza a tételhez"
               >
                 <FaArrowLeft className="mr-2" />
-                Tételekhez
+                Vissza
               </Link>
 
               <div className="flex items-center md:gap-4 gap-1">
@@ -253,13 +254,14 @@ export default function TetelDetails() {
                   </div>
                 )}
                 <Link
-                  to="/tetelek"
-                  className="inline-flex items-center px-3 py-2 border border-border mb-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                  to="/tetelek/$id"
+                  params={{ id: tetelId.toString() }}
+                  className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                   aria-label="Vissza a tételekhez"
-                  title="Vissza a tételekhez"
+                  title="Vissza a tételhez"
                 >
                   <FaArrowLeft className="mr-2" />
-                  Tételekhez
+                  Vissza
                 </Link>
               </div>
             ) : (
@@ -284,7 +286,7 @@ export default function TetelDetails() {
           {isAuthenticated && !learningMode && (
             <>
               <Link
-                to="/tetelek/$id/edit"
+                to="/tetelek/$id/details/edit"
                 params={{ id: tetelId.toString() }}
                 className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
                 title="Szerkeszd a tételt"

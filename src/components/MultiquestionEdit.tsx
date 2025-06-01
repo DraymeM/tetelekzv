@@ -15,10 +15,12 @@ const MultiQuestionForm = React.lazy(
 );
 
 const MultiQuestionEdit = () => {
-  const { id } = useParams({ strict: false });
-  const questionId = Number(id);
+  const { id: qid } = useParams({
+    from: "/tetelek/$id/questions/$qid",
+  });
+  const questionId = Number(qid);
   const navigate = useNavigate();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   const [isBlocking, setIsBlocking] = useState(false);
   const isOnline = useOnlineStatus();
   const { data, isLoading } = useQuery({
@@ -32,10 +34,16 @@ const MultiQuestionEdit = () => {
       updateMultiQuestion(questionId, updated),
     onMutate: () => setIsBlocking(true),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["multiQuestion", questionId] });
-      qc.invalidateQueries({ queryKey: ["multiQuestions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["multiQuestion", questionId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
+      queryClient.invalidateQueries({ queryKey: ["tetelQuestions"] });
       toast.success("Kérdés frissítve!");
-      setTimeout(() => navigate({ to: `/mquestions/${questionId}` }), 2000);
+      setTimeout(
+        () => navigate({ to: `/tetelek/$id/questions/${questionId}` }),
+        2000
+      );
     },
     onError: () => {
       toast.error("Nem sikerült frissíteni a kérdést.");

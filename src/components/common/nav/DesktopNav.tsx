@@ -27,7 +27,7 @@ const DesktopNav: FC<Props> = ({
       {/* Theme toggle */}
       <button
         onClick={toggleTheme}
-        className="p-2 rounded-full transition-colors hover:cursor-pointer  border border-border"
+        className="p-2 rounded-full transition-colors hover:cursor-pointer bg-muted hover:bg-muted/50 border border-border"
         title="Toggle theme"
       >
         {theme === "dark" ? <FaMoon size={18} /> : <FaSun size={18} />}
