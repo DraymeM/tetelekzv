@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { createMultiQuestion } from "../api/repo";
 import type { Answer, NewMultiQuestion } from "../api/types";
 import Spinner from "./Spinner";
-import Navbar from "./Navbar";
 import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
@@ -64,7 +63,6 @@ const MultiQuestionCreate: React.FC = () => {
   if (!id || isNaN(tetelId) || tetelId <= 0) {
     return (
       <>
-        <Navbar />
         <div className="text-center mt-10 text-red-500">
           Érvénytelen tétel ID
         </div>
@@ -74,7 +72,6 @@ const MultiQuestionCreate: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <PageTransition>
         {isBlocking && (
           <div
@@ -84,7 +81,7 @@ const MultiQuestionCreate: React.FC = () => {
             <Spinner />
           </div>
         )}
-        <Suspense fallback={<Spinner />}>
+        <Suspense>
           <div className="max-w-4xl mx-auto items-center mt-10">
             <MultiQuestionForm
               onSubmit={mutation.mutate}

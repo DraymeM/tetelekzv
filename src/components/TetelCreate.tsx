@@ -4,7 +4,6 @@ import { useNavigate } from "@tanstack/react-router";
 import type { TetelFormData } from "../api/types";
 import { createTetel } from "../api/repo";
 import Spinner from "./Spinner";
-import Navbar from "./Navbar";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 const TetelForm = React.lazy(() => import("./common/Forms/TetelForm"));
@@ -53,7 +52,6 @@ const TetelCreate: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <Suspense>
         <div className="relative">
           {isBlocking && (

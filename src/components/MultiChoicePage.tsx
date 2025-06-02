@@ -2,7 +2,6 @@ import { Suspense, useEffect, useState, Fragment } from "react";
 import { Transition } from "@headlessui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import Navbar from "./Navbar";
 import AnswerPicker from "../components/common/AnswerPicker";
 import Spinner from "./Spinner";
 import TimerControls from "../components/common/TimerControls";
@@ -15,9 +14,9 @@ import {
   FaArrowLeft,
 } from "react-icons/fa";
 import { fetchRandomMultiQuestion } from "../api/repo";
-import PageTransition from "../components/common/PageTransition";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
+import PageTransition from "./common/PageTransition";
 
 export default function MultiChoicePage() {
   const queryClient = useQueryClient();
@@ -88,7 +87,6 @@ export default function MultiChoicePage() {
   if (isLoading)
     return (
       <>
-        <Navbar />
         <div className="p-10 text-center">
           <Spinner />
         </div>
@@ -105,7 +103,6 @@ export default function MultiChoicePage() {
   if (!currentQuestion || "error" in currentQuestion) {
     return (
       <>
-        <Navbar />
         <div className="p-10 text-center text-muted-foreground">
           No questions available.
         </div>
@@ -115,9 +112,8 @@ export default function MultiChoicePage() {
 
   return (
     <>
-      <Navbar />
-      <PageTransition>
-        <Suspense fallback={<Spinner />}>
+      <Suspense>
+        <PageTransition>
           <Link
             to="/tetelek"
             className="inline-flex items-center px-3 py-2 border border-border mt-20 md:ml-10 ml-1 rounded-md
@@ -231,8 +227,8 @@ export default function MultiChoicePage() {
               </div>
             </Transition>
           </main>
-        </Suspense>
-      </PageTransition>
+        </PageTransition>
+      </Suspense>
     </>
   );
 }

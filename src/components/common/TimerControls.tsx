@@ -1,4 +1,4 @@
-import { FaSyncAlt, FaRegClock, FaCheck } from "react-icons/fa";
+import { FaRegClock, FaCheck, FaArrowRight } from "react-icons/fa";
 import { Menu, Transition } from "@headlessui/react";
 
 type TimerControlsProps = {
@@ -24,7 +24,7 @@ export default function TimerControls({
         className="inline-flex items-center px-4 py-2 bg-amber-700 hover:cursor-pointer text-sm hover:bg-amber-600 text-white font-bold rounded-md 
                    transition focus:outline-none "
       >
-        <FaSyncAlt className="mr-2 animate-spin" />
+        <FaArrowRight className="mr-2" />
         Következő kérdés
       </button>
 

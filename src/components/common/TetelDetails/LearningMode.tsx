@@ -1,10 +1,10 @@
 import { lazy, Suspense, useState } from "react";
-import { Transition } from "@headlessui/react";
 import { useCardRatings } from "@/hooks/useCardRatings";
 import { IoArrowRedoSharp } from "react-icons/io5";
 import { FaQuestion } from "react-icons/fa"; // for the tutorial button
 import { tutorialSteps } from "../../../tutorials/CardGameTutorial";
 import Spinner from "@/components/Spinner";
+import PageTransition from "../PageTransition";
 const FlashCard = lazy(() => import("../FlashCard"));
 const CardDeck = lazy(() => import("./CardDeck"));
 const CardControls = lazy(() => import("./CardControls"));
@@ -49,16 +49,7 @@ const LearningMode = ({
   return (
     <>
       <Suspense fallback={<Spinner />}>
-        <Transition
-          show={true}
-          enter="transition-opacity duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="transition-opacity duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-          as="div"
-        >
+        <PageTransition>
           <div className="flex flex-col items-center gap-6">
             <CardDeck
               id="card-deck"
@@ -108,7 +99,7 @@ const LearningMode = ({
               handleNext={handleNext}
             />
           </div>
-        </Transition>
+        </PageTransition>
 
         {/* Floating Tutorial Button */}
         <button

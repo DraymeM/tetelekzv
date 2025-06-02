@@ -23,6 +23,21 @@ const CardDeck: React.FC<Props> = ({
   setFocusedIdx,
   setSelectedIdx,
 }) => {
+  if (sortedIndexes.length === 0) {
+    return (
+      <div
+        id={id}
+        className="w-full md:max-w-[450px] bg-secondary border border-border rounded-md p-6 text-center text-foreground"
+        aria-label="Nincsenek villámkártyák"
+      >
+        <p className="text-lg font-semibold">Nincsenek villámkártyák</p>
+        <p className="text-sm text-secondary-foreground">
+          Ehhez a tételhez nem tartoznak villámkártyák.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       id={id}
@@ -98,4 +113,5 @@ const CardDeck: React.FC<Props> = ({
     </div>
   );
 };
+
 export default CardDeck;

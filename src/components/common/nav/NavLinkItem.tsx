@@ -97,6 +97,8 @@ const NavLinkItem: FC<Props> = ({ link }) => {
 
       <button
         onClick={toggleOpen}
+        aria-label="Továbbiak"
+        title="Továbbiak"
         className={`ml-1 p-1 bg-muted rounded-full hover:cursor-pointer transition-colors ${
           isAnyChildActive ? "text-primary" : ""
         }`}
@@ -104,8 +106,6 @@ const NavLinkItem: FC<Props> = ({ link }) => {
         <HiChevronDown
           width={20}
           height={20}
-          aria-label="Továbbiak"
-          title="Továbbiak"
           className={`w-5 h-5 transform transition-transform ${
             open ? "rotate-180" : ""
           }`}

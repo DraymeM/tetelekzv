@@ -21,7 +21,7 @@ import { registerSW } from "virtual:pwa-register";
 // Import idb-keyval for IndexedDB access
 import { set, get, del } from "idb-keyval";
 
-const Applayout = lazy(() => import("./components/AppLayout"));
+import Applayout from "./components/AppLayout";
 const NotFoundPage = lazy(() => import("./components/404"));
 const ErrorBoundary = lazy(() => import("./components/ErrorBoundary"));
 
@@ -80,7 +80,10 @@ persistQueryClient({
         key === "tetel-count" ||
         key === "question-count" ||
         key === "flashcard-count" ||
-        key === "tetel-list-home"
+        key === "tetel-list-home" ||
+        key === "tetelQuestions" ||
+        key === "multiQuestions" ||
+        key === "multiquestion"
       );
     },
   },

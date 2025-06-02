@@ -1,7 +1,6 @@
 import React, { useState, Suspense } from "react";
 import { useParams, Outlet, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import { fetchTetelek } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
@@ -32,7 +31,6 @@ export default function Tetelek() {
   if (isLoading) {
     return (
       <>
-        <Navbar />
         <div className="p-10 text-center">
           <Spinner />
         </div>
@@ -44,7 +42,6 @@ export default function Tetelek() {
     if (!navigator.onLine) {
       return (
         <>
-          <Navbar />
           <OfflinePlaceholder />
         </>
       );
@@ -52,7 +49,6 @@ export default function Tetelek() {
 
     return (
       <>
-        <Navbar />
         <div className="p-10 text-red-500 text-center">
           Hiba történt: {error.message}
         </div>
@@ -65,8 +61,7 @@ export default function Tetelek() {
 
   return (
     <div className="text-center pt-20">
-      <Navbar />
-      <Suspense fallback={<Spinner />}>
+      <Suspense>
         <PageTransition>
           <h2 className="text-3xl font-bold mb-8">Tételek</h2>
 

@@ -5,6 +5,7 @@ import { register } from "../../../api/repo";
 import { toast } from "react-toastify";
 import OfflinePlaceholder from "../../OfflinePlaceholder";
 import { useOnlineStatus } from "../../../hooks/useOnlineStatus";
+import PageTransition from "../PageTransition";
 const FormContainer = React.lazy(() => import("../Forms/FormContainer"));
 const InputField = React.lazy(() => import("../Forms/InputField"));
 const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
@@ -80,54 +81,56 @@ const Register: React.FC = () => {
   }
   return (
     <Suspense>
-      <div>
-        <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
-          <FormContainer error={error} success={success} label="Register">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <InputField
-                id="username"
-                label="Felhasználónév"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setTouched({ ...touched, username: true });
-                }}
-                error={touched.username ? fieldErrors.username : undefined}
-              />
+      <PageTransition>
+        <div>
+          <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
+            <FormContainer error={error} success={success} label="Register">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <InputField
+                  id="username"
+                  label="Felhasználónév"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setTouched({ ...touched, username: true });
+                  }}
+                  error={touched.username ? fieldErrors.username : undefined}
+                />
 
-              <InputField
-                id="password"
-                label="Jelszó"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setTouched({ ...touched, password: true });
-                }}
-                enablePasswordToggle
-                error={touched.password ? fieldErrors.password : undefined}
-              />
+                <InputField
+                  id="password"
+                  label="Jelszó"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setTouched({ ...touched, password: true });
+                  }}
+                  enablePasswordToggle
+                  error={touched.password ? fieldErrors.password : undefined}
+                />
 
-              <InputField
-                id="confirm password"
-                label="Jelszó megerősítése"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setTouched({ ...touched, confirmPassword: true });
-                }}
-                enablePasswordToggle
-                error={
-                  touched.confirmPassword
-                    ? fieldErrors.confirmPassword
-                    : undefined
-                }
-              />
+                <InputField
+                  id="confirm password"
+                  label="Jelszó megerősítése"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setTouched({ ...touched, confirmPassword: true });
+                  }}
+                  enablePasswordToggle
+                  error={
+                    touched.confirmPassword
+                      ? fieldErrors.confirmPassword
+                      : undefined
+                  }
+                />
 
-              <SubmitButton isPending={isPending} label="Register" />
-            </form>
-          </FormContainer>
+                <SubmitButton isPending={isPending} label="Register" />
+              </form>
+            </FormContainer>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     </Suspense>
   );
 };

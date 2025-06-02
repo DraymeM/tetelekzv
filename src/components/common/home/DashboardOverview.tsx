@@ -1,17 +1,16 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaBook, FaClone, FaQuestion, FaSpinner } from "react-icons/fa";
 import CountUp from "react-countup";
 import { fetchQuestions, fetchTetelek, fetchFlashcardCount } from "@/api/repo";
 const StackedCards = React.lazy(() => import("./StackedCards"));
-import Spinner from "@/components/Spinner";
 
 const MAX_COUNT_TETELEK = 200;
 const MAX_COUNT_QUESTION = 1800;
 const MAX_COUNT_FLASHCARDS = 1000;
 
 const StatCard = ({ children }: { children: React.ReactNode }) => (
-  <div className="bg-secondary border border-transparent hover:border-border rounded-xl px-6 py-4 shadow-md w-full">
+  <div className="bg-secondary min-h-[170px] border border-transparent hover:border-border rounded-xl px-6 py-4 shadow-md w-full">
     {children}
   </div>
 );
@@ -142,48 +141,46 @@ const DashboardOverview = () => {
   const flashcardCount = flashcardData?.total ?? 0;
 
   return (
-    <Suspense fallback={<Spinner />}>
-      <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 w-full mb-6">
-        <StatCard>
-          <div className="flex flex-col space-y-3 w-full items-center">
-            <div className="flex items-center space-x-2 text-primary text-xl font-bold mb-2">
-              <FaClone />
-              <span>Flashcards</span>
-            </div>
-            {loadingFlashcards ? (
-              <div className="flex items-center justify-center ">
-                <FaSpinner className="animate-spin text-primary text-5xl" />
-              </div>
-            ) : (
-              <StackedCards
-                count={flashcardCount}
-                maxCount={MAX_COUNT_FLASHCARDS}
-              />
-            )}
+    <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 w-full mb-6">
+      <StatCard>
+        <div className="flex flex-col space-y-3 w-full items-center">
+          <div className="flex items-center space-x-2 text-primary text-xl font-bold mb-2">
+            <FaClone />
+            <span>Flashcards</span>
           </div>
-        </StatCard>
+          {loadingFlashcards ? (
+            <div className="flex items-center justify-center ">
+              <FaSpinner className="animate-spin text-primary text-5xl" />
+            </div>
+          ) : (
+            <StackedCards
+              count={flashcardCount}
+              maxCount={MAX_COUNT_FLASHCARDS}
+            />
+          )}
+        </div>
+      </StatCard>
 
-        <StatCard>
-          <StatCircle
-            icon={FaBook}
-            label="Tételek"
-            value={loadingTetelek ? 0 : tetelCount}
-            color="var(--primary)"
-            maxCount={MAX_COUNT_TETELEK}
-          />
-        </StatCard>
+      <StatCard>
+        <StatCircle
+          icon={FaBook}
+          label="Tételek"
+          value={loadingTetelek ? 0 : tetelCount}
+          color="var(--primary)"
+          maxCount={MAX_COUNT_TETELEK}
+        />
+      </StatCard>
 
-        <StatCard>
-          <StatProgressBar
-            icon={FaQuestion}
-            label="Kérdések"
-            value={loadingQuestions ? 0 : questionCount}
-            color="var(--primary)"
-            maxCount={MAX_COUNT_QUESTION}
-          />
-        </StatCard>
-      </div>
-    </Suspense>
+      <StatCard>
+        <StatProgressBar
+          icon={FaQuestion}
+          label="Kérdések"
+          value={loadingQuestions ? 0 : questionCount}
+          color="var(--primary)"
+          maxCount={MAX_COUNT_QUESTION}
+        />
+      </StatCard>
+    </div>
   );
 };
 
