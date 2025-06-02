@@ -30,7 +30,7 @@ const TetelListCard: FC = () => {
   };
 
   return (
-    <div className="bg-secondary shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2">
+    <div className="bg-secondary md:min-h-[150px] min-h-170px shadow-md rounded-lg overflow-hidden transition duration-300 border-transparent hover:border-border border-2">
       <div className="p-6">
         <h3 className="text-xl font-semibold text-primary mb-2 flex items-center gap-2">
           <FaListUl size={24} />

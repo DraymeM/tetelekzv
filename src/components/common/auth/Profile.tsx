@@ -1,6 +1,5 @@
 import React, { Suspense, useState } from "react";
 import { Tab } from "@headlessui/react";
-import Navbar from "../../Navbar";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
@@ -81,7 +80,6 @@ const Profile: React.FC = () => {
   }
   return (
     <>
-      <Navbar />
       <PageTransition>
         <Suspense>
           <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50 overflow-hidden">

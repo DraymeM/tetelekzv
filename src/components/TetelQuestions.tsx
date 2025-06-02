@@ -3,10 +3,10 @@ import { useParams, Outlet, Link, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuestionsByTetelId } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
-import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import PageTransition from "../components/common/PageTransition";
 import { FaPlus, FaArrowLeft } from "react-icons/fa";
+import { LuTestTubeDiagonal } from "react-icons/lu";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import { LimitDropdown, Pagination } from "./common/PaginationControls";
@@ -48,14 +48,9 @@ export default function TetelQuestions() {
     return <Outlet />;
   }
 
-  if (!isOnline) {
-    return <OfflinePlaceholder />;
-  }
-
   if (isLoading) {
     return (
       <>
-        <Navbar />
         <div className="p-10 text-center">
           <Spinner />
         </div>
@@ -63,10 +58,17 @@ export default function TetelQuestions() {
     );
   }
 
-  if (error instanceof Error) {
+  if (error) {
+    if (!isOnline) {
+      return (
+        <>
+          <OfflinePlaceholder />
+        </>
+      );
+    }
+
     return (
       <>
-        <Navbar />
         <div className="text-center mt-10 text-red-500">
           Hiba: {error.message}
         </div>
@@ -78,9 +80,8 @@ export default function TetelQuestions() {
   const total = data?.total ?? 0;
 
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense>
       <div className="text-center pt-20">
-        <Navbar />
         <PageTransition>
           <div className="flex items-center justify-between mb-8 px-4">
             <Link
@@ -147,11 +148,19 @@ export default function TetelQuestions() {
             limit={limit}
           />
         </PageTransition>
+        <Link
+          to="/tetelek/$id/questions/test"
+          params={{ id: tetelId.toString() }}
+          className="fixed bottom-7 right-7 p-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all transform hover:scale-105 flex items-center justify-center"
+          title="Teszteld magad"
+        >
+          <LuTestTubeDiagonal size={20} />
+        </Link>
         {isAuthenticated && (
           <Link
             to="/tetelek/$id/questions/add"
             params={{ id: tetelId.toString() }}
-            className="fixed bottom-7 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
+            className="fixed bottom-20 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
             title="Adj hozzá saját kérdést"
           >
             <FaPlus size={20} />

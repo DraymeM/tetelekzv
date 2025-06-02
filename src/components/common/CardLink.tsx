@@ -25,7 +25,7 @@ function CardLink({ id, title, to }: CardLinkProps) {
             {title}
           </h3>
         </div>
-        <div className="flex items-center p-4 hover:cursor-pointer rounded-md h-full transition-colors bg-muted text-primary hover:shadow">
+        <div className="flex items-center p-4 hover:cursor-pointer rounded-md h-full transition-colors bg-muted text-primary hover:shadow hover:bg-muted/80 border-2 border-transparent hover:border-[var(--border)]">
           <FaChevronRight size={20} />
         </div>
       </Link>

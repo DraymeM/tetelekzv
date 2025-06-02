@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { fetchMultiQuestionDetails, updateMultiQuestion } from "../api/repo";
 import type { Answer } from "../api/types";
 import Spinner from "./Spinner";
-import Navbar from "./Navbar";
 import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
@@ -23,7 +22,7 @@ const MultiQuestionEdit = () => {
   const queryClient = useQueryClient();
   const [isBlocking, setIsBlocking] = useState(false);
   const isOnline = useOnlineStatus();
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["multiQuestions", questionId],
     queryFn: () => fetchMultiQuestionDetails(questionId),
     enabled: !isNaN(questionId),
@@ -51,7 +50,6 @@ const MultiQuestionEdit = () => {
     },
   });
 
-  if (isLoading) return <Spinner />;
   if (!isOnline) {
     return (
       <>
@@ -61,7 +59,6 @@ const MultiQuestionEdit = () => {
   }
   return (
     <>
-      <Navbar />
       <PageTransition>
         {isBlocking && (
           <div

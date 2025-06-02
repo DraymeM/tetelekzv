@@ -10,12 +10,10 @@ import { Suspense, useState } from "react";
 import { FaArrowLeft, FaPen, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { fetchMultiQuestionDetails, deleteMultiQuestion } from "../api/repo";
-import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import { useAuth } from "../context/AuthContext";
 import PageTransition from "../components/common/PageTransition";
 import OfflinePlaceholder from "./OfflinePlaceholder";
-import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import React from "react";
 
 const DeleteModal = React.lazy(() => import("./common/Forms/DeleteModal"));
@@ -24,14 +22,12 @@ const AnswerPicker = React.lazy(
 );
 
 export default function MultiquestionDetails() {
-  // Capture tetelId ($id) and questionId ($qid) from the route
   const { id: tetelId, qid } = useParams({
     from: "/tetelek/$id/questions/$qid",
   });
   const questionId = Number(qid);
   const location = useLocation();
   const isEditMode = location.pathname.includes("/edit");
-  const isOnline = useOnlineStatus();
   const { isAuthenticated, isSuperUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -46,6 +42,7 @@ export default function MultiquestionDetails() {
     queryFn: () => fetchMultiQuestionDetails(questionId),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
+    retry: 2,
   });
 
   const deleteMutation = useMutation({
@@ -71,31 +68,40 @@ export default function MultiquestionDetails() {
         params: { id: tetelId },
       });
     },
-    onError: () => {},
   });
 
-  if (!isOnline) {
-    return <OfflinePlaceholder />;
-  }
-
-  if (isEditMode) return <Outlet />;
-
+  // 🛠️ Handle loading
   if (isLoading) return <Spinner />;
 
-  if (error || !question) {
+  // ❗ Handle error + offline
+  if (error) {
+    if (!navigator.onLine) {
+      return <OfflinePlaceholder />;
+    }
     return (
-      <div className="p-10 text-center text-red-500">
+      <div className="p-10 mt-20 text-center text-red-500">
         Hiba történt a kérdés betöltése közben.
       </div>
     );
   }
 
+  if (isEditMode) return <Outlet />;
+
   if (!tetelId || isNaN(Number(tetelId))) {
     return (
       <>
-        <Navbar />
-        <div className="p-10 text-center text-red-500">
+        <div className="p-10 mt-20 text-center text-red-500">
           Érvénytelen tétel ID
+        </div>
+      </>
+    );
+  }
+
+  if (!question) {
+    return (
+      <>
+        <div className="p-10 mt-20 text-center text-red-500">
+          A kérdés nem található.
         </div>
       </>
     );
@@ -103,7 +109,6 @@ export default function MultiquestionDetails() {
 
   return (
     <>
-      <Navbar />
       <PageTransition>
         <Suspense>
           <Link
@@ -114,6 +119,7 @@ export default function MultiquestionDetails() {
             <FaArrowLeft className="mr-2" />
             Vissza a kérdésekhez
           </Link>
+
           <div className="max-w-2xl mx-auto p-6 mt-6 bg-secondary rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold text-center mb-4">
               {question.question}
@@ -130,9 +136,9 @@ export default function MultiquestionDetails() {
           />
         </Suspense>
       </PageTransition>
+
       {isAuthenticated && (
         <>
-          {/* Edit Button */}
           <Link
             to="/tetelek/$id/questions/$qid/edit"
             params={{ id: tetelId, qid }}
@@ -143,7 +149,6 @@ export default function MultiquestionDetails() {
             <FaPen size={20} />
           </Link>
 
-          {/* Delete Button */}
           <button
             onClick={() => setIsDeleteModalOpen(true)}
             className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 

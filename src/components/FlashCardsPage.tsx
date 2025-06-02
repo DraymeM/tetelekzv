@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Navbar from "./Navbar";
+
 import TimerControls from "./common/TimerControls";
 import { useTimer } from "../hooks/useTimer";
 import Spinner from "./Spinner";
@@ -55,7 +55,6 @@ export default function FlashCardsPage() {
   if (isLoading)
     return (
       <>
-        <Navbar />
         <div className="p-10 text-center">
           <Spinner />
         </div>
@@ -72,7 +71,6 @@ export default function FlashCardsPage() {
   if (!flashcard || "error" in flashcard) {
     return (
       <>
-        <Navbar />
         <div className="p-10 text-center text-muted">
           No flashcards available.
         </div>
@@ -82,9 +80,8 @@ export default function FlashCardsPage() {
 
   return (
     <>
-      <Navbar />
-      <PageTransition>
-        <Suspense>
+      <Suspense>
+        <PageTransition>
           <main className="flex flex-col items-center justify-center min-h-screen max-w-4xl mx-auto p-8 text-center">
             <h1 className="text-3xl font-bold mb-6">Villámkérdések</h1>
 
@@ -112,8 +109,8 @@ export default function FlashCardsPage() {
               )}
             </div>
           </main>
-        </Suspense>
-      </PageTransition>
+        </PageTransition>
+      </Suspense>
     </>
   );
 }

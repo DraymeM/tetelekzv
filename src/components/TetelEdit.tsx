@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchTetelDetails, updateTetel } from "../api/repo";
 import type { TetelFormData } from "../api/types";
 import Spinner from "./Spinner";
-import Navbar from "./Navbar";
 import PageTransition from "../components/common/PageTransition";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
@@ -19,7 +18,7 @@ const TetelEdit: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [isBlocking, setIsBlocking] = useState(false);
   const isOnline = useOnlineStatus();
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["tetelDetail", tetelId],
     queryFn: () => fetchTetelDetails(tetelId),
     enabled: !isNaN(tetelId),
@@ -65,17 +64,10 @@ const TetelEdit: React.FC = () => {
   if (!isOnline) {
     return (
       <>
-        <Navbar />
         <OfflinePlaceholder />
       </>
     );
   }
-  if (isLoading)
-    return (
-      <div className="p-10 text-center text-gray-300">
-        <Spinner />
-      </div>
-    );
 
   const initialData: TetelFormData = {
     name: data?.tetel.name || "",
@@ -89,7 +81,6 @@ const TetelEdit: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <PageTransition>
         <Suspense>
           <div className="relative">
