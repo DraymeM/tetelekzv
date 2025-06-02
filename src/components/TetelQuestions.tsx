@@ -130,24 +130,24 @@ export default function TetelQuestions() {
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
-                {questions.map((question) => (
+                {questions.map((question, index) => (
                   <Suspense
-                    key={question.id}
+                    key={question.id} // Use real ID for React key
                     fallback={
                       <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] animate-pulse" />
                     }
                   >
                     <CardLink
-                      key={question.id}
-                      id={question.id}
+                      id={index + 1} // Show 1., 2., 3. in the UI
                       title={question.question}
-                      to={`/tetelek/${tetelId}/questions/${question.id}`}
+                      to={`/tetelek/${tetelId}/questions/${question.id}`} // Keep route correct
                     />
                   </Suspense>
                 ))}
               </div>
             )}
           </div>
+
           <Pagination
             page={page}
             setPage={setPage}

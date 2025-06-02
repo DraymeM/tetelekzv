@@ -34,7 +34,7 @@ const MobileNav: FC<Props> = ({
             type="button"
             aria-label="Menü megnyitása"
             title="Menü megnyitása"
-            className="p-2 m-1 rounded-md border-2 transition-colors duration-300 border-border text-foreground"
+            className="p-2 m-1 rounded-md border-2 transition-colors duration-300 border-border text-foreground hover:bg-muted/50 bg-muted"
           >
             <TiThMenu
               aria-hidden="true"

@@ -37,7 +37,7 @@ const DesktopNav: FC<Props> = ({
       {isAuthenticated ? (
         <Link
           to="/auth/profile"
-          className={`transition-all duration-300 flex items-center text-md gap-2 px-3 py-1.5 bg-muted border border-border rounded-full${
+          className={`transition-all duration-300 flex items-center text-md gap-2 px-3 py-1.5 bg-muted border hover:bg-muted/50 border-border rounded-full ${
             matchRoute({ to: "/auth/profile", fuzzy: true })
               ? "underline text-primary border-primary "
               : "hover:underline"
@@ -49,7 +49,7 @@ const DesktopNav: FC<Props> = ({
       ) : (
         <Link
           to="/login"
-          className={`transition-all duration-300 flex items-center text-md gap-2 px-3 py-1.5 border border-border rounded-full bg-muted ${
+          className={`transition-all duration-300 flex items-center text-md gap-2 px-3 py-1.5 border border-border rounded-full hover:bg-muted/50 bg-muted ${
             matchRoute({ to: "/login", fuzzy: true })
               ? "underline text-primary border-primary"
               : "hover:underline"
