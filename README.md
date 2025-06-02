@@ -4,7 +4,6 @@
 
 <h1 align="center">Tiomi – Interactive Topic Learning App</h1>
 
-
 **Tiomi** is a full-stack, installable, offline-ready **Progressive Web App (PWA)** designed for learners of all kinds. Whether you're preparing for university exams, language certifications, coding interviews, or personal enrichment, Tiomi helps you organize knowledge through topic-based notes, flashcards, and interactive quizzes.
 
 > 🔗 **Live Demo**: [danielmarkus.web.elte.hu/tetelekzv](https://danielmarkus.web.elte.hu/tetelekzv/)
@@ -15,19 +14,19 @@
 
 - 💾 **Offline-first**: Caching and React Query ensure content works even without internet
 - 📊 **Dashboard**: Live animated progress stats with CountUp.js
-- 🗣️ **Text-to-speech reader** (desktop only)
+- 🗣️ **Text-to-speech reader** (desktop only) with adjustable speed, pitch, and multiple voices; shows reading time per topic
 - 📱 **Installable** as a native-like app on mobile and desktop
 - 🌓 **Light/Dark Mode** toggle based on system or user preference
 - ✍️ **Markdown editor** with syntax highlighting and custom styling
 - 🧠 **Flashcard system** with spaced repetition and difficulty-based prioritization
-- 🧭 **Step-by-step tutorials** for key features (modular and reusable)
-- 🎮 **Gamified quiz engine** with streaks and performance tracking
+- 🧭 **Step-by-step tutorials** for key features (modular, handles resize & interaction-required fallback)
+- 🎮 **Gamified quiz engine** with streaks, progress %, feedback messages with icons, and optional timer mode
 - 👥 **Authentication & role-based access**:
   - Guests: read-only
   - Users: create, read, edit
   - Superusers: full CRUD access
-  - Collaborative platform everything open like wikipedia (for now)
-- 🔐 **Backend rate limiting** to prevent misuse
+  - Collaborative platform, open content like Wikipedia (future group fragmentation & permissions)
+- 🔐 **Backend rate limiting** to prevent misuse with toast notifications
 - 🧪 **Unit/component testing** via ViteTest
 - ⚙️ **Minimal PHP backend** with custom-built ORM (due to shared hosting)
 
@@ -92,88 +91,91 @@ php -S localhost:8000
 
 ### 🔥 PWA Capabilities
 
-- Installable on mobile/desktop
-- Works offline via:
-  - IndexedDB caching of API responses
-  - Manual critical resource caching
+- Installable on mobile/desktop  
+- Works offline via:  
+  - IndexedDB caching of API responses  
+  - Manual critical resource caching  
 - Built using vite-plugin-pwa and service workers
 
 ---
 
 ### 🗣️ Text-to-Speech Reader
 
-- Uses browser-native speech synthesis
-- Reads entire topics (main + subsections)
-- Great for:
-  - 🧑‍🦯 Accessibility
-  - 🧠 Learners with dyslexia
-  - 🎧 Auditory learners
+- Uses browser-native speech synthesis  
+- Reads entire topics (main + subsections)  
+- Adjustable voice speed, pitch, and multiple voice options  
+- Displays estimated reading time per topic  
+- Great for:  
+  - 🧑‍🦯 Accessibility  
+  - 🧠 Learners with dyslexia  
+  - 🎧 Auditory learners  
 - **Desktop only** (disabled on mobile/PWA mode)
 
 ---
 
 ### 📊 Dashboard & Stats
 
-- Counts for:
-  - 📚 Topics (Tételek)
-  - 🧠 Flashcards
-  - ❓ Quiz questions
-- Animated via CountUp.js
+- Counts for:  
+  - 📚 Topics (Tételek)  
+  - 🧠 Flashcards  
+  - ❓ Quiz questions  
+- Animated via CountUp.js  
 - Responsive Tailwind layout
 
 ---
 
 ### 🌓 Light/Dark Mode
 
-- System theme detection + manual toggle
+- System theme detection + manual toggle  
 - Applies across UI and markdown content
 
 ---
 
 ### 🎮 Quiz System
 
-- Create/attempt multiple-choice quizzes
-- Tracks progress, scores, and streaks
+- Create/attempt multiple-choice quizzes  
+- Tracks progress, scores, and streaks  
+- Shows progress feedback in % with CountUp.js and encouraging messages + icons  
 - Optional timer mode for challenge sessions
 
 ---
 
 ### ✍️ Markdown Editor
 
-- Markdown saved in DB
-- Rendered with:
-  - HTML passthrough
-  - Syntax-highlighted code blocks
-  - Custom styles
+- Markdown saved in DB  
+- Rendered with:  
+  - HTML passthrough  
+  - Syntax-highlighted code blocks  
+  - Custom styles  
 - Perfect for structured, academic content
 
 ---
 
 ### 👥 User Roles & Auth
 
-- Secure, session-based login
-- Role permissions:
-  - Guests → read-only
-  - Users → can create/edit
+- Secure, session-based login  
+- Role permissions:  
+  - Guests → read-only  
+  - Users → can create/edit  
   - Superusers → full admin CRUD
 
 ---
 
 ### 🧠 Flashcards
 
-- Rate each card after answer:
-  - ✅ Easy → delay increases
-  - ⚖️ Medium → shown moderately
-  - ❌ Hard → shown soon again
-- 6 difficulty levels (custom scale)
-- Linked to topic hierarchy
+- Rate each card after answer:  
+  - ✅ Easy → delay increases  
+  - ⚖️ Medium → shown moderately  
+  - ❌ Hard → shown soon again  
+- 6 difficulty levels (custom scale)  
+- Linked to topic hierarchy  
 - Dynamic spaced repetition order
 
 ---
-
 ### 🧭 Universal Tutorial System
 
 - Modular, reusable steps for user onboarding
+- - Handles resize edge cases and fallback steps with "requires interaction" flag 
 - Example setup:
 
 ```ts
@@ -239,12 +241,13 @@ const flashcardTutorialSteps = [
 
 ## 🧠 Use Cases
 
-- 📖 Organize study materials into nested topics
-- 🧪 Self-test with flashcards & quizzes
-- ✍️ Markdown-powered note-taking
-- Ideal for structured learning with:
-  - Linked flashcards
+- 📖 Organize study materials into nested topics  
+- 🧪 Self-test with flashcards & quizzes  
+- ✍️ Markdown-powered note-taking  
+- Ideal for structured learning with:  
+  - Linked flashcards  
   - Active recall testing
+
 
 ---
 
@@ -267,3 +270,12 @@ const flashcardTutorialSteps = [
   - ✳️ Slim PHP / Lumen (Laravel) / Express.js / Actix
 - Group feature with their own admins own permissions
 - Offline sync actions when connectivity is back
+
+## Additional Notes
+
+- Quiz questions and Flashcards are tied to topics (tételek) mainly help learning specific topics  
+- Open collaboration model currently; planned group fragmentation for better access control  
+- Tutorial engine now handles resize edge cases and supports fallback steps requiring user interaction before continuing  
+- Card game enhancements improve engagement and learning effectiveness  
+- Text-to-speech scaffolds all available voices with speed and pitch adjustment, making it ideal for diverse learners  
+- Reading time estimates help learners manage study sessions effectively
