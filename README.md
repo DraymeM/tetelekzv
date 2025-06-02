@@ -254,11 +254,13 @@ const flashcardTutorialSteps = [
 ## 📈 Performance & Lighthouse
 
 - ✅ Lighthouse: 95–100 across categories
-  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/on1qlhbkom?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ydk2ofdxmz?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [Home Page](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/i6wvejzbbp?form_factor=desktop&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Quiz Game](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/c5bflba7dx?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Quiz Game](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/zpiz51jxez?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [FlashCardGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/dpla823z9i?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Topic List](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/rbhpfx8s14?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic List](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/i8e3ce0g80?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic LandingPage](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/a3iddi15ff?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Random Flashcards](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ipvvh5u020?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
 - ⚡ Fast, responsive, SEO-optimized
 - 📦 Full PWA compliance (installable, background updates)
 
