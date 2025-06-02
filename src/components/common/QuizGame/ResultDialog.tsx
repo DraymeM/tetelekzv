@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, type JSX } from "react";
+import { Fragment, useState, useEffect, useRef, type JSX } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import {
   FaArrowLeft,
@@ -8,7 +8,7 @@ import {
   FaMinusCircle,
   FaTimesCircle,
 } from "react-icons/fa";
-import CountUp from "react-countup";
+import { useCountUp } from "react-countup";
 
 interface ResultDialogProps {
   isOpen: boolean;
@@ -60,25 +60,45 @@ export default function ResultDialog({
   const finalPercentage = total > 0 ? (score / total) * 100 : 0;
   const [currentPercentage, setCurrentPercentage] = useState(0);
   const [showGrade, setShowGrade] = useState(false);
+  const countUpRef = useRef<HTMLElement>(null!);
+
+  const { start: startCountUp } = useCountUp({
+    ref: countUpRef,
+    start: 0,
+    end: finalPercentage,
+    duration: 3,
+    startOnMount: false,
+    useEasing: true,
+  });
 
   useEffect(() => {
     if (isOpen) {
-      setCurrentPercentage(0); // Reset on open
-      const timer = setTimeout(() => {
-        setCurrentPercentage(finalPercentage); // Animate to final
-      }, 0);
-      return () => clearTimeout(timer);
+      setCurrentPercentage(0);
+      setShowGrade(false);
+
+      requestAnimationFrame(() => {
+        setCurrentPercentage(finalPercentage);
+      });
+
+      // Slight delay ensures the modal renders before starting countUp
+      const countUpTimer = setTimeout(() => {
+        startCountUp();
+      }, 100);
+
+      const gradeTimer = setTimeout(() => {
+        setShowGrade(true);
+      }, 3000);
+
+      return () => {
+        clearTimeout(countUpTimer);
+        clearTimeout(gradeTimer);
+      };
     }
-  }, [isOpen, finalPercentage]);
+  }, [isOpen, finalPercentage, startCountUp]);
 
-  const getGrade = () => {
-    return (
-      grades.find((grade) => finalPercentage >= grade.threshold) ||
-      grades[grades.length - 1]
-    );
-  };
-
-  const { icon, message } = getGrade();
+  const { icon, message } =
+    grades.find((grade) => finalPercentage >= grade.threshold) ??
+    grades[grades.length - 1];
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -113,57 +133,42 @@ export default function ResultDialog({
                 >
                   Teszt Eredmények
                 </Dialog.Title>
-                <div>
-                  <p className="text-sm text-foreground mb-2">
-                    Helyes válaszok:{" "}
-                    <span className="font-semibold text-green-500">
-                      {score}
-                    </span>
-                    /{total}
-                  </p>
-                  <div className="flex flex-col space-y-3 w-full items-center">
-                    <CountUp
-                      end={finalPercentage}
-                      decimals={0}
-                      duration={3}
-                      useEasing
-                      onEnd={() => setShowGrade(true)}
-                    >
-                      {({ countUpRef }) => (
-                        <span
-                          ref={countUpRef}
-                          className="text-2xl font-bold text-primary"
-                        >
-                          {Math.round(currentPercentage)}%
-                        </span>
-                      )}
-                    </CountUp>
-                    <div className="w-full max-w-xs h-4 bg-border rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all duration-1500"
-                        style={{
-                          width: `${currentPercentage}%`,
-                          backgroundColor: "var(--primary)",
-                        }}
-                        role="progressbar"
-                        aria-valuenow={currentPercentage}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                        aria-label="Teszt eredmény előrehaladás"
-                      />
-                    </div>
+
+                <p className="text-sm text-foreground mb-2">
+                  Helyes válaszok:{" "}
+                  <span className="font-semibold text-green-500">{score}</span>/
+                  {total}
+                </p>
+
+                <div className="flex flex-col space-y-3 w-full items-center">
+                  <span
+                    ref={countUpRef}
+                    className="text-2xl font-bold text-primary"
+                  ></span>
+
+                  <div className="w-full max-w-xs h-4 bg-border rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-1500 ease-in-out"
+                      style={{
+                        width: `${currentPercentage}%`,
+                        backgroundColor: "var(--primary)",
+                      }}
+                      role="progressbar"
+                      aria-valuenow={currentPercentage}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label="Teszt eredmény előrehaladás"
+                    />
                   </div>
-                  {showGrade && (
-                    <div className="mt-4 flex justify-center">
-                      <span className="block mb-2" aria-hidden="true">
-                        {icon}
-                      </span>
-                    </div>
-                  )}
-                  {showGrade && (
-                    <p className="text-sm text-foreground">{message}</p>
-                  )}
                 </div>
+
+                {showGrade && (
+                  <div className="mt-4 flex flex-col items-center space-y-2">
+                    <span aria-hidden="true">{icon}</span>
+                    <p className="text-sm text-foreground">{message}</p>
+                  </div>
+                )}
+
                 <div className="mt-6 flex justify-center">
                   <button
                     type="button"

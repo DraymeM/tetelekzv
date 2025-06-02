@@ -100,12 +100,19 @@ export default function Tetelek() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
                 {tetelek.map((tetel) => (
-                  <CardLink
+                  <Suspense
                     key={tetel.id}
-                    id={tetel.id}
-                    title={tetel.name}
-                    to={`/tetelek/${tetel.id}`}
-                  />
+                    fallback={
+                      <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] animate-pulse" />
+                    }
+                  >
+                    <CardLink
+                      key={tetel.id}
+                      id={tetel.id}
+                      title={tetel.name}
+                      to={`/tetelek/${tetel.id}`}
+                    />
+                  </Suspense>
                 ))}
               </div>
             )}

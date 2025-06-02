@@ -1,11 +1,13 @@
+import React, { Suspense, type ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
-import { Suspense, type ReactNode } from "react";
 
 type AppLayoutProps = {
   children: ReactNode;
 };
+
+const MemoizedNavbar = React.memo(Navbar);
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   const isPending = useRouterState({
@@ -13,20 +15,21 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   });
 
   return (
-    <>
-      <Navbar />
-      <Suspense fallback={<Spinner />}>
-        <div className="flex flex-col min-h-screen relative">
-          {isPending && (
-            <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-50">
-              <Spinner />
-            </div>
-          )}
+    <div className="flex flex-col min-h-screen">
+      <MemoizedNavbar />
 
-          <div className="flex-1 relative">{children}</div>
-        </div>
-      </Suspense>
-    </>
+      <div className="relative flex-1">
+        {isPending && (
+          <div className="absolute inset-0 bg-background/80 flex items-center justify-center z-50">
+            <Spinner />
+          </div>
+        )}
+
+        <Suspense fallback={<Spinner />}>
+          <div className="relative flex-1">{children}</div>
+        </Suspense>
+      </div>
+    </div>
   );
 };
 
