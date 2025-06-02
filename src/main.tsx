@@ -14,20 +14,16 @@ import { ToastContainer } from "react-toastify";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import type { RouterContext } from "./api/types";
 import Spinner from "./components/Spinner";
-
-// PWA registration import
 import { registerSW } from "virtual:pwa-register";
-
-// Import idb-keyval for IndexedDB access
-import { set, get, del } from "idb-keyval";
-
 import Applayout from "./components/AppLayout";
+import { idbPersister, persistQueryKeys } from "./db/IndexedDB";
+
 const NotFoundPage = lazy(() => import("./components/404"));
 const ErrorBoundary = lazy(() => import("./components/ErrorBoundary"));
 
 const storedTheme = localStorage.getItem("theme") ?? "dark";
-document.documentElement.classList.add(storedTheme);
 
+document.documentElement.classList.add(storedTheme);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -38,58 +34,18 @@ const queryClient = new QueryClient({
   },
 });
 
-const QUERY_CACHE_KEY = "REACT_QUERY_OFFLINE_CACHE";
-
-// IndexedDB persister for React Query cache
-const idbPersister = {
-  persistClient: async (client: unknown) => {
-    try {
-      await set(QUERY_CACHE_KEY, client);
-    } catch (error) {
-      console.error("Error persisting query client to IndexedDB:", error);
-    }
-  },
-  restoreClient: async () => {
-    try {
-      const cache = await get(QUERY_CACHE_KEY);
-      return cache ?? undefined;
-    } catch (error) {
-      console.error("Error restoring query client from IndexedDB:", error);
-      return undefined;
-    }
-  },
-  removeClient: async () => {
-    try {
-      await del(QUERY_CACHE_KEY);
-    } catch (error) {
-      console.error("Error removing query client from IndexedDB:", error);
-    }
-  },
-};
-
 persistQueryClient({
   queryClient,
   persister: idbPersister,
-  maxAge: 1000 * 60 * 60 * 24, // 24 hours
+  maxAge: 1000 * 60 * 60 * 24,
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
       const key = query.queryKey?.[0];
-      return (
-        key === "tetelek" ||
-        key === "tetelDetail" ||
-        key === "tetel-count" ||
-        key === "question-count" ||
-        key === "flashcard-count" ||
-        key === "tetel-list-home" ||
-        key === "tetelQuestions" ||
-        key === "multiQuestions" ||
-        key === "multiquestion"
-      );
+      return persistQueryKeys.includes(key as string);
     },
   },
 });
 
-// 🧭 Router setup
 const router = createRouter({
   routeTree,
   history: createHashHistory(),
@@ -121,9 +77,9 @@ const RouterWrapper = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Spinner />
-      </div>
+      <Applayout>
+        <></>
+      </Applayout>
     );
   }
 
@@ -143,7 +99,7 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
-          <Suspense fallback={<Spinner />}>
+          <Suspense>
             <RouterWrapper />
           </Suspense>
           <ToastContainer
@@ -167,7 +123,6 @@ if (rootElement && !rootElement.innerHTML) {
 
 reportWebVitals();
 
-// Register PWA service worker
 registerSW({
   onNeedRefresh() {
     console.log("New content available, please refresh.");

@@ -9,26 +9,39 @@ interface CardLinkProps {
   onClick?: (id: number) => void;
 }
 
-function CardLink({ id, title, to }: CardLinkProps) {
+function CardLink({ id, title, to, onClick }: CardLinkProps) {
   return (
-    <div className="p-4 shadow-md rounded-md transition duration-300 border-2 transform text-foreground border-transparent bg-secondary hover:border-[var(--border)]">
+    <div
+      className="group relative rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] transition-all duration-300 hover:border-[var(--border)] hover:shadow-md"
+      onClick={() => onClick?.(id)}
+    >
       <Link
         to={to}
         params={{ id: id.toString() }}
-        className="flex justify-between items-center w-full h-full"
+        className="flex items-center justify-between w-full"
       >
-        <div className="flex-1 pr-4 overflow-hidden">
-          <h3 className="text-xl font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
-            <span style={{ color: "var(--foreground)" }} className="font-bold">
-              {id}.{" "}
+        <div className="flex-1 pr-6 overflow-hidden">
+          <h3 className="text-lg md:text-xl font-semibold tracking-tight truncate">
+            <span
+              style={{ color: "var(--foreground)" }}
+              className="font-bold mr-1"
+            >
+              {id}.
             </span>
             {title}
           </h3>
         </div>
-        <div className="flex items-center p-4 hover:cursor-pointer rounded-md h-full transition-colors bg-muted text-primary hover:shadow hover:bg-muted/80 border-2 border-transparent hover:border-[var(--border)]">
-          <FaChevronRight size={20} />
+
+        <div className="flex items-center justify-center rounded-md transition-all duration-300 bg-muted text-primary border-2 border-transparent group-hover:border-[var(--border)] group-hover:bg-muted/70 shadow-sm group-hover:shadow-md w-10 h-10">
+          <FaChevronRight
+            className="transition-transform duration-300 group-hover:translate-x-1"
+            size={18}
+          />
         </div>
       </Link>
+
+      {/* 🔳 Inset notch at bottom */}
+      <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50 " />
     </div>
   );
 }

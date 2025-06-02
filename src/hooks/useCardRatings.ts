@@ -1,27 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
 
 export function useCardRatings(count: number) {
-  const [ratings, setRatings] = useState<Record<number, Rating>>({});
-  const [sortedIndexes, setSortedIndexes] = useState<number[]>([]);
-
-  useEffect(() => {
-    const indexes = Array.from({ length: count }, (_, i) => i);
-    indexes.sort((a, b) => {
-      const ra = ratings[a] ?? -1;
-      const rb = ratings[b] ?? -1;
-      return ra - rb;
-    });
-    setSortedIndexes(indexes);
-  }, [ratings, count]);
+  const [ratings, setRatings] = useState<Map<number, Rating>>(new Map());
 
   const rateCard = (idx: number, rating: Rating) => {
-    setRatings((prev) => ({ ...prev, [idx]: rating }));
+    setRatings((prev) => {
+      const next = new Map(prev);
+      next.set(idx, rating);
+      return next;
+    });
   };
 
   const getRating = (idx: number): Rating | null =>
-    ratings.hasOwnProperty(idx) ? ratings[idx] : null;
+    ratings.has(idx) ? ratings.get(idx)! : null;
 
-  return { ratings, rateCard, getRating, sortedIndexes };
+  const sortedIndexes = useMemo(() => {
+    const indexes = Array.from({ length: count }, (_, i) => i);
+    indexes.sort((a, b) => {
+      const ra = ratings.get(a) ?? -1;
+      const rb = ratings.get(b) ?? -1;
+      return ra - rb;
+    });
+    return indexes;
+  }, [ratings, count]);
+
+  return {
+    ratings: Object.fromEntries(ratings), // optional: expose plain object for compatibility
+    rateCard,
+    getRating,
+    sortedIndexes,
+  };
 }

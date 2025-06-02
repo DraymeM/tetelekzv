@@ -131,12 +131,19 @@ export default function TetelQuestions() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
                 {questions.map((question) => (
-                  <CardLink
+                  <Suspense
                     key={question.id}
-                    id={question.id}
-                    title={question.question}
-                    to={`/tetelek/${tetelId}/questions/${question.id}`}
-                  />
+                    fallback={
+                      <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] animate-pulse" />
+                    }
+                  >
+                    <CardLink
+                      key={question.id}
+                      id={question.id}
+                      title={question.question}
+                      to={`/tetelek/${tetelId}/questions/${question.id}`}
+                    />
+                  </Suspense>
                 ))}
               </div>
             )}

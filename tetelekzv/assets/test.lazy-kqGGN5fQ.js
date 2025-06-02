@@ -1,1 +1,0 @@
-import{T as t}from"./TetelTestYourself-BGFkR9Sv.js";import{c as o}from"./index-DNhYfZVa.js";import"./useQuery-B90wnf1T.js";import"./repo-I0R3ESGW.js";import"./PageTransition-CKedCoC9.js";import"./OfflinePlaceholder-BfCSPmJv.js";import"./useOnlineStatus-CFArgxL8.js";import"./useTimer-BuaqZ4Nj.js";const l=o("/tetelek/$id/questions/test")({component:t});export{l as Route};

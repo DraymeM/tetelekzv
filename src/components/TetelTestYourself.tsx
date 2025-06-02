@@ -12,9 +12,8 @@ import OfflinePlaceholder from "./OfflinePlaceholder";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import { useTimer } from "../hooks/useTimer";
 import React from "react";
-const ResultDialog = React.lazy(
-  () => import("../components/common/QuizGame/ResultDialog")
-);
+import ResultDialog from "../components/common/QuizGame/ResultDialog";
+
 const TimerSection = React.lazy(
   () => import("../components/common/QuizGame/TimerSection")
 );
