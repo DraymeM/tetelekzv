@@ -22,7 +22,6 @@ export default function Tetelek() {
     queryKey: ["tetelek", page, limit],
     queryFn: () => fetchTetelek({ page, limit }),
     enabled: shouldFetch,
-    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
 
@@ -65,7 +64,6 @@ export default function Tetelek() {
         <PageTransition>
           <h2 className="text-3xl font-bold mb-8">Tételek</h2>
 
-          {/* Controls: Limit, Pagination, Total Count */}
           <div className="flex flex-wrap items-center justify-between md:gap-4 px-4 mb-4">
             <div className="flex-shrink-0 mx-auto">
               <LimitDropdown
@@ -86,8 +84,8 @@ export default function Tetelek() {
               />
             </div>
 
-            <div className="flex-shrink-0 px-2 mx-auto text-muted-foreground text-sm">
-              Összes: {total}
+            <div className="flex-shrink-0 mx-auto p-2 text-foreground bg-secondary rounded-md shadow-lg text-sm">
+              Összes: <span className="text-primary font-bold">{total}</span>
             </div>
           </div>
 
@@ -100,15 +98,15 @@ export default function Tetelek() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
                 {tetelek.map((tetel, index) => (
                   <Suspense
-                    key={tetel.id} // key stays real id
+                    key={tetel.id}
                     fallback={
                       <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] animate-pulse" />
                     }
                   >
                     <CardLink
-                      id={index + 1} // index used for display number
+                      id={index + 1}
                       title={tetel.name}
-                      to={`/tetelek/${tetel.id}`} // real id used for route
+                      to={`/tetelek/${tetel.id}`}
                     />
                   </Suspense>
                 ))}
@@ -116,7 +114,6 @@ export default function Tetelek() {
             )}
           </div>
 
-          {/* Bottom Pagination */}
           <Pagination
             page={page}
             setPage={setPage}
@@ -125,7 +122,6 @@ export default function Tetelek() {
           />
         </PageTransition>
 
-        {/* Floating Button */}
         {isAuthenticated && (
           <Link
             to="/tetelcreate"

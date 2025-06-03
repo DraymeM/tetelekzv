@@ -16,32 +16,39 @@ import type { RouterContext } from "./api/types";
 import Spinner from "./components/Spinner";
 import { registerSW } from "virtual:pwa-register";
 import Applayout from "./components/AppLayout";
-import { idbPersister, persistQueryKeys } from "./db/IndexedDB";
+import { idbPersister, persistQueryKeys, CACHE_VERSION } from "./db/IndexedDB";
 
 const NotFoundPage = lazy(() => import("./components/404"));
 const ErrorBoundary = lazy(() => import("./components/ErrorBoundary"));
 
 const storedTheme = localStorage.getItem("theme") ?? "dark";
-
 document.documentElement.classList.add(storedTheme);
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
-      retry: 1,
+      retry: 2,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      gcTime: 1000 * 60 * 60 * 24,
     },
   },
 });
 
-persistQueryClient({
+const [unsubscribe] = persistQueryClient({
   queryClient,
   persister: idbPersister,
   maxAge: 1000 * 60 * 60 * 24,
+  buster: CACHE_VERSION,
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
       const key = query.queryKey?.[0];
-      return persistQueryKeys.includes(key as string);
+      return (
+        persistQueryKeys.includes(key as string) &&
+        query.state.status === "success" &&
+        query.state.data !== undefined
+      );
     },
   },
 });
@@ -131,3 +138,9 @@ registerSW({
     console.log("App is ready to work offline.");
   },
 });
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeunload", () => {
+    unsubscribe();
+  });
+}

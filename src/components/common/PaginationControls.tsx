@@ -65,6 +65,11 @@ interface PaginationProps {
 export function Pagination({ page, setPage, total, limit }: PaginationProps) {
   const pageCount = Math.ceil(total / limit);
 
+  // Hide pagination if there is only one page
+  if (pageCount <= 1) {
+    return null;
+  }
+
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
 

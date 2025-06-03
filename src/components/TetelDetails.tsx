@@ -96,11 +96,9 @@ export default function TetelDetails() {
       return <OfflinePlaceholder />;
     }
     return (
-      <>
-        <div className="p-10 text-red-500 text-center">
-          Hiba történt: {error.message}
-        </div>
-      </>
+      <div className="p-10 text-red-500 text-center">
+        Hiba történt: {error.message}
+      </div>
     );
   }
 
@@ -113,154 +111,169 @@ export default function TetelDetails() {
   const sections = data?.sections ?? [];
 
   const readingMinutes = calculateReadingTime(sections, osszegzes);
+  const getTextFromMarkdown = (markdown: string) =>
+    markdown
+      .replace(/[#_*>\-`]/g, "")
+      .replace(/\[.*?\]\(.*?\)/g, "")
+      .replace(/!\[.*?\]\(.*?\)/g, "")
+      .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
   const textToSpeak = [
-    tetel.name,
+    getTextFromMarkdown(tetel.name),
     ...sections.flatMap((section) => [
-      section.content,
-      ...(section.subsections?.flatMap((sub) => [sub.title, sub.description]) ??
-        []),
+      getTextFromMarkdown(section.content),
+      ...(section.subsections?.flatMap((sub) => [
+        getTextFromMarkdown(sub.title || ""),
+        getTextFromMarkdown(sub.description || ""),
+      ]) ?? []),
     ]),
     "Összegzés:",
-    osszegzes?.content ?? "",
+    osszegzes?.content ? getTextFromMarkdown(osszegzes.content) : "",
     "Vége",
   ]
     .filter(Boolean)
     .join(". ");
 
   return (
-    <>
-      <Suspense>
-        <main className="relative md:max-w-7xl max-w-full mx-auto mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
-          <PageTransition>
-            {/* Header */}
-            <div className="flex justify-between items-center mb-8">
-              <Link
-                to="/tetelek/$id"
-                params={{ id: tetelId.toString() }}
-                className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-                aria-label="Vissza a tétel áttekintéséhez"
-                title="Vissza a tételhez"
-              >
-                <FaArrowLeft className="mr-2" aria-hidden="true" />
-                Vissza
-              </Link>
+    <Suspense>
+      <main className="relative md:max-w-7xl max-w-full mx-auto mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
+        <PageTransition>
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <Link
+              to="/tetelek/$id"
+              params={{ id: tetelId.toString() }}
+              className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              aria-label="Vissza a tétel áttekintéséhez"
+              title="Vissza a tételhez"
+            >
+              <FaArrowLeft className="mr-2" aria-hidden="true" />
+              Vissza
+            </Link>
 
-              <div className="flex items-center md:gap-4 gap-1">
-                <span className="text-sm mx-auto text-secondary-foreground">
-                  <FaRegClock
-                    className="inline mr-1"
-                    size={15}
-                    aria-hidden="true"
-                  />
-                  {readingMinutes} perc
-                </span>
-                <SpeechController text={textToSpeak} />
-              </div>
+            <div className="flex items-center md:gap-4 gap-1">
+              <span className="text-sm mx-auto text-secondary-foreground">
+                <FaRegClock
+                  className="inline mr-1"
+                  size={15}
+                  aria-hidden="true"
+                />
+                {readingMinutes} perc
+              </span>
+              <SpeechController text={textToSpeak} />
             </div>
+          </div>
 
-            {/* Title */}
-            <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
-              {tetel.name}
-            </h1>
+          {/* Title */}
+          <h1 className="text-3xl font-bold mb-8 text-center text-foreground">
+            {tetel.name}
+          </h1>
 
-            {/* Content */}
-            <div className="space-y-6">
-              {sections.map((section) => (
-                <div
-                  key={section.id}
-                  className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent hover:border-border transition-colors"
+          {/* Content */}
+          <div className="space-y-6">
+            {sections.map((section) => (
+              <div
+                key={section.id}
+                className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent hover:border-border transition-colors"
+              >
+                <Suspense
+                  fallback={
+                    <div className="bg-secondary rounded-lg p-6 shadow-xl animate-pulse " />
+                  }
                 >
+                  <div className="text-xl font-semibold mb-4 text-foreground">
+                    <MarkdownHandler content={section.content} />
+                  </div>
+                </Suspense>
+                {section.subsections?.map((sub) => (
                   <Suspense
+                    key={sub.id}
                     fallback={
-                      <div className="bg-secondary rounded-lg p-6 shadow-xl animate-pulse " />
+                      <div className="bg-muted rounded-lg p-6 shadow-xl animate-pulse " />
                     }
                   >
-                    <div className="text-xl font-semibold mb-4 text-foreground">
-                      <MarkdownHandler content={section.content} />
+                    <div className="ml-4 mb-4 p-4 bg-muted rounded-lg">
+                      <div className="font-medium text-foreground mb-2">
+                        <MarkdownHandler content={sub.title} />
+                      </div>
+                      <div className="text-secondary-foreground prose prose-invert max-w-none">
+                        <MarkdownHandler content={sub.description} />
+                      </div>
                     </div>
                   </Suspense>
-                  {section.subsections?.map((sub) => (
-                    <Suspense
-                      key={sub.id}
-                      fallback={
-                        <div className="bg-muted rounded-lg p-6 shadow-xl animate-pulse " />
-                      }
-                    >
-                      <div className="ml-4 mb-4 p-4 bg-muted rounded-lg">
-                        <div className="font-medium text-foreground mb-2">
-                          <MarkdownHandler content={sub.title} />
-                        </div>
-                        <div className="text-secondary-foreground prose prose-invert max-w-none">
-                          <MarkdownHandler content={sub.description} />
-                        </div>
-                      </div>
-                    </Suspense>
-                  ))}
+                ))}
+              </div>
+            ))}
+
+            {osszegzes?.content && (
+              <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
+                <h2 className="text-2xl font-bold mb-4 text-foreground">
+                  Összegzés
+                </h2>
+                <div className="text-foreground prose prose-invert max-w-none whitespace-pre-wrap">
+                  <MarkdownHandler content={osszegzes.content} />
                 </div>
-              ))}
+              </div>
+            )}
+            <Link
+              to="/tetelek/$id"
+              params={{ id: tetelId.toString() }}
+              className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+              aria-label="Vissza a tétel áttekintéséhez"
+              title="Vissza a tételhez"
+            >
+              <FaArrowLeft className="mr-2" aria-hidden="true" />
+              Vissza
+            </Link>
+          </div>
 
-              {osszegzes?.content && (
-                <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
-                  <h2 className="text-2xl font-bold mb-4 text-foreground">
-                    Összegzés
-                  </h2>
-                  <div className="text-foreground prose prose-invert max-w-none whitespace-pre-wrap">
-                    <MarkdownHandler content={osszegzes.content} />
-                  </div>
-                </div>
-              )}
-              <Link
-                to="/tetelek/$id"
-                params={{ id: tetelId.toString() }}
-                className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-                aria-label="Vissza a tétel áttekintéséhez"
-                title="Vissza a tételhez"
-              >
-                <FaArrowLeft className="mr-2" aria-hidden="true" />
-                Vissza
-              </Link>
-            </div>
+          {/* Delete Modal */}
+          <DeleteModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onDelete={() => deleteMutation.mutate()}
+            isDeleting={deleteMutation.isPending}
+            itemName={tetel.name}
+          />
+        </PageTransition>
 
-            {/* Delete Modal */}
-            <DeleteModal
-              isOpen={isDeleteModalOpen}
-              onClose={() => setIsDeleteModalOpen(false)}
-              onDelete={() => deleteMutation.mutate()}
-              isDeleting={deleteMutation.isPending}
-              itemName={tetel.name}
-            />
-          </PageTransition>
+        {isAuthenticated && isSuperUser ? (
+          <>
+            {/* Delete button in primary position (bottom-7) */}
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              title="Töröld a tételt"
+              aria-label="Töröld a tételt"
+            >
+              <FaTrash size={20} aria-hidden="true" />
+            </button>
 
-          {/* Floating Action Buttons */}
-          {isAuthenticated && (
-            <>
-              <Link
-                to="/tetelek/$id/details/edit"
-                params={{ id: tetelId.toString() }}
-                className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
-                title="Szerkeszd a tételt"
-                aria-label="Szerkeszd a tételt"
-              >
-                <FaPen size={20} aria-hidden="true" />
-              </Link>
-              <button
-                onClick={() => {
-                  if (!isAuthenticated) {
-                    toast.error("Ehhez be kell jelentkezned!");
-                    return;
-                  }
-                  setIsDeleteModalOpen(true);
-                }}
-                className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 transition-all transform hover:scale-105 flex items-center hover:cursor-pointer justify-center z-50"
-                title="Töröld a tételt"
-                aria-label="Töröld a tételt"
-              >
-                <FaTrash size={20} aria-hidden="true" />
-              </button>
-            </>
-          )}
-        </main>
-      </Suspense>
-    </>
+            {/* Edit button in secondary position (bottom-22) */}
+            <Link
+              to="/tetelek/$id/details/edit"
+              params={{ id: tetelId.toString() }}
+              className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              title="Szerkeszd a tételt"
+              aria-label="Szerkeszd a tételt"
+            >
+              <FaPen size={20} aria-hidden="true" />
+            </Link>
+          </>
+        ) : isAuthenticated ? (
+          // Just authenticated, show edit in primary position
+          <Link
+            to="/tetelek/$id/details/edit"
+            params={{ id: tetelId.toString() }}
+            className="fixed bottom-7 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+            title="Szerkeszd a tételt"
+            aria-label="Szerkeszd a tételt"
+          >
+            <FaPen size={20} aria-hidden="true" />
+          </Link>
+        ) : null}
+      </main>
+    </Suspense>
   );
 }

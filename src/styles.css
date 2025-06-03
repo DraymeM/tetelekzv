@@ -55,8 +55,8 @@ code {
   color: var(--foreground) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   border-radius: var(--radius);
+  border: 1px solid var(--border) !important; /* add this line */
 }
-
 .custom-toast-body {
   color: var(--foreground) !important;
 }

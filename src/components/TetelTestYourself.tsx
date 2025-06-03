@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -45,8 +45,8 @@ export default function TetelTestYourself() {
   const [streak, setStreak] = useState(0);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
-  // Fetch question IDs
   const {
     data: questionList,
     isLoading: isListLoading,
@@ -59,7 +59,6 @@ export default function TetelTestYourself() {
     refetchOnWindowFocus: false,
   });
 
-  // Fetch current question details
   const {
     data: currentQuestion,
     isLoading: isDetailLoading,
@@ -74,6 +73,12 @@ export default function TetelTestYourself() {
   });
 
   const questions = questionList?.data ?? [];
+
+  useEffect(() => {
+    if (!isListLoading && !isDetailLoading) {
+      setInitialLoadComplete(true);
+    }
+  }, [isListLoading, isDetailLoading]);
 
   const {
     timerEnabled,
@@ -134,13 +139,11 @@ export default function TetelTestYourself() {
     });
   };
 
-  if (isListLoading || isDetailLoading) {
+  if (!initialLoadComplete) {
     return (
-      <>
-        <div className="p-10 text-center">
-          <Spinner />
-        </div>
-      </>
+      <div className="p-10 text-center">
+        <Spinner />
+      </div>
     );
   }
 
@@ -149,11 +152,9 @@ export default function TetelTestYourself() {
       return <OfflinePlaceholder />;
     }
     return (
-      <>
-        <div className="text-center mt-10 text-red-500">
-          Hiba: {(listError || detailError)?.message}
-        </div>
-      </>
+      <div className="text-center mt-10 text-red-500">
+        Hiba: {(listError || detailError)?.message}
+      </div>
     );
   }
 
@@ -161,7 +162,7 @@ export default function TetelTestYourself() {
     <Suspense>
       <PageTransition>
         <div className="text-center pt-20">
-          <div className="flex items-center justify-between mb-8 px-4">
+          <div className="flex items-center justify-between mb-1 px-4">
             <Link
               to="/tetelek/$id"
               params={{ id: tetelId.toString() }}
@@ -172,8 +173,17 @@ export default function TetelTestYourself() {
               <FaArrowLeft className="mr-2" aria-hidden="true" />
               Vissza
             </Link>
-            <h2 className="text-3xl font-bold">Teszteld Magad</h2>
-            <div className="w-[100px]"></div>
+            <div className="text-foreground bg-secondary px-2 rounded-md text-md font-medium text-center">
+              {questions.length > 0 && (
+                <>
+                  <span className="text-primary font-bold">
+                    {currentIndex + 1}
+                  </span>
+                  <span className="mx-1 text-foreground">/</span>
+                  <span>{questions.length}</span>
+                </>
+              )}
+            </div>
           </div>
 
           {questions.length === 0 ? (

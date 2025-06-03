@@ -137,28 +137,38 @@ export default function MultiquestionDetails() {
         </Suspense>
       </PageTransition>
 
-      {isAuthenticated && (
+      {isAuthenticated && isSuperUser ? (
         <>
-          <Link
-            to="/tetelek/$id/questions/$qid/edit"
-            params={{ id: tetelId, qid }}
-            className="fixed bottom-20 right-7 p-3 bg-blue-600 text-white rounded-full 
-                       hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
-            title="Szerkeszd a kérdést"
-          >
-            <FaPen size={20} />
-          </Link>
-
           <button
             onClick={() => setIsDeleteModalOpen(true)}
             className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
-                       hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
+                 hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
             title="Töröld a kérdést"
           >
             <FaTrash size={20} />
           </button>
+
+          <Link
+            to="/tetelek/$id/questions/$qid/edit"
+            params={{ id: tetelId, qid }}
+            className="fixed bottom-20 right-7 p-3 bg-blue-600 text-white rounded-full 
+                 hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
+            title="Szerkeszd a kérdést"
+          >
+            <FaPen size={20} />
+          </Link>
         </>
-      )}
+      ) : isAuthenticated ? (
+        <Link
+          to="/tetelek/$id/questions/$qid/edit"
+          params={{ id: tetelId, qid }}
+          className="fixed bottom-7 right-7 p-3 bg-blue-600 text-white rounded-full 
+               hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
+          title="Szerkeszd a kérdést"
+        >
+          <FaPen size={20} />
+        </Link>
+      ) : null}
     </>
   );
 }
