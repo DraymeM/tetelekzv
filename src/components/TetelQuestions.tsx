@@ -3,7 +3,6 @@ import { useParams, Outlet, Link, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchQuestionsByTetelId } from "../api/repo";
 import { useAuth } from "../context/AuthContext";
-import Spinner from "./Spinner";
 import PageTransition from "../components/common/PageTransition";
 import { FaPlus, FaArrowLeft } from "react-icons/fa";
 import { LuTestTubeDiagonal } from "react-icons/lu";
@@ -29,16 +28,15 @@ export default function TetelQuestions() {
 
   const shouldFetch = !isNaN(tetelId) && tetelId > 0;
 
-  const { data, isLoading, error } = useQuery<
-    { data: IQuestion[]; total: number },
-    Error
-  >({
-    queryKey: ["tetelQuestions", tetelId, page, limit],
-    queryFn: () => fetchQuestionsByTetelId({ tetelId, page, limit }),
-    enabled: shouldFetch,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
-  });
+  const { data, error } = useQuery<{ data: IQuestion[]; total: number }, Error>(
+    {
+      queryKey: ["tetelQuestions", tetelId, page, limit],
+      queryFn: () => fetchQuestionsByTetelId({ tetelId, page, limit }),
+      enabled: shouldFetch,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   // Check if a child route is active (e.g., /tetelek/$id/questions/$questionId)
   if (
@@ -46,16 +44,6 @@ export default function TetelQuestions() {
     location.pathname !== `/tetelek/${tetelId}/questions`
   ) {
     return <Outlet />;
-  }
-
-  if (isLoading) {
-    return (
-      <>
-        <div className="p-10 text-center">
-          <Spinner />
-        </div>
-      </>
-    );
   }
 
   if (error) {
@@ -119,8 +107,8 @@ export default function TetelQuestions() {
               />
             </div>
             {/* Right: Total */}
-            <div className="flex-shrink-0 px-2 mx-auto text-muted-foreground text-sm">
-              Összes: {total}
+            <div className="flex-shrink-0 mx-auto p-2 text-foreground bg-secondary rounded-md shadow-lg text-sm">
+              Összes: <span className="text-primary font-bold">{total}</span>
             </div>
           </div>
           <div className="min-h-[60dvh]">

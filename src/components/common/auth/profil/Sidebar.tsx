@@ -8,7 +8,7 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => (
   <div
-    className={`w-64 p-6 space-y-4 bg-secondary transition-all duration-300 transform lg:h-[95dvh] border-r-1 border-border mt-6 h-full fixed z-40 top-0 lg:relative ${
+    className={`w-40 py-6 px-2 space-y-4 bg-secondary transition-all duration-300 transform lg:h-[95dvh] border-r-1 border-border mt-6 h-full fixed z-40 top-0 lg:relative ${
       isOpen ? "translate-x-0" : "-translate-x-full"
     } lg:translate-x-0`}
   >
@@ -25,9 +25,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => (
     <Tab.List className="space-y-4">
       <Tab
         className={({ selected }) =>
-          `block w-full px-4 py-4 text-xl font-medium text-center transition-colors rounded hover:cursor-pointer ${
+          `block w-full px-4 py-4 text-base font-medium text-left transition-colors rounded hover:cursor-pointer hover:underline ${
             selected
-              ? "bg-muted text-primary font-bold"
+              ? "bg-muted text-primary font-bold underline"
               : "text-secondary-foreground hover:bg-muted"
           }`
         }
@@ -36,9 +36,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => (
       </Tab>
       <Tab
         className={({ selected }) =>
-          `block w-full px-4 py-4 text-xl font-medium transition-colors rounded text-center hover:cursor-pointer ${
+          `block w-full px-4 py-4 text-base font-medium text-left transition-colors rounded hover:cursor-pointer hover:underline ${
             selected
-              ? "bg-muted text-primary font-bold"
+              ? "bg-muted text-primary font-bold underline"
               : "text-secondary-foreground hover:bg-muted"
           }`
         }

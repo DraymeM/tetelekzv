@@ -1,4 +1,3 @@
-// components/common/CardLink.tsx
 import { Link } from "@tanstack/react-router";
 import { FaChevronRight } from "react-icons/fa";
 
@@ -11,15 +10,14 @@ interface CardLinkProps {
 
 function CardLink({ id, title, to, onClick }: CardLinkProps) {
   return (
-    <div
-      className="group relative rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] transition-all duration-300 hover:border-[var(--border)] hover:shadow-md"
+    <Link
+      to={to}
+      params={{ id: id.toString() }}
+      className="group relative block rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] transition-all duration-300 hover:border-[var(--border)] hover:shadow-md"
       onClick={() => onClick?.(id)}
+      activeProps={{ className: "border-[var(--border)] shadow-md" }}
     >
-      <Link
-        to={to}
-        params={{ id: id.toString() }}
-        className="flex items-center justify-between w-full"
-      >
+      <div className="flex items-center justify-between w-full">
         <div className="flex-1 pr-6 overflow-hidden">
           <h3 className="text-lg md:text-xl font-semibold tracking-tight truncate">
             <span
@@ -38,11 +36,10 @@ function CardLink({ id, title, to, onClick }: CardLinkProps) {
             size={18}
           />
         </div>
+      </div>
 
-        {/* 🔳 Inset notch at bottom */}
-        <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50 " />
-      </Link>
-    </div>
+      <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50" />
+    </Link>
   );
 }
 

@@ -14,7 +14,7 @@ const MultiQuestionForm = React.lazy(
 );
 
 const MultiQuestionEdit = () => {
-  const { id: qid } = useParams({
+  const { id: tetelId, qid } = useParams({
     from: "/tetelek/$id/questions/$qid",
   });
   const questionId = Number(qid);
@@ -39,10 +39,10 @@ const MultiQuestionEdit = () => {
       queryClient.invalidateQueries({ queryKey: ["multiQuestions"] });
       queryClient.invalidateQueries({ queryKey: ["tetelQuestions"] });
       toast.success("Kérdés frissítve!");
-      setTimeout(
-        () => navigate({ to: `/tetelek/$id/questions/${questionId}` }),
-        2000
-      );
+      navigate({
+        to: "/tetelek/$id/questions/$qid",
+        params: { id: tetelId, qid: String(questionId) },
+      });
     },
     onError: () => {
       toast.error("Nem sikerült frissíteni a kérdést.");

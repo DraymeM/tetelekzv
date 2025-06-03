@@ -11,10 +11,12 @@ import OfflinePlaceholder from "../../OfflinePlaceholder";
 import { useOnlineStatus } from "../../../hooks/useOnlineStatus";
 const Sidebar = React.lazy(() => import("./profil/Sidebar"));
 const UserInfo = React.lazy(() => import("./profil/UserInfo"));
+
 const Profile: React.FC = () => {
   const { logout, isAuthenticated, isSuperUser, username } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isOnline = useOnlineStatus();
 
   // Password state and handlers
   const [currentPassword, setCurrentPassword] = useState("");
@@ -23,7 +25,7 @@ const Profile: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const isOnline = useOnlineStatus();
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -71,66 +73,60 @@ const Profile: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
   if (!isOnline) {
-    return (
-      <>
-        <OfflinePlaceholder />
-      </>
-    );
+    return <OfflinePlaceholder />;
   }
+
   return (
-    <>
-      <PageTransition>
-        <Suspense>
-          <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50 overflow-hidden">
-            <button
-              className="p-2 border-border rounded-md focus:outline-none"
-              onClick={() => setIsSidebarOpen(true)}
-              aria-label="Open menu"
-            >
-              <FaArrowAltCircleRight size={36} />
-            </button>
-          </div>
+    <PageTransition>
+      <Suspense>
+        <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50">
+          <button
+            className="p-2 border-border rounded-md focus:outline-none"
+            onClick={() => setIsSidebarOpen(true)}
+            aria-label="Open menu"
+          >
+            <FaArrowAltCircleRight size={36} />
+          </button>
+        </div>
 
-          <Tab.Group>
-            <div className="flex mt-4 relative">
-              <Sidebar
-                isOpen={isSidebarOpen}
-                onClose={() => setIsSidebarOpen(false)}
-              />
-
-              <div className="flex-1 p-8 ml-0 lg:mr-64 lg:ml-64">
-                <Tab.Panels>
-                  <Tab.Panel>
-                    <UserInfo
-                      username={username || ""}
-                      isSuperUser={isSuperUser}
-                      isAuthenticated={isAuthenticated}
-                      onLogout={handleLogout}
-                    />
-                  </Tab.Panel>
-
-                  <Tab.Panel>
-                    <PasswordForm
-                      onSubmit={handlePasswordSubmit}
-                      errors={errors}
-                      isSubmitting={isSubmitting}
-                      successMessage={successMessage}
-                      currentPassword={currentPassword}
-                      newPassword={newPassword}
-                      confirmPassword={confirmPassword}
-                      setCurrentPassword={setCurrentPassword}
-                      setNewPassword={setNewPassword}
-                      setConfirmPassword={setConfirmPassword}
-                    />
-                  </Tab.Panel>
-                </Tab.Panels>
-              </div>
+        <Tab.Group>
+          <div className="flex flex-col lg:flex-row mt-4 relative min-h-[calc(60dvh-4rem)]">
+            <Sidebar
+              isOpen={isSidebarOpen}
+              onClose={() => setIsSidebarOpen(false)}
+            />
+            <div className="flex-1 md:p-4  mx-auto max-w-sm md:max-w-lg lg:max-w-full lg:ml-64 lg:mr-64">
+              <Tab.Panels>
+                <Tab.Panel>
+                  <UserInfo
+                    username={username || ""}
+                    isSuperUser={isSuperUser}
+                    isAuthenticated={isAuthenticated}
+                    onLogout={handleLogout}
+                  />
+                </Tab.Panel>
+                <Tab.Panel>
+                  <PasswordForm
+                    onSubmit={handlePasswordSubmit}
+                    errors={errors}
+                    isSubmitting={isSubmitting}
+                    successMessage={successMessage}
+                    currentPassword={currentPassword}
+                    newPassword={newPassword}
+                    confirmPassword={confirmPassword}
+                    setCurrentPassword={setCurrentPassword}
+                    setNewPassword={setNewPassword}
+                    setConfirmPassword={setConfirmPassword}
+                  />
+                </Tab.Panel>
+              </Tab.Panels>
             </div>
-          </Tab.Group>
-        </Suspense>
-      </PageTransition>
-    </>
+          </div>
+        </Tab.Group>
+      </Suspense>
+    </PageTransition>
   );
 };
 

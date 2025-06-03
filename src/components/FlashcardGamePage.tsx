@@ -8,7 +8,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { fetchTetelDetails } from "../api/repo";
 import type { TetelDetailsResponse } from "../api/types";
-import Spinner from "./Spinner";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import { FaArrowLeft } from "react-icons/fa";
 import React from "react";
@@ -65,7 +64,7 @@ export default function FlashcardGamePage() {
             Vissza
           </Link>
         </div>
-        <Suspense fallback={<Spinner />}>
+        <Suspense>
           <LearningMode
             questions={questions}
             onExit={() =>
