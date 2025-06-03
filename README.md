@@ -98,6 +98,29 @@ php -S localhost:8000
 - Built using vite-plugin-pwa and service workers
 
 ---
+### 💾 Offline Data Enhancements
+
+Tiomi now includes more robust handling of IndexedDB via `idb-keyval`:
+
+```ts
+import { get, set } from "idb-keyval";
+
+// Example: Cache user quiz state
+const cacheQuizState = async (key: string, state: QuizState) => {
+  await set(key, state);
+};
+
+const restoreQuizState = async (key: string): Promise<QuizState | undefined> => {
+  return await get(key);
+};
+```
+  - 🧠 Used for persistent quiz progress, flashcard ratings, and user settings.
+
+  - ⚙️ IndexedDB acts as a local cache layer with fallbacks for offline-first experience.
+
+  - 🚀 Enables resume-where-you-left-off functionality in offline mode.
+
+  - 📤 Automatic sync when connection is restored (planned).
 
 ### 🗣️ Text-to-Speech Reader
 
