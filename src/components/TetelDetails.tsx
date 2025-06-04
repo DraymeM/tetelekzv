@@ -119,6 +119,7 @@ export default function TetelDetails() {
       .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
       .replace(/\s+/g, " ")
       .trim();
+
   const textToSpeak = [
     getTextFromMarkdown(tetel.name),
     ...sections.flatMap((section) => [
@@ -128,12 +129,13 @@ export default function TetelDetails() {
         getTextFromMarkdown(sub.description || ""),
       ]) ?? []),
     ]),
-    "Összegzés:",
-    osszegzes?.content ? getTextFromMarkdown(osszegzes.content) : "",
-    "Vége",
+    osszegzes?.content
+      ? "Összegzés: " + getTextFromMarkdown(osszegzes.content)
+      : "",
   ]
-    .filter(Boolean)
-    .join(". ");
+    .filter((text) => text && text.length > 0)
+    .join(" ")
+    .trim();
 
   return (
     <Suspense>
@@ -152,7 +154,7 @@ export default function TetelDetails() {
               Vissza
             </Link>
 
-            <div className="flex items-center md:gap-4 gap-1">
+            <div className="flex items-center gap-4 ">
               <span className="text-sm mx-auto text-secondary-foreground">
                 <FaRegClock
                   className="inline mr-1"

@@ -1,9 +1,9 @@
+// SpeechController.tsx
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Menu } from "@headlessui/react";
 import { FaChevronDown, FaSpinner, FaStop } from "react-icons/fa";
 import { useSpeech } from "../../hooks/useSpeech";
 
-import { isMobileOrPWA } from "../../utils/platform";
 const PlayPauseControls = lazy(() => import("./speech/PlayPauseControls"));
 const VoiceSelector = lazy(() => import("./speech/VoiceSelector"));
 const SpeechSliders = lazy(() => import("./speech/SpeechSliders"));
@@ -17,12 +17,19 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
   text,
   className,
 }) => {
-  if (typeof window !== "undefined" && isMobileOrPWA()) {
-    return null;
-  }
-
-  const { voices, speak, pause, resume, stop, isSpeaking, isPaused } =
-    useSpeech();
+  const {
+    voices,
+    speak,
+    pause,
+    resume,
+    stop,
+    updateParams,
+    isSpeaking,
+    isPaused,
+    isSupported,
+    isLoadingVoices,
+    error,
+  } = useSpeech();
   const [selectedVoice, setSelectedVoice] = useState<string>();
   const [rate, setRate] = useState(1);
   const [pitch, setPitch] = useState(1);
@@ -31,15 +38,16 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (voices.length > 0 && !selectedVoice) {
-      setSelectedVoice(voices[0].name);
+    if (voices.length > 0 && !selectedVoice && !isLoadingVoices) {
+      const defaultVoice = voices.find((v) => v.localService) || voices[0];
+      setSelectedVoice(defaultVoice?.name);
     }
-  }, [voices, selectedVoice]);
+  }, [voices, selectedVoice, isLoadingVoices]);
 
-  useEffect(() => () => window.speechSynthesis.cancel(), []);
+  useEffect(() => () => stop(), []);
 
   const handlePlayPause = () => {
-    if (!text || voices.length === 0) return;
+    if (!text || voices.length === 0 || isLoadingVoices) return;
     isSpeaking
       ? isPaused
         ? resume()
@@ -50,7 +58,10 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
   const handleVoiceChange = (voiceName?: string) => {
     setSelectedVoice(voiceName);
     setDropdownOpen(false);
-    if (isSpeaking) stop();
+    if (isSpeaking) {
+      stop();
+      speak(text, voiceName, rate, pitch, volume); // Restart with new voice
+    }
   };
 
   const handleSliderChange = (
@@ -60,7 +71,7 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
     if (type === "rate") setRate(value);
     if (type === "pitch") setPitch(value);
     if (type === "volume") setVolume(value);
-    if (isSpeaking) stop();
+    updateParams({ [type]: value }); // Update params without stopping
   };
 
   return (
@@ -81,7 +92,7 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
               <PlayPauseControls
                 isSpeaking={isSpeaking}
                 isPaused={isPaused}
-                hasVoices={voices.length > 0}
+                hasVoices={voices.length > 0 && !isLoadingVoices}
                 onClick={handlePlayPause}
               />
             </Suspense>
@@ -89,6 +100,7 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
               className="inline-flex items-center px-2 py-2.5 bg-blue-600 border-l-2 border-blue-800 hover:cursor-pointer rounded-r-md text-sm font-medium text-white hover:bg-blue-700"
               aria-label="Felolvasási Beállítások"
               title="Felolvasási Beállítások"
+              disabled={isLoadingVoices || !isSupported}
             >
               <FaChevronDown
                 size={16}
@@ -105,6 +117,14 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
                 </div>
               }
             >
+              {error && (
+                <div className="text-red-600 text-sm mb-2">{error}</div>
+              )}
+              {isLoadingVoices && (
+                <div className="text-gray-600 text-sm mb-2">
+                  Loading voices...
+                </div>
+              )}
               <VoiceSelector
                 voices={voices}
                 selectedVoice={selectedVoice}

@@ -1,4 +1,6 @@
-import React from "react";
+// SpeechSliders.tsx
+import React, { useRef } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 interface SpeechSlidersProps {
   rate: number;
@@ -17,6 +19,13 @@ const SpeechSliders: React.FC<SpeechSlidersProps> = ({
     accentColor: "var(--primary)",
     width: "100%",
   };
+
+  // Debounce the onChange function to prevent rapid updates
+  const debouncedOnChange = useRef(
+    useDebouncedCallback((type: "rate" | "pitch" | "volume", value: number) => {
+      onChange(type, value);
+    }, 300)
+  ).current;
 
   return (
     <>
@@ -53,7 +62,9 @@ const SpeechSliders: React.FC<SpeechSlidersProps> = ({
           <input
             type="range"
             value={value}
-            onChange={(e) => onChange(type as any, parseFloat(e.target.value))}
+            onChange={(e) =>
+              debouncedOnChange(type as any, parseFloat(e.target.value))
+            }
             style={sliderStyle}
             {...rest}
           />
@@ -62,4 +73,5 @@ const SpeechSliders: React.FC<SpeechSlidersProps> = ({
     </>
   );
 };
+
 export default SpeechSliders;
