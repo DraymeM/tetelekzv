@@ -20,14 +20,13 @@ const TetelCreate: React.FC = () => {
     onMutate: () => {
       setIsBlocking(true);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tetelek"] });
+    onSuccess: async () => {
       setSuccess("Sikeres mentés!");
+      queryClient.refetchQueries({ queryKey: ["tetelek"] });
 
       setTimeout(() => {
         setSuccess(null);
-        navigate({ to: "/tetelek" });
-
+        navigate({ to: "/tetelek", replace: true });
         setIsBlocking(false);
       }, 3000);
     },

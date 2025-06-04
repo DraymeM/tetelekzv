@@ -137,7 +137,7 @@ export default function TetelDetails() {
 
   return (
     <Suspense>
-      <main className="relative md:max-w-7xl max-w-full mx-auto mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
+      <main className="relative md:max-w-7xl max-w-full mb-5 mx-auto mt-10 md:px-10 px-3 pt-10 pb-1 text-left">
         <PageTransition>
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
@@ -216,16 +216,6 @@ export default function TetelDetails() {
                 </div>
               </div>
             )}
-            <Link
-              to="/tetelek/$id"
-              params={{ id: tetelId.toString() }}
-              className="inline-flex items-center px-3 py-2 border border-border rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-              aria-label="Vissza a tétel áttekintéséhez"
-              title="Vissza a tételhez"
-            >
-              <FaArrowLeft className="mr-2" aria-hidden="true" />
-              Vissza
-            </Link>
           </div>
 
           {/* Delete Modal */}
@@ -243,7 +233,7 @@ export default function TetelDetails() {
             {/* Delete button in primary position (bottom-7) */}
             <button
               onClick={() => setIsDeleteModalOpen(true)}
-              className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
               title="Töröld a tételt"
               aria-label="Töröld a tételt"
             >
@@ -254,7 +244,7 @@ export default function TetelDetails() {
             <Link
               to="/tetelek/$id/details/edit"
               params={{ id: tetelId.toString() }}
-              className="fixed bottom-22 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              className="fixed md:bottom-22 bottom-28 right-5 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
               title="Szerkeszd a tételt"
               aria-label="Szerkeszd a tételt"
             >
@@ -266,7 +256,7 @@ export default function TetelDetails() {
           <Link
             to="/tetelek/$id/details/edit"
             params={{ id: tetelId.toString() }}
-            className="fixed bottom-7 right-7 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+            className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
             title="Szerkeszd a tételt"
             aria-label="Szerkeszd a tételt"
           >

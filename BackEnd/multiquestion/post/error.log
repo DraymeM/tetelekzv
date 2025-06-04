@@ -14,3 +14,7 @@ Stack trace: #0 C:\Users\Dani.DESKTOP-J0LINH7\Desktop\ELTE PROG.INF\repos\tetele
 [01-Jun-2025 18:16:17 UTC] Question created successfully: ID=183
 [01-Jun-2025 18:21:14 UTC] Request received: tetel_id=1, payload={"question":"gub","answers":[{"text":"blugy","isCorrect":false},{"text":"dsfsdf","isCorrect":true},{"text":"dfsd","isCorrect":false},{"text":"fsdfsdf","isCorrect":false}]}
 [01-Jun-2025 18:21:14 UTC] Question created successfully: ID=184
+[03-Jun-2025 22:59:54 UTC] Request received: tetel_id=42, payload={"question":"mi\u00e9rt","answers":[{"text":"mer","isCorrect":false},{"text":"az\u00e9 mer","isCorrect":true},{"text":"csak","isCorrect":false},{"text":"nem","isCorrect":false}]}
+[03-Jun-2025 22:59:54 UTC] Question created successfully: ID=185
+[03-Jun-2025 23:08:14 UTC] Request received: tetel_id=42, payload={"question":"bubi","answers":[{"text":"guppi","isCorrect":false},{"text":"guppik","isCorrect":true},{"text":"blob","isCorrect":false},{"text":"gob","isCorrect":false}]}
+[03-Jun-2025 23:08:14 UTC] Question created successfully: ID=186

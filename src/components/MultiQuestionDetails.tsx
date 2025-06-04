@@ -141,7 +141,7 @@ export default function MultiquestionDetails() {
         <>
           <button
             onClick={() => setIsDeleteModalOpen(true)}
-            className="fixed bottom-7 right-7 p-3 bg-rose-600 text-white rounded-full 
+            className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-rose-600 text-white rounded-full 
                  hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
             title="Töröld a kérdést"
           >
@@ -151,7 +151,7 @@ export default function MultiquestionDetails() {
           <Link
             to="/tetelek/$id/questions/$qid/edit"
             params={{ id: tetelId, qid }}
-            className="fixed bottom-20 right-7 p-3 bg-blue-600 text-white rounded-full 
+            className="fixed md:bottom-22 bottom-28 right-5 p-3 bg-blue-600 text-white rounded-full 
                  hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
             title="Szerkeszd a kérdést"
           >
@@ -162,7 +162,7 @@ export default function MultiquestionDetails() {
         <Link
           to="/tetelek/$id/questions/$qid/edit"
           params={{ id: tetelId, qid }}
-          className="fixed bottom-7 right-7 p-3 bg-blue-600 text-white rounded-full 
+          className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-blue-600 text-white rounded-full 
                hover:bg-blue-700 transition-all hover:cursor-pointer transform hover:scale-105 flex items-center justify-center z-50"
           title="Szerkeszd a kérdést"
         >
