@@ -38,7 +38,7 @@ function CardLink({ id, title, to, onClick }: CardLinkProps) {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50" />
+      <div className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50" />
     </Link>
   );
 }

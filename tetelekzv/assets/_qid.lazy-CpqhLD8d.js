@@ -1,0 +1,1 @@
+import{M as t}from"./MultiQuestionDetails-nELqtUTH.js";import{c as o}from"./index-BV4Ew1CB.js";import"./useLocation-BOM22769.js";import"./useQuery-U3GhT_pK.js";import"./useMutation-DXNI1_Xa.js";import"./repo-DjS-Wy59.js";import"./PageTransition-CV21mfqc.js";import"./OfflinePlaceholder-e_2sxJ83.js";const u=o("/tetelek/$id/questions/$qid")({component:t});export{u as Route};

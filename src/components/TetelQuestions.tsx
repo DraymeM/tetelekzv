@@ -113,8 +113,8 @@ export default function TetelQuestions() {
           </div>
           <div className="min-h-[60dvh]">
             {questions.length === 0 ? (
-              <p className="p-4 bg-secondary shadow-md rounded-md transition text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform">
-                Nincsenek kérdések ehhez a tételhez.
+              <p className="p-4 mx-auto max-w-[98dvw] bg-secondary shadow-md rounded-md transition text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform">
+                Nincsenek még kérdések ehhez a tételhez.
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
@@ -146,7 +146,7 @@ export default function TetelQuestions() {
         <Link
           to="/tetelek/$id/questions/test"
           params={{ id: tetelId.toString() }}
-          className="fixed bottom-7 right-7 p-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all transform hover:scale-105 flex items-center justify-center"
+          className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all transform hover:scale-105 flex items-center justify-center"
           title="Teszteld magad"
         >
           <LuTestTubeDiagonal size={20} />
@@ -155,7 +155,7 @@ export default function TetelQuestions() {
           <Link
             to="/tetelek/$id/questions/add"
             params={{ id: tetelId.toString() }}
-            className="fixed bottom-20 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
+            className="fixed md:bottom-22 bottom-28 right-5 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
             title="Adj hozzá saját kérdést"
           >
             <FaPlus size={20} />

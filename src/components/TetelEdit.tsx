@@ -31,12 +31,13 @@ const TetelEdit: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tetelDetail", tetelId] });
+      queryClient.invalidateQueries({ queryKey: ["tetelek"] });
       setSuccess("Sikeres frissítés!");
       setTimeout(() => {
         setSuccess(null);
-        navigate({ to: `/tetelek/${tetelId}` });
+        navigate({ to: `/tetelek/${tetelId}`, replace: true });
         setIsBlocking(false);
-      }, 2000);
+      }, 3000);
     },
     onError: (e: any) => {
       setError(e.response?.data?.error || "Hiba a frissítés közben.");

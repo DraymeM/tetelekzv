@@ -152,7 +152,7 @@ export default function TetelForm({
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-end mb-4">
             <button
-              className="fixed top-20 right-7 p-3 bg-blue-600 hover:cursor-pointer text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 z-50"
+              className="fixed top-20 right-5 p-3 bg-blue-600 hover:cursor-pointer text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 z-50"
               onClick={() => setShowTutorial(true)}
               title="Segítség a használathoz"
             >
@@ -161,7 +161,7 @@ export default function TetelForm({
             <button
               id="preview"
               onClick={() => setIsPreview((p) => !p)}
-              className="fixed bottom-7 right-7 p-3 bg-purple-600 text-white rounded-full hover:bg-purple-700 hover:scale-105 transition-all z-50"
+              className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-purple-600 text-white rounded-full hover:bg-purple-700 hover:scale-105 transition-all z-50"
               title={isPreview ? "Vissza szerkesztéshez" : "Előnézet"}
             >
               {isPreview ? <FaPen size={20} /> : <FaEye size={20} />}
