@@ -124,15 +124,81 @@ const restoreQuizState = async (key: string): Promise<QuizState | undefined> => 
 
 ### 🗣️ Text-to-Speech Reader
 
-- Uses browser-native speech synthesis  
-- Reads entire topics (main + subsections)  
-- Adjustable voice speed, pitch, and multiple voice options  
-- Displays estimated reading time per topic  
-- Great for:  
-  - 🧑‍🦯 Accessibility  
-  - 🧠 Learners with dyslexia  
-  - 🎧 Auditory learners  
+Tiomi’s text-to-speech (TTS) feature leverages the browser-native Web Speech API to read entire topics, including main content and subsections, making it ideal for:
+- 🧑‍🦯 Accessibility (e.g., screen reader support)
+- 🧠 Learners with dyslexia
+- 🎧 Auditory learners
 
+**Key Features**:
+- Reads long texts (e.g., ~10,000 characters) by chunking into ~300-character segments at word boundaries to prevent word splitting.
+- Adjustable speed, pitch, and volume.
+- Multiple voice options (browser-dependent, e.g., Siri on iOS Safari).
+- Displays estimated reading time per topic (~200 words/minute).
+- Pause/resume and stop controls, with mobile-friendly handling (e.g., Safari workaround).
+
+**Code Snippets**:
+
+1. **Text Chunking in `useSpeech` Hook**:
+   The `useSpeech` hook splits text into chunks at whitespace to ensure whole words, queuing one chunk at a time for efficient playback.
+
+   ```typescript
+   // useSpeech.ts
+   const speak = (text: string, voiceName?: string, rate = 1, pitch = 1, volume = 1) => {
+     if (!text || !isSupported || !synthRef.current || isLoadingVoices) {
+       setError("Cannot speak: Voices are still loading or not supported.");
+       return;
+     }
+     stop();
+     pendingParams.current = { rate, pitch, volume };
+     const cleanText = text.trim().replace(/\s+/g, " ");
+     const sentences = cleanText.match(/\S.{0,298}\s/g) || [cleanText]; // Split at whitespace
+     console.log(`Total chunks: ${sentences.length}`);
+     utteranceQueue.current = [
+       createUtterance(sentences[0] || "", voiceName, rate, pitch, volume),
+     ];
+     remainingText.current = sentences.slice(1).join("");
+     currentUtteranceIndex.current = 0;
+     synthRef.current.cancel();
+     if (utteranceQueue.current.length > 0) {
+       synthRef.current.speak(utteranceQueue.current[0]);
+     }
+   };
+   ```
+2. Generating textToSpeak in TetelDetails:
+Cleans Markdown content and concatenates topic sections for TTS.
+  ```typescript
+  // TetelDetails.tsx
+  const getTextFromMarkdown = (markdown: string) =>
+    markdown
+      .replace(/[#_*>\-`]/g, "")
+      .replace(/$$   .*?   $$$$   .*?   $$/g, "")
+      .replace(/!$$   .*?   $$$$   .*?   $$/g, "")
+      .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  
+  const textToSpeak = [
+    getTextFromMarkdown(tetel.name),
+    ...sections.flatMap((section) => [
+      getTextFromMarkdown(section.content),
+      ...(section.subsections?.flatMap((sub) => [
+        getTextFromMarkdown(sub.title || ""),
+        getTextFromMarkdown(sub.description || ""),
+      ]) ?? []),
+    ]),
+    osszegzes?.content ? "Összegzés: " + getTextFromMarkdown(osszegzes.content) + " Vége" : "",
+  ]
+    .filter((text) => text && text.length > 0)
+    .join(" ")
+    .trim();
+  
+  // Usage in JSX
+  <SpeechController text={textToSpeak} />;
+  ```
+Notes:
+
+  > Chunks are processed one at a time to handle long texts efficiently, with mobile-specific resume logic for Safari.
+  > Estimated reading time is calculated at ~200 words/minute, displayed in the UI.
 
 ---
 
