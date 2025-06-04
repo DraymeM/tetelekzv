@@ -14,7 +14,7 @@
 
 - 💾 **Offline-first**: Caching and React Query ensure content works even without internet
 - 📊 **Dashboard**: Live animated progress stats with CountUp.js
-- 🗣️ **Text-to-speech reader** (desktop only) with adjustable speed, pitch, and multiple voices; shows reading time per topic
+- 🗣️ **Text-to-speech reader** with adjustable speed, pitch, and multiple voices; shows reading time per topic
 - 📱 **Installable** as a native-like app on mobile and desktop
 - 🌓 **Light/Dark Mode** toggle based on system or user preference
 - ✍️ **Markdown editor** with syntax highlighting and custom styling
@@ -132,7 +132,7 @@ const restoreQuizState = async (key: string): Promise<QuizState | undefined> => 
   - 🧑‍🦯 Accessibility  
   - 🧠 Learners with dyslexia  
   - 🎧 Auditory learners  
-- **Desktop only** (disabled on mobile/PWA mode)
+
 
 ---
 
