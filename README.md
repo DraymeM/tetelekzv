@@ -195,6 +195,18 @@ const restoreQuizState = async (key: string): Promise<QuizState | undefined> => 
 - Dynamic spaced repetition order
 
 ---
+
+---
+
+## 📱 Responsive Sidebar & Footer Navigation
+
+Tiomi features a sidebar navigation that **transforms into a footer on mobile devices** to ensure easier reach and better usability for mobile users.
+
+- On desktop and larger screens, the sidebar provides quick access to navigation links and the "Vissza" (Back) button.
+- On mobile, the sidebar collapses into a footer bar placed at the bottom of the screen, improving thumb accessibility without sacrificing functionality.
+This design choice enhances navigation ergonomics, making the app more user-friendly across devices.
+---
+
 ### 🧭 Universal Tutorial System
 
 - Modular, reusable steps for user onboarding
@@ -276,16 +288,44 @@ const flashcardTutorialSteps = [
 
 ## 📈 Performance & Lighthouse
 
-- ✅ Lighthouse: 95–100 across categories
-  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ydk2ofdxmz?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Home Page](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/i6wvejzbbp?form_factor=desktop&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Quiz Game](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/zpiz51jxez?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [FlashCardGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/dpla823z9i?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Topic List](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/i8e3ce0g80?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Topic LandingPage](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/a3iddi15ff?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+### Lighthouse Scores Summary
+
+📱 Mobile Lighthouse Scores
+
+| Page              | Performance ⚡ | Accessibility ♿ | Best Practices ✅ | SEO 🔍 |
+|------------------|-------------|---------------|----------------|-------|
+| Home Page        | 93          | 98            | 100            | 100   |
+| Topic Detail     | 92          | 100           | 100            | 100   |
+| Quiz Game        | 98          | 100           | 100            | 100   |
+| FlashCardGame    | 94          | 100           | 100            | 100   |
+| Topic List       | 98          | 100           | 100            | 100   |
+| Topic LandingPage| 97          | 100           | 100            | 100   |
+| Random Flashcards| 98          | 100           | 100            | 100   |
+
+
+💻 Desktop Lighthouse Scores
+
+| Page              | Performance ⚡ | Accessibility ♿ | Best Practices ✅ | SEO 🔍 |
+|------------------|-------------|---------------|----------------|-------|
+| Home Page        | 100         | 98            | 100            | 100   |
+| Topic Detail     | 99          | 100           | 100            | 100   |
+| Quiz Game        | 100         | 100           | 100            | 100   |
+| FlashCardGame    | 100         | 100           | 100            | 100   |
+| Topic List       | 100         | 100           | 100            | 100   |
+| Topic LandingPage| 100         | 100           | 100            | 100   |
+| Random Flashcards| 100         | 100           | 100            | 100   |
+
+- ✅ Lighthouse: 92–100 across categories
+  - [Home Page](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/zvzxy2kbw0?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/q2n1m2r5wa?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Quiz Game](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/g6ulklf2yj?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [FlashCardGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/je5fjk0ick?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic List](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/tgz4ybr8ay?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic LandingPage](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/o7x7gfk97y?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [Random Flashcards](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ipvvh5u020?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
 - ⚡ Fast, responsive, SEO-optimized
 - 📦 Full PWA compliance (installable, background updates)
+  
 
 ---
 
