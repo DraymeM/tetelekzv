@@ -1,1 +1,0 @@
-import{T as o}from"./TetelCreate-B7VFEJkZ.js";import"./index-vBRKwINY.js";import"./useMutation-B-TJnO2H.js";import"./repo-rO_d9CsQ.js";import"./OfflinePlaceholder-j2sJlGF2.js";import"./useOnlineStatus-BGXvz0nh.js";const n=o;export{n as component};
