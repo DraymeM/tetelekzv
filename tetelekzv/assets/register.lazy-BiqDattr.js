@@ -1,0 +1,1 @@
+import{R as o}from"./Register-DXk1l_hI.js";import{c as t}from"./index-DjVUmYMt.js";import"./repo-B4YouHkU.js";import"./OfflinePlaceholder-BESBqUW5.js";import"./useOnlineStatus-DnaavMgL.js";import"./PageTransition-SGScu-hn.js";import"./types-CZYGTQuY.js";const c=t("/register")({component:o});export{c as Route};

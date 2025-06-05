@@ -101,7 +101,7 @@ const Login: React.FC = () => {
                 <div className="text-left mt-2">
                   <Link
                     to="/register"
-                    className="text-md text-teal-400 hover:underline"
+                    className="text-md text-primary hover:underline"
                   >
                     Nincs fiókod? Regisztrálj
                   </Link>

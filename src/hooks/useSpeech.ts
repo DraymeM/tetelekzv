@@ -58,14 +58,6 @@ export function useSpeech() {
         const availableVoices = synthRef.current!.getVoices();
         if (availableVoices.length > 0) {
           if (isMountedRef.current) {
-            console.log(
-              "Available voices:",
-              availableVoices.map((v) => ({
-                name: v.name,
-                lang: v.lang,
-                localService: v.localService,
-              }))
-            );
             setVoices(availableVoices);
             setIsLoadingVoices(false);
             setError(null);
@@ -165,7 +157,6 @@ export function useSpeech() {
 
     utterance.onerror = (event) => {
       const errorMessage = `Speech Error: ${event.error}`;
-      console.error(errorMessage);
       if (isMountedRef.current) {
         setIsSpeaking(false);
         setIsPaused(false);
@@ -211,7 +202,6 @@ export function useSpeech() {
     // Clean and chunk text
     const cleanText = text.trim().replace(/\s+/g, " ");
     const sentences = cleanText.match(/\S.{0,298}\s/g) || [cleanText]; // Stop at whitespace
-    console.log(`Total chunks: ${sentences.length}`);
 
     // Initialize queue with first chunk
     utteranceQueue.current = [

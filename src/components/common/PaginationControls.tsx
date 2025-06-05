@@ -102,7 +102,7 @@ export function Pagination({ page, setPage, total, limit }: PaginationProps) {
   return (
     <div className="flex justify-center items-center space-x-2 my-6">
       <button
-        className="p-2 rounded border bg-muted disabled:opacity-50 hover:cursor-pointer"
+        className="p-2 rounded border bg-muted disabled:opacity-50 hover:cursor-pointer hover:border-primary"
         onClick={() => setPage((p) => Math.max(1, p - 1))}
         disabled={page === 1}
         aria-label="Previous page"
@@ -117,8 +117,8 @@ export function Pagination({ page, setPage, total, limit }: PaginationProps) {
             onClick={() => setPage(item)}
             className={`px-3 py-1 rounded text-md hover:cursor-pointer ${
               page === item
-                ? "bg-teal-600 text-white"
-                : "border bg-muted hover:bg-muted/70"
+                ? "bg-primary/50 text-foreground border-primary border-2"
+                : "border bg-muted hover:bg-muted/70 hover:border-primary"
             }`}
           >
             {item}
@@ -131,7 +131,7 @@ export function Pagination({ page, setPage, total, limit }: PaginationProps) {
       )}
 
       <button
-        className="p-2 rounded border bg-muted disabled:opacity-50 hover:cursor-pointer"
+        className="p-2 rounded border bg-muted disabled:opacity-50 hover:cursor-pointer hover:border-primary"
         onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
         disabled={page === pageCount}
         aria-label="Next page"
