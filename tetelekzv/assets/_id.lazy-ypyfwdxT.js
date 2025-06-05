@@ -1,0 +1,1 @@
+import{T as t}from"./TetelOverview-D3SOmAxM.js";import{c as o}from"./index-DL7jmjce.js";import"./useLocation-BroehfVX.js";import"./useQuery-_mFiLXuZ.js";import"./repo-mML4AvjK.js";import"./OfflinePlaceholder-BMvq1OyA.js";import"./PageTransition-B0taeK5L.js";const l=o("/tetelek/$id")({component:t});export{l as Route};

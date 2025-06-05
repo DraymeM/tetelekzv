@@ -139,7 +139,7 @@ export default function TetelDetails() {
 
   return (
     <Suspense>
-      <main className="relative md:max-w-[80dvw] max-w-full mb-5 mx-auto mt-10 md:px-0 px-2 pt-10 pb-1 text-left">
+      <main className="relative md:max-w-[75dvw] max-w-full mb-5 mx-auto mt-10 md:px-0 px-2 pt-10 pb-1 text-left">
         <PageTransition>
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
