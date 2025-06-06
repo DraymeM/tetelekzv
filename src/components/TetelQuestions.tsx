@@ -146,7 +146,7 @@ export default function TetelQuestions() {
         <Link
           to="/tetelek/$id/questions/test"
           params={{ id: tetelId.toString() }}
-          className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all transform hover:scale-105 flex items-center justify-center"
+          className="fixed md:bottom-2 bottom-14 right-2 p-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-all transform hover:scale-105 flex items-center justify-center"
           title="Teszteld magad"
         >
           <LuTestTubeDiagonal size={20} />
@@ -155,7 +155,7 @@ export default function TetelQuestions() {
           <Link
             to="/tetelek/$id/questions/add"
             params={{ id: tetelId.toString() }}
-            className="fixed md:bottom-22 bottom-28 right-5 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
+            className="fixed md:bottom-16 bottom-28 right-2 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
             title="Adj hozzá saját kérdést"
           >
             <FaPlus size={20} />

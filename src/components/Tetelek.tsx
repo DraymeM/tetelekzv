@@ -125,7 +125,7 @@ export default function Tetelek() {
         {isAuthenticated && (
           <Link
             to="/tetelcreate"
-            className="fixed bottom-7 right-7 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
+            className="fixed bottom-2 right-2 p-3 bg-emerald-600 text-white rounded-full hover:bg-green-700 transition-all transform hover:scale-105 flex items-center justify-center"
             title="Adj hozzá saját tételt"
           >
             <FaPlus size={20} />

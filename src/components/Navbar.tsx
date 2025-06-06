@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import React, { Suspense } from "react";
+import React from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
 import { FaScroll, FaPlus } from "react-icons/fa";
 import { GiCardPick } from "react-icons/gi";
@@ -31,36 +31,34 @@ const Navbar: FC = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <Suspense>
-      <nav className="fixed top-0 w-full mb-10 h-13 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
-        <div className="flex items-center w-full mx-auto justify-between">
-          <Link
-            to="/"
-            aria-label="Kezdőlap"
-            title="Kezdőlap"
-            className={`flex items-center hover:animate-pulse font-semibold transition-all duration-300 ${
-              isHomeActive ? "text-primary" : "text-foreground"
-            }`}
-          >
-            <LogoIcon className="w-6 h-6  mr-2" />
-          </Link>
+    <nav className="fixed top-0 w-full mb-10 h-13 flex items-center px-6 z-50 bg-secondary border-b-2 border-border text-foreground shadow">
+      <div className="flex items-center w-full mx-auto justify-between">
+        <Link
+          to="/"
+          aria-label="Kezdőlap"
+          title="Kezdőlap"
+          className={`flex items-center hover:animate-pulse font-semibold transition-all duration-300 ${
+            isHomeActive ? "text-primary" : "text-foreground"
+          }`}
+        >
+          <LogoIcon className="w-6 h-6  mr-2" />
+        </Link>
 
-          <DesktopNav
-            navLinks={navLinks}
-            theme={theme}
-            toggleTheme={toggleTheme}
-            isAuthenticated={isAuthenticated}
-          />
+        <DesktopNav
+          navLinks={navLinks}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          isAuthenticated={isAuthenticated}
+        />
 
-          <MobileNav
-            navLinks={navLinks}
-            theme={theme}
-            toggleTheme={toggleTheme}
-            isAuthenticated={isAuthenticated}
-          />
-        </div>
-      </nav>
-    </Suspense>
+        <MobileNav
+          navLinks={navLinks}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          isAuthenticated={isAuthenticated}
+        />
+      </div>
+    </nav>
   );
 };
 
