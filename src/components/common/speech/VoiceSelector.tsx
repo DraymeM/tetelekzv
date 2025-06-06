@@ -69,11 +69,11 @@ const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <div className="absolute z-50 mt-1 w-full max-h-62 rounded-md border border-border bg-popover shadow-lg text-sm focus:outline-none flex flex-col">
-          <div className="flex items-center border-b border-border rounded-t-md overflow-hidden text-md bg-background px-1 py-1">
+        <div className="absolute z-50 mt-1 w-full max-h-50 rounded-md border border-border bg-popover shadow-lg text-sm focus:outline-none flex flex-col">
+          <div className="flex items-center border-b min-h-8 border-border rounded-t-md overflow-hidden text-md bg-background px-1 py-1">
             <button
               type="button"
-              className="pr-3 pl-1 py-2 bg-background border-r border-border text-foreground"
+              className="pr-3 pl-1 py-2 min-h-5 bg-background border-r border-border text-foreground"
               aria-label="Search"
             >
               <FaSearch size={14} />

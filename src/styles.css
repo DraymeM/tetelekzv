@@ -19,10 +19,9 @@ code {
 
 :root {
   --radius: 0.5rem;
-  --background: #e9f4ff;
-  --foreground: #1c1b2b;
+  --background: #f5f9ff;
+  --foreground: #1a202c;
   --primary: #1ab474;
-  --primary-muted: color-mix(in srgb, var(--primary) 60%, var(--foreground));
   --primary-foreground: color-mix(
     in srgb,
     var(--foreground) 88%,
@@ -72,7 +71,7 @@ code {
 }
 
 .dark {
-  --background: #1f202a;
+  --background: #181921;
   --foreground: #e4edff;
   --primary: #4df7a2;
 }

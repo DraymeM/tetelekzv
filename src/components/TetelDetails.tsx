@@ -235,7 +235,7 @@ export default function TetelDetails() {
             {/* Delete button in primary position (bottom-7) */}
             <button
               onClick={() => setIsDeleteModalOpen(true)}
-              className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              className="fixed md:bottom-2 bottom-14 right-2 p-3 bg-rose-600 text-white rounded-full hover:bg-rose-700 hover:cursor-pointer transition-all transform hover:scale-105 flex items-center justify-center z-50"
               title="Töröld a tételt"
               aria-label="Töröld a tételt"
             >
@@ -246,7 +246,7 @@ export default function TetelDetails() {
             <Link
               to="/tetelek/$id/details/edit"
               params={{ id: tetelId.toString() }}
-              className="fixed md:bottom-22 bottom-28 right-5 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+              className="fixed md:bottom-16 bottom-28 right-2 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
               title="Szerkeszd a tételt"
               aria-label="Szerkeszd a tételt"
             >
@@ -258,7 +258,7 @@ export default function TetelDetails() {
           <Link
             to="/tetelek/$id/details/edit"
             params={{ id: tetelId.toString() }}
-            className="fixed md:bottom-7 bottom-14 right-5 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
+            className="fixed md:bottom-2 bottom-14 right-2 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 flex items-center justify-center z-50"
             title="Szerkeszd a tételt"
             aria-label="Szerkeszd a tételt"
           >
