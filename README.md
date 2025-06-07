@@ -134,8 +134,8 @@ Tiomi’s text-to-speech (TTS) feature leverages the browser-native Web Speech A
 - Adjustable speed, pitch, and volume.
 - Multiple voice options (browser-dependent, e.g., Siri on iOS Safari).
 - Displays estimated reading time per topic (~200 words/minute).
-- Pause/resume and stop controls, with mobile-friendly handling (e.g., Safari workaround).
-
+- Pause/resume and stop controls, with mobile-friendly handling, bar like audio players (e.g., Safari workaround).
+- Future plan to skip or go back to chunks
 **Code Snippets**:
 
 1. **Text Chunking in `useSpeech` Hook**:
