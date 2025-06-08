@@ -3,12 +3,13 @@ import { Menu, Transition } from "@headlessui/react";
 import {
   FaCog,
   FaSpinner,
-  FaTimes,
   FaPause,
   FaPlay,
   FaStop,
+  FaTimes,
 } from "react-icons/fa";
 import { MdVolumeUp } from "react-icons/md";
+import { IoMdSkipBackward, IoMdSkipForward } from "react-icons/io";
 import { useSpeech } from "../../hooks/useSpeech";
 
 const VoiceSelector = lazy(() => import("./speech/VoiceSelector"));
@@ -18,6 +19,19 @@ interface SpeechControllerProps {
   text: string;
   className?: string;
 }
+
+// Helpers
+const estimateDuration = (text: string, rate: number) => {
+  const words = text.trim().split(/\s+/).length;
+  const seconds = words / 3 / rate;
+  return seconds;
+};
+
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+};
 
 const SpeechController: React.FC<SpeechControllerProps> = ({
   text,
@@ -29,12 +43,14 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
     pause,
     resume,
     stop,
-    updateParams,
     isSpeaking,
     isPaused,
     isSupported,
     isLoadingVoices,
     error,
+    chunks,
+    currentChunkIndex,
+    goToChunk,
   } = useSpeech();
 
   const [selectedVoice, setSelectedVoice] = useState<string>();
@@ -43,6 +59,8 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
   const [volume, setVolume] = useState(1);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [hasStartedSpeaking, setHasStartedSpeaking] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (voices.length > 0 && !selectedVoice && !isLoadingVoices) {
@@ -55,19 +73,25 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
 
   const handlePlayPause = () => {
     if (!text || voices.length === 0 || isLoadingVoices) return;
-    isSpeaking
-      ? isPaused
-        ? resume()
-        : pause()
-      : speak(text, selectedVoice, rate, pitch, volume);
+    if (isSpeaking) {
+      isPaused ? resume() : pause();
+    } else {
+      speak(text, selectedVoice, rate, pitch, volume);
+      setHasStartedSpeaking(true);
+    }
+  };
+
+  const handleStop = () => {
+    stop();
+    setHasStartedSpeaking(false);
   };
 
   const handleVoiceChange = (voiceName?: string) => {
     setSelectedVoice(voiceName);
-    setDropdownOpen(false);
     if (isSpeaking) {
       stop();
-      speak(text, voiceName, rate, pitch, volume);
+      speak(text, voiceName, rate, pitch, volume, currentChunkIndex);
+      setHasStartedSpeaking(true);
     }
   };
 
@@ -78,16 +102,37 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
     if (type === "rate") setRate(value);
     if (type === "pitch") setPitch(value);
     if (type === "volume") setVolume(value);
-    updateParams({ [type]: value });
+    if (isSpeaking) {
+      stop();
+      speak(text, selectedVoice, rate, pitch, volume, currentChunkIndex);
+      setHasStartedSpeaking(true);
+    }
+  };
+
+  const totalChunks = chunks.length;
+
+  const elapsed = estimateDuration(
+    chunks.slice(0, currentChunkIndex).join(" "),
+    rate
+  );
+  const total = estimateDuration(text, rate);
+
+  const handleSeek = (clientX: number, target: HTMLDivElement) => {
+    const rect = target.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const ratio = Math.min(Math.max(clickX / rect.width, 0), 1);
+    const targetIndex = Math.floor(ratio * totalChunks);
+    goToChunk(targetIndex);
+    setHasStartedSpeaking(true);
   };
 
   return (
     <div className={`relative ${className ?? ""}`}>
-      {!isSpeaking && (
+      {!isSpeaking && !hasStartedSpeaking && (
         <button
           onClick={handlePlayPause}
           disabled={isLoadingVoices || !isSupported || voices.length === 0}
-          className="inline-flex items-center py-2.5 px-3 bg-blue-600 border-blue-500 hover:cursor-pointer rounded-md text-sm font-medium text-white hover:bg-blue-700 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center py-2.5 px-3 hover:cursor-pointer bg-blue-600 border-blue-500 rounded-md text-sm font-medium text-white hover:bg-blue-700 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           aria-label="Start Speech"
           title="Start Speech"
         >
@@ -95,50 +140,91 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
         </button>
       )}
 
-      <Transition
-        show={isSpeaking}
-        enter="transition transform ease-out duration-300"
-        enterFrom="translate-y-full opacity-0"
-        enterTo="translate-y-0 opacity-100"
-        leave="transition transform ease-in duration-200"
-        leaveFrom="translate-y-0 opacity-100"
-        leaveTo="translate-y-full opacity-0"
-      >
-        <div className="fixed bottom-0 left-0 h-13 md:h-max md:left-33 w-[100dvw] md:w-[calc(100vw-8.25rem)] bg-secondary border-t-border border-t-2 py-2 flex justify-center gap-10 items-center z-50 shadow-lg">
+      {(isSpeaking || hasStartedSpeaking) && (
+        <div className="fixed bottom-0 left-0 h-13 md:h-max md:left-33 w-[100dvw] md:w-[calc(100vw-8.6rem)] bg-secondary border-t-border py-2 flex justify-center md:gap-10 gap-3 items-center z-50 shadow-lg">
+          {/* Progress Bar with Seek */}
+          <div
+            className="absolute top-0 left-2 md:w-[98%] w-[95%] mr-10 h-1 cursor-pointer bg-border rounded"
+            onClick={(e) => handleSeek(e.clientX, e.currentTarget)}
+            onMouseDown={() => setIsDragging(true)}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseMove={(e) => {
+              if (isDragging) handleSeek(e.clientX, e.currentTarget);
+            }}
+          >
+            <div
+              className="h-1 bg-primary transition-all duration-300"
+              style={{
+                width: `${(currentChunkIndex / (totalChunks || 1)) * 100}%`,
+              }}
+            />
+            <div
+              className="absolute top-[-4px] -translate-x-1/2 w-3 h-3 rounded-full bg-primary text-sm border border-border shadow"
+              style={{
+                left: `${(currentChunkIndex / (totalChunks || 1)) * 100}%`,
+              }}
+            />
+          </div>
+
+          {/* Time Info */}
+          <span className="absolute top-1 text-foreground left-2 md:text-sm text-[11px] font-mono">
+            {formatTime(elapsed)} / {formatTime(total)}
+          </span>
+
+          {/* Stop */}
           <button
-            onClick={stop}
-            className="text-foreground focus:outline-none hover:cursor-pointer transition-colors duration-200"
+            onClick={handleStop}
+            className="text-foreground hover:cursor-pointer"
             aria-label="Stop"
             title="Stop"
           >
             <FaStop size={18} />
           </button>
 
+          {/* Previous Chunk */}
+          <button
+            onClick={() => {
+              goToChunk(currentChunkIndex - 1);
+              setHasStartedSpeaking(true);
+            }}
+            disabled={currentChunkIndex === 0}
+            className="text-foreground hover:cursor-pointer disabled:opacity-50"
+            aria-label="Previous Chunk"
+            title="Previous Chunk"
+          >
+            <IoMdSkipBackward size={18} />
+          </button>
+
+          {/* Play / Pause */}
           <button
             onClick={handlePlayPause}
-            className="text-white focus:outline-none bg-teal-600 bottom-1 rounded-full p-3 hover:bg-teal-700 hover:cursor-pointer transition-colors duration-200"
+            className="text-white bg-teal-600 rounded-full p-3 mt-1 hover:cursor-pointer hover:bg-teal-700"
             aria-label={isPaused ? "Resume" : "Pause"}
             title={isPaused ? "Resume" : "Pause"}
           >
-            <Transition
-              show
-              appear
-              enter="transition-opacity duration-200"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity duration-150"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              {isPaused ? <FaPlay size={18} /> : <FaPause size={18} />}
-            </Transition>
+            {isPaused ? <FaPlay size={18} /> : <FaPause size={18} />}
           </button>
 
+          {/* Next Chunk */}
+          <button
+            onClick={() => {
+              goToChunk(currentChunkIndex + 1);
+              setHasStartedSpeaking(true);
+            }}
+            disabled={currentChunkIndex >= totalChunks - 1}
+            className="text-foreground hover:cursor-pointer disabled:opacity-50"
+            aria-label="Next Chunk"
+            title="Next Chunk"
+          >
+            <IoMdSkipForward size={18} />
+          </button>
+
+          {/* Settings Menu */}
           <Menu as="div" className="relative">
             <Menu.Button
-              className="text-foreground focus:outline-none hover:cursor-pointer transition-colors duration-200"
-              aria-label="Felolvasási Beállítások"
-              title="Felolvasási Beállítások"
+              className="text-foreground focus:outline-none hover:cursor-pointer mt-1 transition-colors duration-200"
+              aria-label="Reading Settings"
+              title="Reading Settings"
               disabled={isLoadingVoices || !isSupported}
             >
               {({ open }) => (
@@ -157,11 +243,11 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
               )}
             </Menu.Button>
 
-            <Menu.Items className="absolute right-1/2 bottom-5 mb-2 w-64 bg-secondary border border-border rounded-md shadow-lg p-4 space-y-4 max-h-[400px] overflow-auto z-50">
+            <Menu.Items className="absolute right-1/2 bottom-7 mb-2 w-64 bg-secondary border border-border rounded-md shadow-lg p-4 space-y-4 max-h-[400px] overflow-auto z-50">
               <Suspense
                 fallback={
                   <div className="flex items-center justify-center">
-                    <FaSpinner className="animate-spin text-primary min-h-[300px] max-w-[50px] text-4xl" />
+                    <FaSpinner className="animate-spin text-primary min-h-[310px] max-w-[50px] text-4xl" />
                   </div>
                 }
               >
@@ -169,7 +255,7 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
                   <div className="text-red-600 text-sm mb-2">{error}</div>
                 )}
                 {isLoadingVoices && (
-                  <div className="text-gray-600 text-sm mb-2">
+                  <div className="text-muted-foreground text-sm mb-2">
                     Loading voices...
                   </div>
                 )}
@@ -192,7 +278,7 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
             </Menu.Items>
           </Menu>
         </div>
-      </Transition>
+      )}
     </div>
   );
 };
