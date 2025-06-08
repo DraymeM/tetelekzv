@@ -278,6 +278,12 @@ This architecture and UI provide a **robust, accessible**, and **user-friendly**
   - Guests → read-only  
   - Users → can create/edit  
   - Superusers → full admin CRUD
+- 🆕 User Registration:
+  - Email + password sign-up with validation
+  - Error handling for existing usernames/emails
+- 📧 Email Confirmation:
+  - Sends a welcome email on successful registration
+  - Includes styled HTML email with a login button
 
 ---
 
@@ -343,6 +349,203 @@ const flashcardTutorialSteps = [
 - Custom mini ORM for DB operations
 - Supports `.env` configs
 - Rate limiter with toast feedback for end users
+
+### 🧩 Custom ORM
+
+The application includes a lightweight custom ORM for structured and reusable database access. It provides a base Model class with common SQL helpers, and each table/model extends this base with custom logic.
+
+🏗️ Base Model Class:
+  ```php
+  <?php
+namespace Models;
+
+use \PDO;
+use \PDOException;
+
+abstract class Model
+{
+    protected PDO $db;
+    protected string $table;
+
+    public function __construct(PDO $db)
+    {
+        $this->db    = $db;
+        if (empty($this->table)) {
+            throw new \Exception('Model ' . static::class . ' must set protected $table');
+        }
+    }
+
+    protected function selectOne(string $sql, array $params = []): ?array
+    {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row !== false ? $row : null;
+    }
+
+    protected function selectAll(string $sql, array $params = []): array
+    {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    protected function execute(string $sql, array $params = []): int
+    {
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        if (stripos(trim($sql), 'insert') === 0) {
+            return (int)$this->db->lastInsertId();
+        }
+        return $stmt->rowCount();
+    }
+
+    public function delete(string $whereSql, array $params = []): int
+    {
+        $sql = "DELETE FROM {$this->table} WHERE $whereSql";
+        return $this->execute($sql, $params);
+    }
+}
+```
+🧠 Example: Question Model
+
+This child model extends the base Model class to provide specific logic for handling questions and their related answers. It shows off more advanced usage including:
+ - Transaction-safe inserts & deletes
+ - Embedded answer model delegation
+ - Data transformation
+ - Pagination, shuffling, and filtering
+```php
+<?php
+namespace Models;
+
+use \PDO;
+use \Exception;
+
+class Question extends Model
+{
+    protected string $table = 'questions';
+    private Answer $answerModel;
+
+    public function __construct(PDO $db)
+    {
+        parent::__construct($db);
+        $this->answerModel = new Answer($db);
+    }
+
+    public function findById(int $id): ?array
+    {
+        $q = $this->selectOne("SELECT id, question FROM {$this->table} WHERE id = :id", [':id' => $id]);
+        if (! $q) return null;
+
+        $answers = $this->answerModel->findByQuestionId($id);
+        return [
+            'id' => (int)$q['id'],
+            'question' => $q['question'],
+            'answers' => $answers
+        ];
+    }
+
+    public function findAll(): array
+    {
+        $rows = $this->selectAll("SELECT id, question FROM {$this->table}");
+        return array_map(fn($r) => [
+            'id' => (int)$r['id'],
+            'question' => $r['question']
+        ], $rows);
+    }
+
+    public function findRandom(): ?array
+    {
+        $q = $this->selectOne("SELECT id, question FROM {$this->table} ORDER BY RAND() LIMIT 1");
+        if (! $q) return null;
+
+        $detail = $this->findById((int)$q['id']);
+        if ($detail) {
+            shuffle($detail['answers']);
+        }
+        return $detail;
+    }
+
+    public function createWithAnswers(string $text, array $answers, int $tetel_id): int
+    {
+        if (count($answers) < 2) {
+            throw new Exception("At least two answers required");
+        }
+        $this->db->beginTransaction();
+        try {
+            $stmt = $this->db->prepare("INSERT INTO {$this->table} (question, tetel_id) VALUES (:q, :tid)");
+            $stmt->execute([':q' => $text, ':tid' => $tetel_id]);
+            $qid = (int)$this->db->lastInsertId();
+            $this->answerModel->createBulk($qid, $answers);
+            $this->db->commit();
+            return $qid;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
+
+    public function deleteById(int $id): void
+    {
+        $this->db->beginTransaction();
+        $this->answerModel->deleteByQuestionId($id);
+        $this->delete("id = :id", [':id' => $id]);
+        $this->db->commit();
+    }
+
+    public function updateWithAnswers(int $id, string $text, array $answers): void
+    {
+        if (count($answers) < 2) {
+            throw new Exception("At least two answers required");
+        }
+        $this->db->beginTransaction();
+        $this->execute("UPDATE {$this->table} SET question = :q WHERE id = :id", [':q' => $text, ':id' => $id]);
+        $this->answerModel->updateBulk($id, $answers);
+        $this->db->commit();
+    }
+}
+```
+### 🌐 Example Endpoint: List Questions with Pagination
+This API endpoint uses the Question model to return a paginated list of multiple-choice questions. It uses the ORM’s selectAll() helper internally via raw SQL, and maps the results for frontend use.
+
+```php
+<?php
+header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET");
+
+$pdo = require __DIR__ . '/../../core/init.php';
+require_once __DIR__ . '/../../models/Model.php';
+require_once __DIR__ . '/../../models/Answer.php';
+require_once __DIR__ . '/../../models/Question.php';
+
+use Models\Question;
+
+// Parse pagination parameters
+$page  = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = isset($_GET['limit']) ? max(1, (int)$_GET['limit']) : 35;
+$offset = ($page - 1) * $limit;
+
+// Instantiate the model
+$questionModel = new Question($pdo);
+
+// Total count for pagination UI
+$total = $pdo->query("SELECT COUNT(*) FROM questions")->fetchColumn();
+
+// Fetch paginated questions
+$stmt = $pdo->prepare("SELECT id, question FROM questions LIMIT :limit OFFSET :offset");
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Return formatted response
+echo json_encode([
+  "data" => array_map(fn($q) => [
+      'id' => (int)$q['id'],
+      'question' => $q['question']
+  ], $questions),
+  "total" => (int)$total,
+]);
+```
 
 ---
 
