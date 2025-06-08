@@ -140,7 +140,7 @@ Tiomi’s TTS leverages the browser-native **Web Speech API** to read full topic
 - Full playback controls: **play**, **pause**, **resume**, and **stop**.
 - **Skip forward** and **previous chunk** navigation to move through text segments.
 - **Progress bar** with draggable seek support, similar to common audio players.
-- Mobile-friendly with **swipe down to stop** gesture and animations.
+- Mobile-friendly with animations.
 - Smooth **chunk-based playback** to handle very long texts efficiently.
 - **Improved chunk navigation** and enhanced UI options fully implemented.
 
