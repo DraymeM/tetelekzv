@@ -190,9 +190,14 @@ export async function fetchFlashcardCount(): Promise<{ total: number }> {
 
 /*------------------------------------------------------AUTH---------------------------------------------------------------*/
 
-export async function register(username: string, password: string) {
+export async function register(
+  username: string,
+  email: string,
+  password: string
+) {
   const res = await apiClient.post("/auth/register.php", {
     username,
+    email,
     password,
   });
   return res.data;

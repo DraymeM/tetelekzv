@@ -13,6 +13,7 @@ const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,10 +22,30 @@ const Register: React.FC = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const isOnline = useOnlineStatus();
+
   const registerSchema = z
     .object({
-      username: z.string().min(3, "Legalább 3 karakter"),
-      password: z.string().min(6, "Legalább 6 karakter"),
+      username: z
+        .string()
+        .min(3, "Legalább 3 karakter")
+        .max(32, "Legfeljebb 32 karakter")
+        .regex(
+          /^[a-zA-Z0-9_]+$/,
+          "Csak betűk, számok és aláhúzás (_) megengedett"
+        ),
+      email: z
+        .string()
+        .min(5, "Legalább 5 karakter")
+        .max(254, "Túl hosszú email cím")
+        .email("Érvényes email cím szükséges"),
+      password: z
+        .string()
+        .min(8, "Legalább 8 karakter")
+        .max(30, "Túl hosszú jelszó")
+        .regex(
+          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
+          "A jelszónak tartalmaznia kell betűt és számot"
+        ),
       confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -37,10 +58,16 @@ const Register: React.FC = () => {
     setError(null);
     setSuccess(null);
     setIsPending(true);
-    setTouched({ username: true, password: true, confirmPassword: true });
+    setTouched({
+      username: true,
+      email: true,
+      password: true,
+      confirmPassword: true,
+    });
 
     const validation = registerSchema.safeParse({
       username,
+      email,
       password,
       confirmPassword,
     });
@@ -56,79 +83,108 @@ const Register: React.FC = () => {
     }
 
     try {
-      await register(username, password);
-      setSuccess("Sikeres Regiszráció!");
+      await register(username, email, password);
+      setSuccess("Sikeres Regisztráció!");
       toast.success("Sikeres regisztráció!");
       setUsername("");
+      setEmail("");
       setPassword("");
       setConfirmPassword("");
       setFieldErrors({});
       setTouched({});
       navigate({ to: "/login" });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed");
-      toast.error("Nems sikerült a regisztráció!");
+    } catch (err: any) {
+      if (err.response?.status === 409) {
+        if (err.response.data.error.includes("Email")) {
+          setFieldErrors((prev) => ({
+            ...prev,
+            email: "Az email cím már foglalt",
+          }));
+          toast.error("Az email cím már foglalt");
+        } else if (err.response.data.error.includes("Username")) {
+          setFieldErrors((prev) => ({
+            ...prev,
+            username: "A felhasználónév már foglalt",
+          }));
+          toast.error("A felhasználónév már foglalt");
+        } else {
+          setError(err.response.data.error || "Registration failed");
+          toast.error(
+            err.response.data.error || "Nems sikerült a regisztráció!"
+          );
+        }
+      } else {
+        setError(err instanceof Error ? err.message : "Registration failed");
+        toast.error("Nems sikerült a regisztráció!");
+      }
     } finally {
       setIsPending(false);
     }
   };
+
   if (!isOnline) {
-    return (
-      <>
-        <OfflinePlaceholder />
-      </>
-    );
+    return <OfflinePlaceholder />;
   }
+
   return (
     <Suspense>
       <PageTransition>
-        <div>
-          <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
-            <FormContainer error={error} success={success} label="Register">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <InputField
-                  id="username"
-                  label="Felhasználónév"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    setTouched({ ...touched, username: true });
-                  }}
-                  error={touched.username ? fieldErrors.username : undefined}
-                />
+        <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
+          <FormContainer error={error} success={success} label="Register">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <InputField
+                id="username"
+                label="Felhasználónév"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setTouched({ ...touched, username: true });
+                }}
+                error={touched.username ? fieldErrors.username : undefined}
+              />
 
-                <InputField
-                  id="password"
-                  label="Jelszó"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setTouched({ ...touched, password: true });
-                  }}
-                  enablePasswordToggle
-                  error={touched.password ? fieldErrors.password : undefined}
-                />
+              <InputField
+                id="email"
+                label="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setTouched({ ...touched, email: true });
+                }}
+                error={touched.email ? fieldErrors.email : undefined}
+              />
 
-                <InputField
-                  id="confirm password"
-                  label="Jelszó megerősítése"
-                  value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                    setTouched({ ...touched, confirmPassword: true });
-                  }}
-                  enablePasswordToggle
-                  error={
-                    touched.confirmPassword
-                      ? fieldErrors.confirmPassword
-                      : undefined
-                  }
-                />
+              <InputField
+                id="password"
+                label="Jelszó"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setTouched({ ...touched, password: true });
+                }}
+                enablePasswordToggle
+                error={touched.password ? fieldErrors.password : undefined}
+              />
 
-                <SubmitButton isPending={isPending} label="Register" />
-              </form>
-            </FormContainer>
-          </div>
+              <InputField
+                id="confirm-password"
+                label="Jelszó megerősítése"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setTouched({ ...touched, confirmPassword: true });
+                }}
+                enablePasswordToggle
+                error={
+                  touched.confirmPassword
+                    ? fieldErrors.confirmPassword
+                    : undefined
+                }
+              />
+
+              <SubmitButton isPending={isPending} label="Register" />
+            </form>
+          </FormContainer>
         </div>
       </PageTransition>
     </Suspense>
