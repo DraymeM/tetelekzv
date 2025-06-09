@@ -1,0 +1,1 @@
+import{T as o}from"./TetelDetails-BI2lQrcm.js";import"./index-DIxBzota.js";import"./useLocation-CzZwow3l.js";import"./useQuery-DL4HnUFU.js";import"./useMutation-ABTRtzU8.js";import"./repo-CDFxhs3-.js";import"./PageTransition-C6AlueE5.js";import"./OfflinePlaceholder-B3DKf6Jg.js";const a=o;export{a as component};
