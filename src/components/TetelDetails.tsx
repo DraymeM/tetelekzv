@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import {
   useParams,
   useLocation,
@@ -12,11 +12,14 @@ import type { TetelDetailsResponse } from "../api/types";
 import { FaArrowLeft, FaPen, FaRegClock, FaTrash } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import DeleteModal from "./common/Forms/DeleteModal";
 import PageTransition from "../components/common/PageTransition";
 import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
-import SpeechController from "./common/SpeechController";
+const DeleteModal = React.lazy(() => import("./common/Forms/DeleteModal"));
+const SpeechController = React.lazy(() => import("./common/SpeechController"));
+const MarkdownHandler = React.lazy(
+  () => import("./common/markdown/MarkdownHandler")
+);
 
 const getTextFromMarkdown = (markdown: string) => {
   let cleanedText = markdown
@@ -79,10 +82,6 @@ export default function TetelDetails() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [location.pathname]);
 
-  const MarkdownHandler = React.lazy(
-    () => import("./common/markdown/MarkdownHandler")
-  );
-
   const deleteMutation = useMutation({
     mutationFn: () => {
       if (!isAuthenticated || !isSuperUser) {
@@ -119,22 +118,24 @@ export default function TetelDetails() {
 
   const readingMinutes = calculateReadingTime(sections, osszegzes);
 
-  const textToSpeak = [
-    getTextFromMarkdown(tetel.name),
-    ...sections.flatMap((section) => [
-      getTextFromMarkdown(section.content),
-      ...(section.subsections?.flatMap((sub) => [
-        getTextFromMarkdown(sub.title || ""),
-        getTextFromMarkdown(sub.description || ""),
-      ]) ?? []),
-    ]),
-    osszegzes?.content
-      ? "Összegzés: " + getTextFromMarkdown(osszegzes.content)
-      : "",
-  ]
-    .filter((text) => text && text.length > 0)
-    .join(" ")
-    .trim();
+  const textToSpeak = useMemo(() => {
+    return [
+      getTextFromMarkdown(tetel.name),
+      ...sections.flatMap((section) => [
+        getTextFromMarkdown(section.content),
+        ...(section.subsections?.flatMap((sub) => [
+          getTextFromMarkdown(sub.title || ""),
+          getTextFromMarkdown(sub.description || ""),
+        ]) ?? []),
+      ]),
+      osszegzes?.content
+        ? "Összegzés: " + getTextFromMarkdown(osszegzes.content)
+        : "",
+    ]
+      .filter((text) => text && text.length > 0)
+      .join(" ")
+      .trim();
+  }, [tetel.name, sections, osszegzes]);
 
   return (
     <Suspense>
@@ -173,27 +174,21 @@ export default function TetelDetails() {
 
           {/* Content */}
           <div className="space-y-6">
-            {sections.map((section) => (
-              <div
-                key={section.id}
-                className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent hover:border-border transition-colors"
-              >
-                <Suspense
-                  fallback={
-                    <div className="bg-secondary rounded-lg p-6 shadow-xl animate-pulse " />
-                  }
+            <Suspense
+              fallback={
+                <div className="bg-secondary rounded-lg p-6 shadow-xl animate-pulse " />
+              }
+            >
+              {sections.map((section) => (
+                <div
+                  key={section.id}
+                  className="bg-secondary rounded-lg p-6 shadow-xl border border-transparent hover:border-border transition-colors"
                 >
                   <div className="text-xl font-semibold mb-4 text-foreground">
                     <MarkdownHandler content={section.content} />
                   </div>
-                </Suspense>
-                {section.subsections?.map((sub) => (
-                  <Suspense
-                    key={sub.id}
-                    fallback={
-                      <div className="bg-muted rounded-lg p-6 shadow-xl animate-pulse " />
-                    }
-                  >
+
+                  {section.subsections?.map((sub) => (
                     <div className="ml-4 mb-4 p-4 bg-muted rounded-lg">
                       <div className="font-medium text-foreground mb-2">
                         <MarkdownHandler content={sub.title} />
@@ -202,21 +197,21 @@ export default function TetelDetails() {
                         <MarkdownHandler content={sub.description} />
                       </div>
                     </div>
-                  </Suspense>
-                ))}
-              </div>
-            ))}
-
-            {osszegzes?.content && (
-              <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
-                <h2 className="text-2xl font-bold mb-4 text-foreground">
-                  Összegzés
-                </h2>
-                <div className="text-foreground prose prose-invert max-w-none whitespace-pre-wrap">
-                  <MarkdownHandler content={osszegzes.content} />
+                  ))}
                 </div>
-              </div>
-            )}
+              ))}
+
+              {osszegzes?.content && (
+                <div className="bg-secondary rounded-lg p-6 border border-transparent hover:border-border transition-colors">
+                  <h2 className="text-2xl font-bold mb-4 text-foreground">
+                    Összegzés
+                  </h2>
+                  <div className="text-foreground prose prose-invert max-w-none whitespace-pre-wrap">
+                    <MarkdownHandler content={osszegzes.content} />
+                  </div>
+                </div>
+              )}
+            </Suspense>
           </div>
 
           {/* Delete Modal */}

@@ -1,0 +1,1 @@
+import{c as o}from"./index-DIxBzota.js";import{M as t}from"./MultiQuestionDetails-DL1Ck7JP.js";import"./useLocation-CzZwow3l.js";import"./useQuery-DL4HnUFU.js";import"./useMutation-ABTRtzU8.js";import"./repo-CDFxhs3-.js";import"./PageTransition-C6AlueE5.js";import"./OfflinePlaceholder-B3DKf6Jg.js";const u=o("/mquestions/$id")({component:t});export{u as Route};
