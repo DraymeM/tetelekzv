@@ -12,6 +12,8 @@ export function useSpeech() {
   const [chunks, setChunks] = useState<string[]>([]);
   const isMountedRef = useRef(true);
   const selectedVoiceRef = useRef<string | undefined>(undefined);
+  // Store speech settings in refs to preserve them across chunk navigation
+  const settingsRef = useRef({ rate: 1, pitch: 1, volume: 1 });
 
   const isSupported =
     typeof window !== "undefined" && "speechSynthesis" in window;
@@ -113,6 +115,7 @@ export function useSpeech() {
     stop();
 
     selectedVoiceRef.current = voiceName;
+    settingsRef.current = { rate, pitch, volume }; // Update settings
     const cleanText = text.trim().replace(/\s+/g, " ");
     const chunksArray = splitIntoChunks(cleanText, 300);
     setChunks(chunksArray);
@@ -143,7 +146,15 @@ export function useSpeech() {
   const goToChunk = (index: number) => {
     if (index < 0 || index >= chunks.length || !synthRef.current) return;
     stop();
-    speak(chunks.join(" "), selectedVoiceRef.current, 1, 1, 1, index);
+    const { rate, pitch, volume } = settingsRef.current;
+    speak(
+      chunks.join(" "),
+      selectedVoiceRef.current,
+      rate,
+      pitch,
+      volume,
+      index
+    );
   };
 
   // Stop speech

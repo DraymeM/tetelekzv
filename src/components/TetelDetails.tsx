@@ -18,19 +18,26 @@ import React from "react";
 import OfflinePlaceholder from "./OfflinePlaceholder";
 import SpeechController from "./common/SpeechController";
 
+const getTextFromMarkdown = (markdown: string) => {
+  let cleanedText = markdown
+    .replace(/<[^>]+>/g, "")
+    .replace(/{[^}]+}/g, "")
+    .replace(/&[a-zA-Z0-9#]+;/g, "")
+
+    .replace(/[#_*>\-`]/g, "")
+    .replace(/\[.*?\]\(.*?\)/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return cleanedText;
+};
+
 function calculateReadingTime(
   sections: TetelDetailsResponse["sections"],
   osszegzes?: TetelDetailsResponse["osszegzes"]
 ): number {
-  const getTextFromMarkdown = (markdown: string) =>
-    markdown
-      .replace(/[#_*>\-`]/g, "")
-      .replace(/\[.*?\]\(.*?\)/g, "")
-      .replace(/!\[.*?\]\(.*?\)/g, "")
-      .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-
   let totalText = "";
 
   sections.forEach((section) => {
@@ -111,14 +118,6 @@ export default function TetelDetails() {
   const sections = data?.sections ?? [];
 
   const readingMinutes = calculateReadingTime(sections, osszegzes);
-  const getTextFromMarkdown = (markdown: string) =>
-    markdown
-      .replace(/[#_*>\-`]/g, "")
-      .replace(/\[.*?\]\(.*?\)/g, "")
-      .replace(/!\[.*?\]\(.*?\)/g, "")
-      .replace(/`{1,3}[\s\S]*?`{1,3}/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
 
   const textToSpeak = [
     getTextFromMarkdown(tetel.name),

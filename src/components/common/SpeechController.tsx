@@ -63,13 +63,41 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
-    if (voices.length > 0 && !selectedVoice && !isLoadingVoices) {
+    if (isLoadingVoices || voices.length === 0) return;
+
+    const storedVoice = localStorage.getItem("selectedVoice");
+    if (storedVoice && voices.some((v) => v.name === storedVoice)) {
+      setSelectedVoice(storedVoice);
+    } else {
       const defaultVoice = voices.find((v) => v.localService) || voices[0];
       setSelectedVoice(defaultVoice?.name);
+      if (storedVoice && storedVoice !== defaultVoice?.name) {
+        // Optionally notify user if stored voice wasn't found
+        console.warn(`Stored voice "${storedVoice}" not found, using default.`);
+      }
     }
-  }, [voices, selectedVoice, isLoadingVoices]);
+  }, [voices, isLoadingVoices]);
 
+  // Clean up on unmount
   useEffect(() => () => stop(), []);
+
+  // Reset state when speech ends naturally
+  useEffect(() => {
+    if (
+      !isSpeaking &&
+      !isPaused &&
+      hasStartedSpeaking &&
+      currentChunkIndex >= chunks.length - 1
+    ) {
+      setHasStartedSpeaking(false);
+    }
+  }, [
+    isSpeaking,
+    isPaused,
+    hasStartedSpeaking,
+    currentChunkIndex,
+    chunks.length,
+  ]);
 
   const handlePlayPause = () => {
     if (!text || voices.length === 0 || isLoadingVoices) return;
@@ -88,6 +116,12 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
 
   const handleVoiceChange = (voiceName?: string) => {
     setSelectedVoice(voiceName);
+    // Save to localStorage
+    if (voiceName) {
+      localStorage.setItem("selectedVoice", voiceName);
+    } else {
+      localStorage.removeItem("selectedVoice");
+    }
     if (isSpeaking) {
       stop();
       speak(text, voiceName, rate, pitch, volume, currentChunkIndex);
@@ -126,6 +160,12 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
     setHasStartedSpeaking(true);
   };
 
+  // Progress bar width: 100% if speech has ended
+  const progressWidth =
+    !isSpeaking && currentChunkIndex >= totalChunks - 1
+      ? 100
+      : (currentChunkIndex / (totalChunks || 1)) * 100;
+
   return (
     <div className={`relative ${className ?? ""}`}>
       {!isSpeaking && !hasStartedSpeaking && (
@@ -155,13 +195,13 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
             <div
               className="h-1 bg-primary transition-all duration-300"
               style={{
-                width: `${(currentChunkIndex / (totalChunks || 1)) * 100}%`,
+                width: `${progressWidth}%`,
               }}
             />
             <div
               className="absolute top-[-4px] -translate-x-1/2 w-3 h-3 rounded-full bg-primary text-sm border border-border shadow"
               style={{
-                left: `${(currentChunkIndex / (totalChunks || 1)) * 100}%`,
+                left: `${progressWidth}%`,
               }}
             />
           </div>
@@ -199,10 +239,14 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
           <button
             onClick={handlePlayPause}
             className="text-white bg-teal-600 rounded-full p-3 mt-1 hover:cursor-pointer hover:bg-teal-700"
-            aria-label={isPaused ? "Resume" : "Pause"}
-            title={isPaused ? "Resume" : "Pause"}
+            aria-label={isSpeaking && !isPaused ? "Pause" : "Play"}
+            title={isSpeaking && !isPaused ? "Pause" : "Play"}
           >
-            {isPaused ? <FaPlay size={18} /> : <FaPause size={18} />}
+            {isSpeaking && !isPaused ? (
+              <FaPause size={18} />
+            ) : (
+              <FaPlay size={18} />
+            )}
           </button>
 
           {/* Next Chunk */}
@@ -267,6 +311,7 @@ const SpeechController: React.FC<SpeechControllerProps> = ({
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}
                   handleVoiceChange={handleVoiceChange}
+                  isLoadingVoices={isLoadingVoices} // Pass isLoadingVoices
                 />
                 <SpeechSliders
                   rate={rate}
