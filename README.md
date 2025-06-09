@@ -594,10 +594,10 @@ echo json_encode([
 
 | Page              | Performance ⚡ | Accessibility ♿ | Best Practices ✅ | SEO 🔍 |
 |------------------|-------------|---------------|----------------|-------|
-| Home Page        | 93          | 98            | 100            | 100   |
-| Topic Detail     | 92          | 100           | 100            | 100   |
+| Home Page        | 95          | 98            | 100            | 100   |
+| Topic Detail     | 95          | 100           | 100            | 100   |
 | Quiz Game        | 98          | 100           | 100            | 100   |
-| FlashCardGame    | 94          | 100           | 100            | 100   |
+| FlashCardGame    | 98          | 100           | 100            | 100   |
 | Topic List       | 98          | 100           | 100            | 100   |
 | Topic LandingPage| 97          | 100           | 100            | 100   |
 | Random Flashcards| 98          | 100           | 100            | 100   |
@@ -608,7 +608,7 @@ echo json_encode([
 | Page              | Performance ⚡ | Accessibility ♿ | Best Practices ✅ | SEO 🔍 |
 |------------------|-------------|---------------|----------------|-------|
 | Home Page        | 100         | 98            | 100            | 100   |
-| Topic Detail     | 99          | 100           | 100            | 100   |
+| Topic Detail     | 100         | 100           | 100            | 100   |
 | Quiz Game        | 100         | 100           | 100            | 100   |
 | FlashCardGame    | 100         | 100           | 100            | 100   |
 | Topic List       | 100         | 100           | 100            | 100   |
@@ -616,10 +616,10 @@ echo json_encode([
 | Random Flashcards| 100         | 100           | 100            | 100   |
 
 - ✅ Lighthouse: 92–100 across categories
-  - [Home Page](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/zvzxy2kbw0?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/q2n1m2r5wa?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Home Page](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/qgw81piw24?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [Topic Detail](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/wxj9qb29ie?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [Quiz Game](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/g6ulklf2yj?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
-  - [FlashCardGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/je5fjk0ick?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
+  - [FlashCardGame](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/fsmigo6nnx?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [Topic List](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/tgz4ybr8ay?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [Topic LandingPage](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/o7x7gfk97y?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
   - [Random Flashcards](https://pagespeed.web.dev/analysis/https-danielmarkus-web-elte-hu-tetelekzv/ipvvh5u020?form_factor=mobile&category=performance&category=accessibility&category=best-practices&category=seo&hl=hu&utm_source=lh-chrome-ext)
