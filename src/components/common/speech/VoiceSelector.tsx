@@ -10,6 +10,7 @@ interface VoiceSelectorProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   handleVoiceChange: (voiceName?: string) => void;
+  isLoadingVoices: boolean;
 }
 
 const VoiceSelector: React.FC<VoiceSelectorProps> = ({
@@ -20,6 +21,7 @@ const VoiceSelector: React.FC<VoiceSelectorProps> = ({
   searchTerm,
   setSearchTerm,
   handleVoiceChange,
+  isLoadingVoices,
 }) => {
   const selectedRef = useRef<HTMLLIElement | null>(null);
 
@@ -46,17 +48,20 @@ const VoiceSelector: React.FC<VoiceSelectorProps> = ({
         className="relative w-full rounded-md border border-border bg-muted px-3 py-2 text-sm text-foreground flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-primary"
         aria-haspopup="listbox"
         aria-expanded={isDropdownOpen}
+        disabled={isLoadingVoices}
       >
         <span className="truncate">
-          {selectedVoice
-            ? voices.find((v) => v.name === selectedVoice)?.name
-            : "Default"}
+          {isLoadingVoices
+            ? "Loading voices..."
+            : selectedVoice
+              ? voices.find((v) => v.name === selectedVoice)?.name
+              : "Default"}
         </span>
         <FaChevronDown
           size={15}
           className={`ml-2 transition-transform duration-300 ${
             isDropdownOpen ? "rotate-180" : "rotate-0"
-          }`}
+          } ${isLoadingVoices ? "opacity-50" : ""}`}
         />
       </button>
 

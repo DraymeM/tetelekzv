@@ -1,1 +1,0 @@
-import{c as o}from"./index-KuHBpOT7.js";import{L as t}from"./Login-B9EggxiK.js";import"./OfflinePlaceholder-BpVkrmzD.js";import"./useOnlineStatus-18hOUwqw.js";import"./PageTransition-CNlM1Ck_.js";import"./types-CZYGTQuY.js";const a=o("/login")({component:t});export{a as Route};
