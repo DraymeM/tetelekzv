@@ -13,7 +13,7 @@ const UserInfo = ({
   isAuthenticated,
   onLogout,
 }: UserInfoProps) => (
-  <div className="flex flex-col justify-center items-center h-full min-h-[60vh] mx-auto max-w-[95dvw] md:max-w-md  px-4">
+  <div className="flex flex-col justify-center items-center h-full min-h-[50dvh] mx-auto max-w-[95dvw] md:max-w-md  px-4">
     <div className="flex items-center space-x-6 p-6 rounded-2xl shadow-xl mb-6 w-full">
       <FiUser className="text-foreground bg-secondary md:w-30 md:h-30 w-25 h-25 p-2 rounded-full" />
       <div>

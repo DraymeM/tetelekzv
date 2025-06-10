@@ -1,4 +1,4 @@
-import Tetelek from "@/components/Tetelek";
+import Tetelek from "@/components/pages/Tetelek";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/tetelek")({

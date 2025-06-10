@@ -152,7 +152,7 @@ export default function TetelForm({
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-end mb-4">
             <button
-              className="fixed top-20 right-5 p-3 bg-blue-600 hover:cursor-pointer text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 z-50"
+              className="fixed top-15 right-5 p-3 bg-blue-600 hover:cursor-pointer text-white rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 z-50"
               onClick={() => setShowTutorial(true)}
               title="Segítség a használathoz"
             >

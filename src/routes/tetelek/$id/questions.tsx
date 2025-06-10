@@ -1,4 +1,4 @@
-import TetelQuestions from "@/components/TetelQuestions";
+import TetelQuestions from "@/components/pages/TetelQuestions";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/tetelek/$id/questions")({

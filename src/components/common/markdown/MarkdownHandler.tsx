@@ -1,6 +1,11 @@
-import React, { Suspense, useRef, useState, useEffect } from "react";
+import React, { Suspense, useRef } from "react";
 import { toast } from "react-toastify";
 const ReactMarkdown = React.lazy(() => import("react-markdown"));
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw"; // 👈 Enables raw HTML in markdown
+import rehypeHighlight from "rehype-highlight";
+
+// A small wrapper around <pre> to inject a Copy button
 const CodeBlockWrapper: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -31,60 +36,50 @@ const CodeBlockWrapper: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Simplified component props
-type MarkdownComponentProps = {
-  children?: React.ReactNode;
-  node?: any;
-  inline?: boolean;
-  className?: string;
-  href?: string;
-  src?: string;
-  alt?: string;
-};
-
-const markdownComponents: Record<string, React.FC<MarkdownComponentProps>> = {
-  h1: ({ children }) => (
+// Tell react-markdown to wrap every <pre><code> in our wrapper
+const markdownComponents = {
+  h1: ({ children }: any) => (
     <h1 className="text-3xl font-bold mt-6 mb-2">{children}</h1>
   ),
-  h2: ({ children }) => (
+  h2: ({ children }: any) => (
     <h2 className="text-2xl font-semibold mt-5 mb-2">{children}</h2>
   ),
-  h3: ({ children }) => (
+  h3: ({ children }: any) => (
     <h3 className="text-xl font-medium mt-4 mb-2">{children}</h3>
   ),
-  h4: ({ children }) => (
+  h4: ({ children }: any) => (
     <h4 className="text-lg font-medium mt-3 mb-1">{children}</h4>
   ),
-  table: ({ children }) => (
+  table: ({ children }: any) => (
     <table className="table-auto border-collapse border border-border my-4">
       {children}
     </table>
   ),
-  thead: ({ children }) => (
+  thead: ({ children }: any) => (
     <thead className="bg-muted text-left">{children}</thead>
   ),
-  th: ({ children }) => (
+  th: ({ children }: any) => (
     <th className="border border-border px-3 py-2">{children}</th>
   ),
-  td: ({ children }) => (
+  td: ({ children }: any) => (
     <td className="border border-border px-3 py-2">{children}</td>
   ),
-  img: ({ src, alt, ...props }) => (
+  img: ({ src, alt, ...props }: any) => (
     <img src={src} alt={alt} loading="lazy" {...props} />
   ),
-  ul: ({ children }) => (
+  ul: ({ children }: any) => (
     <ul className="list-disc list-inside my-2">{children}</ul>
   ),
-  ol: ({ children }) => (
+  ol: ({ children }: any) => (
     <ol className="list-decimal list-inside my-2">{children}</ol>
   ),
-  li: ({ children }) => <li className="mb-1">{children}</li>,
-  p: ({ children }) => <p className="my-2 leading-relaxed">{children}</p>,
+  li: ({ children }: any) => <li className="mb-1">{children}</li>,
+  p: ({ children }: any) => <p className="my-2 leading-relaxed">{children}</p>,
   hr: () => <hr className="my-6 border-t border-border" />,
-  pre: ({ children, ...props }) => (
-    <CodeBlockWrapper {...props}>{children}</CodeBlockWrapper>
-  ),
-  code: ({ inline, children, ...props }) => {
+  pre({ node, children, ...props }: any) {
+    return <CodeBlockWrapper {...props}>{children}</CodeBlockWrapper>;
+  },
+  code({ inline, children, ...props }: any) {
     if (inline) {
       return (
         <code {...props} className="px-1 rounded font-mono text-sm">
@@ -94,17 +89,19 @@ const markdownComponents: Record<string, React.FC<MarkdownComponentProps>> = {
     }
     return <code {...props}>{children}</code>;
   },
-  a: ({ href, children, ...props }) => (
-    <a
-      href={href}
-      {...props}
-      className="text-blue-700 dark:text-blue-400 hover:underline font-medium"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {children}
-    </a>
-  ),
+  a({ href, children, ...props }: any) {
+    return (
+      <a
+        href={href}
+        {...props}
+        className="text-blue-700 dark:text-blue-400 hover:underline font-medium"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    );
+  },
 };
 
 interface MarkdownHandlerProps {
@@ -112,45 +109,15 @@ interface MarkdownHandlerProps {
 }
 
 const MarkdownHandler: React.FC<MarkdownHandlerProps> = ({ content }) => {
-  const [plugins, setPlugins] = useState<[any, any, any] | null>(null);
-
-  // Load plugins only when needed
-  useEffect(() => {
-    if (/```|~~~/.test(content)) {
-      Promise.all([
-        import("remark-gfm"),
-        import("rehype-raw"),
-        import("rehype-highlight"),
-      ]).then(([gfm, raw, highlight]) => {
-        setPlugins([gfm.default, raw.default, highlight.default]);
-      });
-    } else {
-      setPlugins(null);
-    }
-  }, [content]);
-
-  const allPluginsLoaded =
-    plugins &&
-    plugins.length === 3 &&
-    plugins[0] !== undefined &&
-    plugins[1] !== undefined &&
-    plugins[2] !== undefined;
-
   return (
-    <Suspense
-      fallback={<div className="min-h-[200px]">Markdown betöltése...</div>}
-    >
-      {allPluginsLoaded ? (
-        <ReactMarkdown
-          remarkPlugins={[plugins[0]]}
-          rehypePlugins={[plugins[1], plugins[2]]}
-          components={markdownComponents}
-        >
-          {content}
-        </ReactMarkdown>
-      ) : (
-        <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
-      )}
+    <Suspense>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw, rehypeHighlight]}
+        components={markdownComponents}
+      >
+        {content}
+      </ReactMarkdown>
     </Suspense>
   );
 };

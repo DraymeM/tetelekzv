@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import MultiQuestionEdit from "@/components/MultiquestionEdit";
+import MultiQuestionEdit from "@/components/pages/MultiquestionEdit";
 import type { RouterContext } from "../../../../../api/types";
 
 export const Route = createFileRoute("/tetelek/$id/questions/$qid/edit")({
