@@ -1,4 +1,4 @@
-import FlashCardsPage from "@/components/FlashCardsPage";
+import FlashCardsPage from "@/components/pages/FlashCardsPage";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/flashcards")({

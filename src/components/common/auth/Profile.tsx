@@ -81,7 +81,7 @@ const Profile: React.FC = () => {
   return (
     <PageTransition>
       <Suspense>
-        <div className="lg:hidden p-4 flex justify-between items-center mt-15 z-50">
+        <div className="lg:hidden p-4 flex justify-between items-center z-50">
           <button
             className="p-2 border-border rounded-md focus:outline-none"
             onClick={() => setIsSidebarOpen(true)}
@@ -92,7 +92,7 @@ const Profile: React.FC = () => {
         </div>
 
         <Tab.Group>
-          <div className="flex flex-col lg:flex-row mt-4 relative min-h-[calc(60dvh-4rem)]">
+          <div className="flex flex-col lg:flex-row relative min-h-[calc(60dvh-4rem)]">
             <Sidebar
               isOpen={isSidebarOpen}
               onClose={() => setIsSidebarOpen(false)}

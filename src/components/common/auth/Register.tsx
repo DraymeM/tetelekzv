@@ -1,17 +1,21 @@
-import React, { Suspense, useState } from "react";
-import { z } from "zod";
+import React, { Fragment, useState, Suspense } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import { useNavigate } from "@tanstack/react-router";
+import { z } from "zod";
 import { register } from "../../../api/repo";
 import { toast } from "react-toastify";
-import OfflinePlaceholder from "../../OfflinePlaceholder";
 import { useOnlineStatus } from "../../../hooks/useOnlineStatus";
+import OfflinePlaceholder from "../../OfflinePlaceholder";
 import PageTransition from "../PageTransition";
 const FormContainer = React.lazy(() => import("../Forms/FormContainer"));
 const InputField = React.lazy(() => import("../Forms/InputField"));
 const SubmitButton = React.lazy(() => import("../Forms/SubmitButton"));
 
 const Register: React.FC = () => {
+  const isOnline = useOnlineStatus();
   const navigate = useNavigate();
+  const [open] = useState(true); // Always open and blocking
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,27 +25,22 @@ const Register: React.FC = () => {
   const [isPending, setIsPending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const isOnline = useOnlineStatus();
 
   const registerSchema = z
     .object({
       username: z
         .string()
         .min(3, "Legalább 3 karakter")
-        .max(32, "Legfeljebb 32 karakter")
+        .max(32)
         .regex(
           /^[a-zA-Z0-9_]+$/,
           "Csak betűk, számok és aláhúzás (_) megengedett"
         ),
-      email: z
-        .string()
-        .min(5, "Legalább 5 karakter")
-        .max(254, "Túl hosszú email cím")
-        .email("Érvényes email cím szükséges"),
+      email: z.string().min(5).max(254).email("Érvényes email cím szükséges"),
       password: z
         .string()
-        .min(8, "Legalább 8 karakter")
-        .max(30, "Túl hosszú jelszó")
+        .min(8)
+        .max(30)
         .regex(
           /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
           "A jelszónak tartalmaznia kell betűt és számot"
@@ -108,86 +107,124 @@ const Register: React.FC = () => {
           }));
           toast.error("A felhasználónév már foglalt");
         } else {
-          setError(err.response.data.error || "Registration failed");
           toast.error(
-            err.response.data.error || "Nems sikerült a regisztráció!"
+            err.response.data.error || "Nem sikerült a regisztráció!"
           );
         }
       } else {
-        setError(err instanceof Error ? err.message : "Registration failed");
-        toast.error("Nems sikerült a regisztráció!");
+        toast.error("Nem sikerült a regisztráció!");
       }
     } finally {
       setIsPending(false);
     }
   };
 
-  if (!isOnline) {
-    return <OfflinePlaceholder />;
-  }
+  if (!isOnline) return <OfflinePlaceholder />;
 
   return (
-    <Suspense>
-      <PageTransition>
-        <div className="max-w-2xl mx-auto items-center h-screen pb-55 pt-30 justify-center overflow-hidden">
-          <FormContainer error={error} success={success} label="Register">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <InputField
-                id="username"
-                label="Felhasználónév"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setTouched({ ...touched, username: true });
-                }}
-                error={touched.username ? fieldErrors.username : undefined}
-              />
+    <Transition appear show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-50" onClose={() => {}}>
+        {/* BACKDROP */}
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-40"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-40"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-background" />
+        </Transition.Child>
 
-              <InputField
-                id="email"
-                label="Email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setTouched({ ...touched, email: true });
-                }}
-                error={touched.email ? fieldErrors.email : undefined}
-              />
-
-              <InputField
-                id="password"
-                label="Jelszó"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setTouched({ ...touched, password: true });
-                }}
-                enablePasswordToggle
-                error={touched.password ? fieldErrors.password : undefined}
-              />
-
-              <InputField
-                id="confirm-password"
-                label="Jelszó megerősítése"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setTouched({ ...touched, confirmPassword: true });
-                }}
-                enablePasswordToggle
-                error={
-                  touched.confirmPassword
-                    ? fieldErrors.confirmPassword
-                    : undefined
-                }
-              />
-
-              <SubmitButton isPending={isPending} label="Register" />
-            </form>
-          </FormContainer>
+        {/* CENTERED PANEL */}
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl text-left align-middle transition-all">
+                <Suspense>
+                  <PageTransition>
+                    <FormContainer
+                      error={error}
+                      success={success}
+                      label="Regisztráció"
+                    >
+                      <form onSubmit={handleSubmit} className="space-y-4">
+                        <InputField
+                          id="username"
+                          label="Felhasználónév"
+                          value={username}
+                          onChange={(e) => {
+                            setUsername(e.target.value);
+                            setTouched((prev) => ({ ...prev, username: true }));
+                          }}
+                          error={
+                            touched.username ? fieldErrors.username : undefined
+                          }
+                        />
+                        <InputField
+                          id="email"
+                          label="Email"
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            setTouched((prev) => ({ ...prev, email: true }));
+                          }}
+                          error={touched.email ? fieldErrors.email : undefined}
+                        />
+                        <InputField
+                          id="password"
+                          label="Jelszó"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            setTouched((prev) => ({ ...prev, password: true }));
+                          }}
+                          enablePasswordToggle
+                          error={
+                            touched.password ? fieldErrors.password : undefined
+                          }
+                        />
+                        <InputField
+                          id="confirmPassword"
+                          label="Jelszó megerősítése"
+                          value={confirmPassword}
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            setTouched((prev) => ({
+                              ...prev,
+                              confirmPassword: true,
+                            }));
+                          }}
+                          enablePasswordToggle
+                          error={
+                            touched.confirmPassword
+                              ? fieldErrors.confirmPassword
+                              : undefined
+                          }
+                        />
+                        <SubmitButton
+                          isPending={isPending}
+                          label="Regisztráció"
+                        />
+                      </form>
+                    </FormContainer>
+                  </PageTransition>
+                </Suspense>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
         </div>
-      </PageTransition>
-    </Suspense>
+      </Dialog>
+    </Transition>
   );
 };
 
