@@ -212,7 +212,7 @@ export default function MultiChoicePage() {
                 />
 
                 {timerEnabled && (
-                  <div className="text-gray-400 text-sm mt-4">
+                  <div className="text-foreground text-md mt-4">
                     Következő kérdés {timeLeft} másodperc múlva
                   </div>
                 )}

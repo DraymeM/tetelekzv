@@ -8,24 +8,22 @@ import PageTransition from "../common/PageTransition";
 import OfflinePlaceholder from "../OfflinePlaceholder";
 import { useOnlineStatus } from "../../hooks/useOnlineStatus";
 
-// Lazy-loaded component
 const TetelForm = React.lazy(() => import("../common/Forms/TetelForm"));
 
 const TetelEdit: React.FC = () => {
-  // All hooks are called at the top level to ensure consistent execution
-  const { id } = useParams({ strict: false }); // Hook 1
+  const { id } = useParams({ strict: false });
   const tetelId = Number(id);
-  const navigate = useNavigate(); // Hook 2
-  const queryClient = useQueryClient(); // Hook 3
-  const [error, setError] = useState<string | null>(null); // Hook 4
-  const [success, setSuccess] = useState<string | null>(null); // Hook 5
-  const [isBlocking, setIsBlocking] = useState(false); // Hook 6
-  const isOnline = useOnlineStatus(); // Hook 7
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [isBlocking, setIsBlocking] = useState(false);
+  const isOnline = useOnlineStatus();
   const { data } = useQuery({
     queryKey: ["tetelDetail", tetelId],
     queryFn: () => fetchTetelDetails(tetelId),
-    enabled: !isNaN(tetelId) && tetelId > 0, // Aligned with TetelDetails
-  }); // Hook 8
+    enabled: !isNaN(tetelId) && tetelId > 0,
+  });
   const mutation = useMutation({
     mutationFn: (formData: TetelFormData) => updateTetel(tetelId, formData),
     onMutate: () => {
@@ -45,9 +43,7 @@ const TetelEdit: React.FC = () => {
       setError(e.response?.data?.error || "Hiba a frissítés közben.");
       setIsBlocking(false);
     },
-  }); // Hook 9
-
-  // Early return after all hooks
+  });
   if (!isOnline) {
     return <OfflinePlaceholder />;
   }

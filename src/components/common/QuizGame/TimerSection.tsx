@@ -27,8 +27,11 @@ export default function TimerSection({
         setTimerDuration={setTimerDuration}
       />
       {timerEnabled && (
-        <div className="text-gray-400 text-sm mt-4">
-          Következő kérdés {timeLeft} másodperc múlva
+        <div className="fixed text-foreground top-20  md:right-5.5 right-4.5  px-3 rounded-md w-16 bg-secondary shadow-lf mt-4 flex gap-1">
+          <span className="text-rose-400 text-right font-mono text-md font-bold">
+            {timeLeft}
+          </span>
+          sec
         </div>
       )}
     </div>

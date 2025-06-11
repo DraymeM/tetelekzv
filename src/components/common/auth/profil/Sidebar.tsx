@@ -14,7 +14,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => (
   >
     <div className="lg:hidden flex justify-end mb-4">
       <button
-        className="text-foreground bg-muted p-1 rounded"
+        className="text-foreground bg-muted md:mt-0 mt-10 p-1 rounded"
         onClick={onClose}
         aria-label="Close menu"
       >
