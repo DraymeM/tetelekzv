@@ -1,0 +1,1 @@
+import{T as t}from"./TetelCreate-t3LJ5EgA.js";import{c as e}from"./index-C-kZPjOI.js";import"./useMutation-9G3vT0rP.js";import"./repo-BMneEDCF.js";import"./OfflinePlaceholder-Jf17uAvg.js";import"./useOnlineStatus-CJTOGzvX.js";const c=e("/tetelcreate")({component:t});export{c as Route};
