@@ -36,7 +36,7 @@ export default function Sidebar({ links }: SidebarProps) {
                 title={`Go to ${label}`}
                 className={`flex items-center gap-2 pl-0 pr-3 py-2 rounded-md text-md font-medium text-center transition-all transform ${
                   active
-                    ? "text-primary underline font-semibold translate-x-1"
+                    ? "text-primary underline font-semibold "
                     : "text-foreground hover:underline"
                 }`}
               >

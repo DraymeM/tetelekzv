@@ -8,7 +8,7 @@ import {
 } from "../../api/repo";
 import Spinner from "../Spinner";
 import PageTransition from "../common/PageTransition";
-import { FaArrowLeft, FaRedo, FaSpinner } from "react-icons/fa";
+import { FaArrowLeft, FaRedo } from "react-icons/fa";
 import OfflinePlaceholder from "../OfflinePlaceholder";
 import { useOnlineStatus } from "../../hooks/useOnlineStatus";
 import { useTimer } from "../../hooks/useTimer";
@@ -83,14 +83,20 @@ export default function TetelTestYourself() {
   } = useTimer(handleNext);
 
   useEffect(() => {
-    if (currentIndex === questions.length - 1) {
+    if (timerEnabled && currentIndex === questions.length - 1) {
       const timeout = setTimeout(() => {
         setTimerEnabled(false);
         setIsDialogOpen(true);
       }, timerDuration * 1000);
       return () => clearTimeout(timeout);
     }
-  }, [currentIndex, questions.length, setTimerEnabled]);
+  }, [
+    currentIndex,
+    questions.length,
+    timerDuration,
+    timerEnabled,
+    setTimerEnabled,
+  ]);
 
   const {
     data: currentQuestion,
@@ -159,7 +165,7 @@ export default function TetelTestYourself() {
     return <OfflinePlaceholder />;
   }
 
-  if (isListLoading) {
+  if (isListLoading || isDetailLoading) {
     return (
       <div className="p-10 text-center">
         <Spinner />
@@ -226,16 +232,10 @@ export default function TetelTestYourself() {
                     {currentQuestion?.question}
                   </h2>
 
-                  {isDetailLoading ? (
-                    <div className="flex justify-center items-center min-h-[200px]">
-                      <FaSpinner className="animate-spin text-primary text-5xl" />
-                    </div>
-                  ) : (
-                    <AnswerPicker
-                      answers={currentQuestion?.answers ?? []}
-                      onPick={handleAnswerPick}
-                    />
-                  )}
+                  <AnswerPicker
+                    answers={currentQuestion?.answers ?? []}
+                    onPick={handleAnswerPick}
+                  />
                 </div>
 
                 <TimerControls

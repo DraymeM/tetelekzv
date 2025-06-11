@@ -100,7 +100,7 @@ export default function Tetelek() {
                   <Suspense
                     key={tetel.id}
                     fallback={
-                      <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] animate-pulse" />
+                      <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[140px] animate-pulse" />
                     }
                   >
                     <CardLink
