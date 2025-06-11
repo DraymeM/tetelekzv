@@ -28,15 +28,16 @@ export default function TetelQuestions() {
 
   const shouldFetch = !isNaN(tetelId) && tetelId > 0;
 
-  const { data, error } = useQuery<{ data: IQuestion[]; total: number }, Error>(
-    {
-      queryKey: ["tetelQuestions", tetelId, page, limit],
-      queryFn: () => fetchQuestionsByTetelId({ tetelId, page, limit }),
-      enabled: shouldFetch,
-      staleTime: 1000 * 60 * 5,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data, error, isLoading, status } = useQuery<
+    { data: IQuestion[]; total: number },
+    Error
+  >({
+    queryKey: ["tetelQuestions", tetelId, page, limit],
+    queryFn: () => fetchQuestionsByTetelId({ tetelId, page, limit }),
+    enabled: shouldFetch,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
 
   // Check if a child route is active (e.g., /tetelek/$id/questions/$questionId)
   if (
@@ -48,17 +49,10 @@ export default function TetelQuestions() {
 
   if (error) {
     if (!isOnline) {
-      return (
-        <>
-          <OfflinePlaceholder />
-        </>
-      );
+      return <OfflinePlaceholder />;
     }
-
     return (
-      <>
-        <div className="text-center text-red-500">Hiba: {error.message}</div>
-      </>
+      <div className="text-center text-red-500">Hiba: {error.message}</div>
     );
   }
 
@@ -84,7 +78,6 @@ export default function TetelQuestions() {
             <div className="w-[100px]"></div> {/* Spacer for alignment */}
           </div>
           <div className="flex flex-wrap items-center justify-between md:gap-4 px-4 mb-4">
-            {/* Left: Limit Dropdown */}
             <div className="flex-shrink-0 mx-auto">
               <LimitDropdown
                 limit={limit}
@@ -94,8 +87,6 @@ export default function TetelQuestions() {
                 }}
               />
             </div>
-
-            {/* Center: Pagination */}
             <div className="flex-grow flex justify-center mx-auto md:mr-8">
               <Pagination
                 page={page}
@@ -104,13 +95,21 @@ export default function TetelQuestions() {
                 limit={limit}
               />
             </div>
-            {/* Right: Total */}
             <div className="flex-shrink-0 mx-auto p-2 text-foreground bg-secondary rounded-md shadow-lg text-sm">
               Összes: <span className="text-primary font-bold">{total}</span>
             </div>
           </div>
           <div className="min-h-[60dvh]">
-            {questions.length === 0 ? (
+            {isLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
+                {[...Array(4)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[140px] animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : status === "success" && questions.length === 0 ? (
               <p className="p-4 mx-auto max-w-[98dvw] bg-secondary shadow-md rounded-md transition text-foreground duration-300 border-transparent hover:border-muted-foreground border-2 cursor-pointer transform">
                 Nincsenek még kérdések ehhez a tételhez.
               </p>
@@ -118,22 +117,21 @@ export default function TetelQuestions() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-2 mb-8">
                 {questions.map((question, index) => (
                   <Suspense
-                    key={question.id} // Use real ID for React key
+                    key={question.id}
                     fallback={
-                      <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] animate-pulse" />
+                      <div className="rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[140px] animate-pulse" />
                     }
                   >
                     <CardLink
-                      id={index + 1} // Show 1., 2., 3. in the UI
+                      id={index + 1}
                       title={question.question}
-                      to={`/tetelek/${tetelId}/questions/${question.id}`} // Keep route correct
+                      to={`/tetelek/${tetelId}/questions/${question.id}`}
                     />
                   </Suspense>
                 ))}
               </div>
             )}
           </div>
-
           <Pagination
             page={page}
             setPage={setPage}

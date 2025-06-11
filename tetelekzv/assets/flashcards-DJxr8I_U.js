@@ -1,0 +1,1 @@
+import{F as o}from"./FlashcardGamePage-BTocZuCJ.js";import"./index-BrSagbY1.js";import"./useLocation-2uzm-Rch.js";import"./useQuery-xx4Ekc8P.js";import"./repo-2S77ZS6a.js";import"./OfflinePlaceholder-B8YUC2_J.js";const e=o;export{e as component};

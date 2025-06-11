@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { FaChevronRight } from "react-icons/fa";
+import { Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
 interface CardLinkProps {
   id: number;
@@ -13,32 +14,39 @@ function CardLink({ id, title, to, onClick }: CardLinkProps) {
     <Link
       to={to}
       params={{ id: id.toString() }}
-      className="group relative block rounded-md border-2 border-transparent bg-secondary p-5 shadow-sm min-h-[85px] transition-all duration-300 hover:border-[var(--border)] hover:shadow-md"
+      className="group relative block rounded-md bg-secondary p-5 min-h-[140px] border-2 border-transparent transition-all duration-300 ease-in-out hover:border-2 hover:border-[var(--border)] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       onClick={() => onClick?.(id)}
-      activeProps={{ className: "border-[var(--border)] shadow-md" }}
+      activeProps={{ className: "shadow-xl ring-2 ring-primary ring-offset-2" }}
     >
-      <div className="flex items-center justify-between w-full">
-        <div className="flex-1 pr-6 overflow-hidden">
-          <h3 className="text-lg md:text-xl font-semibold tracking-tight truncate">
-            <span
-              style={{ color: "var(--foreground)" }}
-              className="font-bold mr-1"
-            >
-              {id}.
-            </span>
-            {title}
-          </h3>
+      <div className="flex flex-col h-full justify-between">
+        <div className="flex-1">
+          <Transition
+            as={Fragment}
+            show={true}
+            enter="transition-all duration-300 ease-out"
+            enterFrom="scale-100 opacity-100"
+            enterTo="group-hover:scale-105 group-hover:opacity-90"
+          >
+            <div className="flex items-center bg-primary/10 rounded-md px-3 py-1 w-fit mb-3">
+              <span className="text-lg md:text-xl font-bold">{id}</span>
+            </div>
+          </Transition>
+
+          <Transition
+            as={Fragment}
+            show={true}
+            enter="transition-transform duration-300 ease-out"
+            enterFrom="translate-y-0"
+            enterTo="group-hover:-translate-y-0.5"
+          >
+            <h3 className="text-base md:text-lg font-semibold tracking-tight text-foreground truncate">
+              {title}
+            </h3>
+          </Transition>
         </div>
 
-        <div className="flex items-center justify-center rounded-md transition-all duration-300 bg-muted text-primary border-2 border-transparent group-hover:border-[var(--border)] group-hover:bg-muted/70 shadow-sm group-hover:shadow-md w-10 h-10">
-          <FaChevronRight
-            className="transition-transform duration-300 group-hover:translate-x-1"
-            size={18}
-          />
-        </div>
+        <div className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50" />
       </div>
-
-      <div className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 rounded w-16 h-1.5 bg-primary/50" />
     </Link>
   );
 }
