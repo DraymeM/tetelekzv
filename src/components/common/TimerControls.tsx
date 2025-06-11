@@ -36,20 +36,20 @@ export default function TimerControls({
         className="inline-flex items-center px-4 py-2 bg-amber-700 hover:cursor-pointer text-sm hover:bg-amber-600 text-white font-bold rounded-md transition focus:outline-none"
       >
         <FaArrowRight className="mr-2" />
-        Következő kérdés
+        Következő
       </button>
 
       {/* Toggle Timer Button */}
       <button
         onClick={debouncedToggleTimer}
-        className={`inline-flex items-center px-4 py-2 rounded-md text-sm hover:cursor-pointer font-bold transition focus:outline-none ${
+        className={`inline-flex items-center md:px-4 px-2 py-2 rounded-md text-sm hover:cursor-pointer font-bold transition focus:outline-none ${
           timerEnabled
             ? "bg-red-700 hover:bg-red-600 text-white"
             : "bg-green-700 hover:bg-green-600 text-white"
         }`}
       >
         <FaRegClock className="mr-2" />
-        {timerEnabled ? "Időzítő kikapcsolása" : "Időzítő bekapcsolása"}
+        {timerEnabled ? "kikapcsolás" : "bekapcsolás"}
       </button>
 
       {/* Timer Duration Dropdown */}

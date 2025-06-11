@@ -1,1 +1,0 @@
-import{F as o}from"./FlashcardGamePage-B2iaA_9W.js";import{c as t}from"./index-KVBsG1ou.js";import"./useLocation-D1n-GyGL.js";import"./useQuery-Dc0WeW7-.js";import"./repo-DMQTQuIf.js";import"./OfflinePlaceholder-BS0FVtr2.js";const c=t("/tetelek/$id/flashcards")({component:o});export{c as Route};
