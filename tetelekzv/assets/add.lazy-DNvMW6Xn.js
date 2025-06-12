@@ -1,1 +1,0 @@
-import{M as t}from"./MultiQuestionCreate-EF81wJR4.js";import{c as o}from"./index-C-kZPjOI.js";import"./useMutation-9G3vT0rP.js";import"./repo-BMneEDCF.js";import"./OfflinePlaceholder-Jf17uAvg.js";import"./useOnlineStatus-CJTOGzvX.js";import"./PageTransition-tmT-SZGH.js";const n=o("/tetelek/$id/questions/add")({component:t});export{n as Route};

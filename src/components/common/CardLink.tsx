@@ -14,7 +14,7 @@ function CardLink({ id, title, to, onClick }: CardLinkProps) {
     <Link
       to={to}
       params={{ id: id.toString() }}
-      className="group relative block rounded-md bg-secondary p-5 min-h-[140px] border-2 border-transparent transition-all duration-300 ease-in-out hover:border-2 hover:border-[var(--border)] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      className="group relative block rounded-md bg-secondary  pl-1 pt-1 pb-5 min-h-[140px] border-2 border-transparent transition-all duration-300 ease-in-out hover:border-2 hover:border-[var(--border)] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
       onClick={() => onClick?.(id)}
       activeProps={{ className: "shadow-xl ring-2 ring-primary ring-offset-2" }}
     >
@@ -27,8 +27,8 @@ function CardLink({ id, title, to, onClick }: CardLinkProps) {
             enterFrom="scale-100 opacity-100"
             enterTo="group-hover:scale-105 group-hover:opacity-90"
           >
-            <div className="flex items-center bg-primary/10 rounded-md px-3 py-1 w-fit mb-3">
-              <span className="text-lg md:text-xl font-bold">{id}</span>
+            <div className="flex items-center dark:bg-primary/10 bg-primary/20 rounded-md px-3 py-1 w-fit mb-3">
+              <span className="text-lg md:text-lg font-bold">{id}</span>
             </div>
           </Transition>
 

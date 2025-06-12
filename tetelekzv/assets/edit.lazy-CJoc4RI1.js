@@ -1,0 +1,1 @@
+import{M as t}from"./MultiquestionEdit-DkLbKKpL.js";import{c as o}from"./index-C0Fg1H1H.js";import"./useQuery-DraQ-A76.js";import"./useMutation-DHIKlFSK.js";import"./repo-CpeVcUY7.js";import"./OfflinePlaceholder-COO-2YQF.js";import"./useOnlineStatus-BNjoD1h4.js";import"./PageTransition-B2bRsmKk.js";const a=o("/tetelek/$id/questions/$qid/edit")({component:t});export{a as Route};
