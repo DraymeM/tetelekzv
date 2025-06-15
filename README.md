@@ -4,7 +4,7 @@
 
 <h1 align="center">Tiomi – Interactive Topic Learning App</h1>
 
-**Tiomi** is a full-stack, installable, offline-ready **Progressive Web App (PWA)** designed for learners of all kinds. Whether you're preparing for university exams, language certifications, coding interviews, or personal enrichment, Tiomi helps you organize knowledge through topic-based notes, flashcards, and interactive quizzes.
+**Tiomi** is an installable, offline-ready Progressive Web App (PWA) that helps learners organize and actively recall knowledge through structured notes, flashcards, and gamified quizzes. Designed for everything from academic study to self-improvement, it brings the best parts of Notion, Quizlet, and Anki — all in one app.
 
 > 🔗 **Live Demo**: [danielmarkus.web.elte.hu/tetelekzv](https://danielmarkus.web.elte.hu/tetelekzv/)
 
