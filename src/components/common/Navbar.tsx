@@ -1,26 +1,25 @@
 import type { FC } from "react";
 import React from "react";
 import { Link, useMatchRoute } from "@tanstack/react-router";
-import { FaScroll, FaPlus } from "react-icons/fa";
-import { GiCardPick } from "react-icons/gi";
-import { FaDice } from "react-icons/fa";
+import { FaScroll } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../hooks/useTheme";
 import type { NavLink } from "./nav/NavLinkItem";
+import { RiGroup3Fill } from "react-icons/ri";
 const DesktopNav = React.lazy(() => import("./nav/DesktopNav"));
 const MobileNav = React.lazy(() => import("./nav/MobileNav"));
 const LogoIcon = React.lazy(() => import("./nav/LogoIcon"));
 
 const navLinks: NavLink[] = [
   {
+    name: "Groups",
+    to: "/groups",
+    icon: RiGroup3Fill,
+  },
+  {
     name: "Tételek",
     to: "/tetelek",
     icon: FaScroll,
-    children: [
-      { name: "Tétel", to: "/tetelcreate", icon: FaPlus },
-      { name: "FlashCards", to: "/flashcards", icon: GiCardPick },
-      { name: "Random", to: "/mchoiceq", icon: FaDice },
-    ],
   },
 ];
 

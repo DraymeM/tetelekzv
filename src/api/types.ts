@@ -66,3 +66,16 @@ export type RouterContext = {
   isAuthenticated: boolean | false;
   isSuperUser: boolean;
 };
+
+export interface GroupFormData {
+  name: string;
+  public: boolean;
+}
+
+export interface GroupData {
+  gid: number;
+  name: string;
+  public: boolean;
+  joined: boolean;
+  member_count: number;
+}

@@ -27,6 +27,7 @@ export const persistQueryKeys = [
   "multiQuestions",
   "multiquestion",
   "multiQuestionDetails",
+  "groups",
 ];
 
 async function initDB(): Promise<IDBPDatabase> {

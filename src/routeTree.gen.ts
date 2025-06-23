@@ -16,15 +16,19 @@ import { Route as TetelcreateImport } from './routes/tetelcreate'
 import { Route as RegisterImport } from './routes/register'
 import { Route as MchoiceqImport } from './routes/mchoiceq'
 import { Route as LoginImport } from './routes/login'
+import { Route as GroupsImport } from './routes/groups'
 import { Route as FlashcardsImport } from './routes/flashcards'
 import { Route as IndexImport } from './routes/index'
 import { Route as TetelekIdImport } from './routes/tetelek/$id'
 import { Route as MquestionsIdImport } from './routes/mquestions/$id'
+import { Route as GroupsCreateImport } from './routes/groups/create'
+import { Route as GroupsGidImport } from './routes/groups/$gid'
 import { Route as AuthProfileImport } from './routes/auth/profile'
 import { Route as TetelekIdQuestionsImport } from './routes/tetelek/$id/questions'
 import { Route as TetelekIdFlashcardsImport } from './routes/tetelek/$id/flashcards'
 import { Route as TetelekIdDetailsImport } from './routes/tetelek/$id/details'
 import { Route as MquestionsIdEditImport } from './routes/mquestions/$id/edit'
+import { Route as GroupsGidEditImport } from './routes/groups/$gid/edit'
 import { Route as TetelekIdQuestionsTestImport } from './routes/tetelek/$id/questions/test'
 import { Route as TetelekIdQuestionsAddImport } from './routes/tetelek/$id/questions/add'
 import { Route as TetelekIdQuestionsQidImport } from './routes/tetelek/$id/questions/$qid'
@@ -63,6 +67,12 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
+const GroupsRoute = GroupsImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const FlashcardsRoute = FlashcardsImport.update({
   id: '/flashcards',
   path: '/flashcards',
@@ -88,6 +98,18 @@ const MquestionsIdRoute = MquestionsIdImport.update({
 } as any).lazy(() =>
   import('./routes/mquestions/$id.lazy').then((d) => d.Route),
 )
+
+const GroupsCreateRoute = GroupsCreateImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => GroupsRoute,
+} as any)
+
+const GroupsGidRoute = GroupsGidImport.update({
+  id: '/$gid',
+  path: '/$gid',
+  getParentRoute: () => GroupsRoute,
+} as any)
 
 const AuthProfileRoute = AuthProfileImport.update({
   id: '/auth/profile',
@@ -126,6 +148,12 @@ const MquestionsIdEditRoute = MquestionsIdEditImport.update({
 } as any).lazy(() =>
   import('./routes/mquestions/$id/edit.lazy').then((d) => d.Route),
 )
+
+const GroupsGidEditRoute = GroupsGidEditImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => GroupsGidRoute,
+} as any)
 
 const TetelekIdQuestionsTestRoute = TetelekIdQuestionsTestImport.update({
   id: '/test',
@@ -185,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlashcardsImport
       parentRoute: typeof rootRoute
     }
+    '/groups': {
+      id: '/groups'
+      path: '/groups'
+      fullPath: '/groups'
+      preLoaderRoute: typeof GroupsImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -227,6 +262,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthProfileImport
       parentRoute: typeof rootRoute
     }
+    '/groups/$gid': {
+      id: '/groups/$gid'
+      path: '/$gid'
+      fullPath: '/groups/$gid'
+      preLoaderRoute: typeof GroupsGidImport
+      parentRoute: typeof GroupsImport
+    }
+    '/groups/create': {
+      id: '/groups/create'
+      path: '/create'
+      fullPath: '/groups/create'
+      preLoaderRoute: typeof GroupsCreateImport
+      parentRoute: typeof GroupsImport
+    }
     '/mquestions/$id': {
       id: '/mquestions/$id'
       path: '/mquestions/$id'
@@ -240,6 +289,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/tetelek/$id'
       preLoaderRoute: typeof TetelekIdImport
       parentRoute: typeof TetelekImport
+    }
+    '/groups/$gid/edit': {
+      id: '/groups/$gid/edit'
+      path: '/edit'
+      fullPath: '/groups/$gid/edit'
+      preLoaderRoute: typeof GroupsGidEditImport
+      parentRoute: typeof GroupsGidImport
     }
     '/mquestions/$id/edit': {
       id: '/mquestions/$id/edit'
@@ -308,6 +364,31 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface GroupsGidRouteChildren {
+  GroupsGidEditRoute: typeof GroupsGidEditRoute
+}
+
+const GroupsGidRouteChildren: GroupsGidRouteChildren = {
+  GroupsGidEditRoute: GroupsGidEditRoute,
+}
+
+const GroupsGidRouteWithChildren = GroupsGidRoute._addFileChildren(
+  GroupsGidRouteChildren,
+)
+
+interface GroupsRouteChildren {
+  GroupsGidRoute: typeof GroupsGidRouteWithChildren
+  GroupsCreateRoute: typeof GroupsCreateRoute
+}
+
+const GroupsRouteChildren: GroupsRouteChildren = {
+  GroupsGidRoute: GroupsGidRouteWithChildren,
+  GroupsCreateRoute: GroupsCreateRoute,
+}
+
+const GroupsRouteWithChildren =
+  GroupsRoute._addFileChildren(GroupsRouteChildren)
 
 interface TetelekIdDetailsRouteChildren {
   TetelekIdDetailsEditRoute: typeof TetelekIdDetailsEditRoute
@@ -390,14 +471,18 @@ const MquestionsIdRouteWithChildren = MquestionsIdRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/flashcards': typeof FlashcardsRoute
+  '/groups': typeof GroupsRouteWithChildren
   '/login': typeof LoginRoute
   '/mchoiceq': typeof MchoiceqRoute
   '/register': typeof RegisterRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/auth/profile': typeof AuthProfileRoute
+  '/groups/$gid': typeof GroupsGidRouteWithChildren
+  '/groups/create': typeof GroupsCreateRoute
   '/mquestions/$id': typeof MquestionsIdRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/groups/$gid/edit': typeof GroupsGidEditRoute
   '/mquestions/$id/edit': typeof MquestionsIdEditRoute
   '/tetelek/$id/details': typeof TetelekIdDetailsRouteWithChildren
   '/tetelek/$id/flashcards': typeof TetelekIdFlashcardsRoute
@@ -412,14 +497,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/flashcards': typeof FlashcardsRoute
+  '/groups': typeof GroupsRouteWithChildren
   '/login': typeof LoginRoute
   '/mchoiceq': typeof MchoiceqRoute
   '/register': typeof RegisterRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/auth/profile': typeof AuthProfileRoute
+  '/groups/$gid': typeof GroupsGidRouteWithChildren
+  '/groups/create': typeof GroupsCreateRoute
   '/mquestions/$id': typeof MquestionsIdRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/groups/$gid/edit': typeof GroupsGidEditRoute
   '/mquestions/$id/edit': typeof MquestionsIdEditRoute
   '/tetelek/$id/details': typeof TetelekIdDetailsRouteWithChildren
   '/tetelek/$id/flashcards': typeof TetelekIdFlashcardsRoute
@@ -435,14 +524,18 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/flashcards': typeof FlashcardsRoute
+  '/groups': typeof GroupsRouteWithChildren
   '/login': typeof LoginRoute
   '/mchoiceq': typeof MchoiceqRoute
   '/register': typeof RegisterRoute
   '/tetelcreate': typeof TetelcreateRoute
   '/tetelek': typeof TetelekRouteWithChildren
   '/auth/profile': typeof AuthProfileRoute
+  '/groups/$gid': typeof GroupsGidRouteWithChildren
+  '/groups/create': typeof GroupsCreateRoute
   '/mquestions/$id': typeof MquestionsIdRouteWithChildren
   '/tetelek/$id': typeof TetelekIdRouteWithChildren
+  '/groups/$gid/edit': typeof GroupsGidEditRoute
   '/mquestions/$id/edit': typeof MquestionsIdEditRoute
   '/tetelek/$id/details': typeof TetelekIdDetailsRouteWithChildren
   '/tetelek/$id/flashcards': typeof TetelekIdFlashcardsRoute
@@ -459,14 +552,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/flashcards'
+    | '/groups'
     | '/login'
     | '/mchoiceq'
     | '/register'
     | '/tetelcreate'
     | '/tetelek'
     | '/auth/profile'
+    | '/groups/$gid'
+    | '/groups/create'
     | '/mquestions/$id'
     | '/tetelek/$id'
+    | '/groups/$gid/edit'
     | '/mquestions/$id/edit'
     | '/tetelek/$id/details'
     | '/tetelek/$id/flashcards'
@@ -480,14 +577,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/flashcards'
+    | '/groups'
     | '/login'
     | '/mchoiceq'
     | '/register'
     | '/tetelcreate'
     | '/tetelek'
     | '/auth/profile'
+    | '/groups/$gid'
+    | '/groups/create'
     | '/mquestions/$id'
     | '/tetelek/$id'
+    | '/groups/$gid/edit'
     | '/mquestions/$id/edit'
     | '/tetelek/$id/details'
     | '/tetelek/$id/flashcards'
@@ -501,14 +602,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/flashcards'
+    | '/groups'
     | '/login'
     | '/mchoiceq'
     | '/register'
     | '/tetelcreate'
     | '/tetelek'
     | '/auth/profile'
+    | '/groups/$gid'
+    | '/groups/create'
     | '/mquestions/$id'
     | '/tetelek/$id'
+    | '/groups/$gid/edit'
     | '/mquestions/$id/edit'
     | '/tetelek/$id/details'
     | '/tetelek/$id/flashcards'
@@ -524,6 +629,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FlashcardsRoute: typeof FlashcardsRoute
+  GroupsRoute: typeof GroupsRouteWithChildren
   LoginRoute: typeof LoginRoute
   MchoiceqRoute: typeof MchoiceqRoute
   RegisterRoute: typeof RegisterRoute
@@ -536,6 +642,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FlashcardsRoute: FlashcardsRoute,
+  GroupsRoute: GroupsRouteWithChildren,
   LoginRoute: LoginRoute,
   MchoiceqRoute: MchoiceqRoute,
   RegisterRoute: RegisterRoute,
@@ -557,6 +664,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/flashcards",
+        "/groups",
         "/login",
         "/mchoiceq",
         "/register",
@@ -571,6 +679,13 @@ export const routeTree = rootRoute
     },
     "/flashcards": {
       "filePath": "flashcards.tsx"
+    },
+    "/groups": {
+      "filePath": "groups.tsx",
+      "children": [
+        "/groups/$gid",
+        "/groups/create"
+      ]
     },
     "/login": {
       "filePath": "login.tsx"
@@ -593,6 +708,17 @@ export const routeTree = rootRoute
     "/auth/profile": {
       "filePath": "auth/profile.tsx"
     },
+    "/groups/$gid": {
+      "filePath": "groups/$gid.tsx",
+      "parent": "/groups",
+      "children": [
+        "/groups/$gid/edit"
+      ]
+    },
+    "/groups/create": {
+      "filePath": "groups/create.tsx",
+      "parent": "/groups"
+    },
     "/mquestions/$id": {
       "filePath": "mquestions/$id.tsx",
       "children": [
@@ -607,6 +733,10 @@ export const routeTree = rootRoute
         "/tetelek/$id/flashcards",
         "/tetelek/$id/questions"
       ]
+    },
+    "/groups/$gid/edit": {
+      "filePath": "groups/$gid/edit.tsx",
+      "parent": "/groups/$gid"
     },
     "/mquestions/$id/edit": {
       "filePath": "mquestions/$id/edit.tsx",

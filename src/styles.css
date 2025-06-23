@@ -19,9 +19,9 @@ code {
 
 :root {
   --radius: 0.5rem;
-  --background: #f5f9ff;
-  --foreground: #1a202c;
-  --primary: #1ab474;
+  --background: hsl(216, 100%, 98%);
+  --foreground: hsl(222, 28%, 13%);
+  --primary: hsl(153, 74%, 40%);
   --primary-foreground: color-mix(
     in srgb,
     var(--foreground) 88%,
@@ -71,9 +71,9 @@ code {
 }
 
 .dark {
-  --background: #181921;
-  --foreground: #e4edff;
-  --primary: #4df7a2;
+  --background: hsl(231, 14%, 12%);
+  --foreground: hsl(220, 100%, 92%);
+  --primary: hsl(153, 94%, 63%);
 }
 
 @theme inline {

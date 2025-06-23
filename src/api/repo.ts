@@ -7,7 +7,40 @@ import type {
   IMultiQuestion,
   IQuestion,
   Flashcard,
+  GroupData,
+  GroupFormData,
 } from "./types";
+
+/*--------------------------------------------------------------Groups---------------------------------------------------------------------*/
+
+export async function createGroup(data: GroupFormData): Promise<void> {
+  const res = await apiClient.post("/group/post/create_group.php", data);
+  if (res.status !== 200) {
+    throw new Error("Failed to create group");
+  }
+}
+
+export async function fetchgroups({
+  page = 1,
+  limit = 35,
+}: {
+  page?: number;
+  limit?: number;
+}): Promise<{ data: GroupData[]; total: number }> {
+  const res = await apiClient.get("/group/get/get_group_list.php", {
+    params: { page, limit },
+  });
+
+  if (!res.data || !Array.isArray(res.data.data)) {
+    throw new Error(
+      "Unexpected response from backend: " + JSON.stringify(res.data)
+    );
+  }
+
+  return res.data;
+}
+
+/*--------------------------------------------------------------Tetelek---------------------------------------------------------------------*/
 
 export async function fetchTetelek({
   page = 1,
@@ -68,7 +101,7 @@ export async function createTetel(formData: TetelFormData): Promise<void> {
     throw new Error("Failed to create tetel");
   }
 }
-/*-----------------------------------------------------Kérdések--------------------------------------------------------------- */
+/*----------------------------------------------------------------Kérdések--------------------------------------------------------------- */
 export async function createMultiQuestion(
   data: NewMultiQuestion,
   tetelId: number
@@ -188,7 +221,7 @@ export async function fetchFlashcardCount(): Promise<{ total: number }> {
   return res.data;
 }
 
-/*------------------------------------------------------AUTH---------------------------------------------------------------*/
+/*-------------------------------------------------------------------AUTH---------------------------------------------------------------*/
 
 export async function register(
   username: string,
