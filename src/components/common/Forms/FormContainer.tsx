@@ -19,7 +19,7 @@ const FormContainer: React.FC<FormContainerProps> = ({
   return (
     <Suspense>
       <div className="min-h-[50dvh] ">
-        <div className="mx-auto p-6">
+        <div className="mx-auto p-2">
           <h2 className="text-3xl font-bold text-forground mb-6 flex items-center gap-2 animate-in fade-in duration-500">
             <FaQuestionCircle />
             {label}

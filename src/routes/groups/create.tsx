@@ -1,9 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import GroupCreate from "@/components/pages/groups/GroupCreate";
 import type { RouterContext } from "@/api/types";
-import TetelCreate from "@/components/pages/TetelCreate";
 
-export const Route = createFileRoute("/tetelcreate")({
-  component: TetelCreate,
+export const Route = createFileRoute("/groups/create")({
+  component: GroupCreate,
   beforeLoad: ({ context }) => {
     const ctx = context as RouterContext;
 
