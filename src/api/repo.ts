@@ -12,6 +12,29 @@ import type {
 } from "./types";
 
 /*--------------------------------------------------------------Groups---------------------------------------------------------------------*/
+export const checkGroupAccess = async (groupId: number) => {
+  try {
+    const resp = await apiClient.get("/auth/check-group-access.php", {
+      params: { group_id: groupId },
+    });
+    return {
+      isPublic: resp.data.isPublic || false,
+      isMember: resp.data.isMember || false,
+      canCreate: resp.data.canCreate || false,
+      canUpdate: resp.data.canUpdate || false,
+      canDelete: resp.data.canDelete || false,
+    };
+  } catch (e) {
+    console.error("Group access check error", e);
+    return {
+      isPublic: false,
+      isMember: false,
+      canCreate: false,
+      canUpdate: false,
+      canDelete: false,
+    };
+  }
+};
 
 export async function createGroup(data: GroupFormData): Promise<void> {
   const res = await apiClient.post("/group/post/create_group.php", data);
@@ -35,6 +58,40 @@ export async function fetchgroups({
     throw new Error(
       "Unexpected response from backend: " + JSON.stringify(res.data)
     );
+  }
+
+  return res.data;
+}
+
+export async function fetchGroupDetail(
+  id: number
+): Promise<{ id: number; name: string; public: boolean }> {
+  const res = await apiClient.get(`/group/get/get_group_detail.php`, {
+    params: { id },
+  });
+
+  if (!res.data || !res.data.name) {
+    throw new Error("Invalid group response");
+  }
+
+  return res.data;
+}
+
+export interface GroupMember {
+  username: string;
+  can_create: number;
+  can_update: number;
+  can_delete: number;
+  joined_at: string;
+}
+
+export async function fetchGroupMembers(id: number): Promise<GroupMember[]> {
+  const res = await apiClient.get(`/group/get/get_group_members.php`, {
+    params: { id },
+  });
+
+  if (!res.data || !Array.isArray(res.data)) {
+    throw new Error("Invalid group members response");
   }
 
   return res.data;

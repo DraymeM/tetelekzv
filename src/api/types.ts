@@ -63,8 +63,15 @@ export interface Answer {
 }
 
 export type RouterContext = {
-  isAuthenticated: boolean | false;
+  isAuthenticated: boolean;
   isSuperUser: boolean;
+  checkGroupAccess: (groupId: number) => Promise<{
+    isPublic: boolean;
+    isMember: boolean;
+    canCreate: boolean;
+    canUpdate: boolean;
+    canDelete: boolean;
+  }>;
 };
 
 export interface GroupFormData {

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import apiClient from "../api/index";
 import RateLimit from "../components/RateLimit";
 import Spinner from "@/components/Spinner";
+import { checkGroupAccess } from "@/api/repo";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -12,6 +13,13 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
+  checkGroupAccess: (groupId: number) => Promise<{
+    isPublic: boolean;
+    isMember: boolean;
+    canCreate: boolean;
+    canUpdate: boolean;
+    canDelete: boolean;
+  }>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -28,7 +36,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [rateLimited, setRateLimited] = useState(false);
 
-  // Install interceptor once
   useEffect(() => {
     const interceptorId = apiClient.interceptors.response.use(
       (res) => res,
@@ -103,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     checkAuth();
   }, []);
+
   if (rateLimited) {
     return <RateLimit />;
   }
@@ -122,6 +130,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         login,
         logout,
         checkAuth,
+        checkGroupAccess,
       }}
     >
       {children}
