@@ -18,7 +18,7 @@ export default function Sidebar({ links }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden mt-13 md:flex md:flex-col md:fixed md:top-0 md:left-0 md:h-screen md:w-33 bg-secondary border-r border-border pr-6 py-6 pl-4 z-40">
+      <aside className="hidden mt-13 md:flex md:flex-col md:fixed md:top-0 md:left-0 md:h-screen md:w-33 bg-secondary/20 border-r border-border pr-6 py-6 pl-4 z-40">
         <nav className="flex flex-col items-start gap-4">
           {links.map(({ to, label, icon, params }) => {
             const isBackLink = to.endsWith("/$id") || to === "/tetelek/$id";
@@ -49,7 +49,7 @@ export default function Sidebar({ links }: SidebarProps) {
       </aside>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-[100dvw] bg-secondary border-t border-border flex justify-around items-center px-3 py-4 h-12 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 w-[100dvw] bg-secondary/20 border-t border-border flex justify-around items-center px-3 py-4 h-12 z-50">
         {links.map(({ to, label, icon, params }) => {
           const isBackLink = to.endsWith("/$id") || to === "/tetelek/$id";
           const active = matchRoute({

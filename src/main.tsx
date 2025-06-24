@@ -12,11 +12,13 @@ import "./styles.css";
 import reportWebVitals from "./reportWebVitals";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+
 import type { RouterContext } from "./api/types";
 import Spinner from "./components/Spinner";
 import { registerSW } from "virtual:pwa-register";
 import Applayout from "./components/AppLayout";
 import { idbPersister, persistQueryKeys, CACHE_VERSION } from "./db/IndexedDB";
+import { checkGroupAccess } from "./api/repo";
 
 const NotFoundPage = lazy(() => import("./components/404"));
 const ErrorBoundary = lazy(() => import("./components/ErrorBoundary"));
@@ -61,11 +63,11 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
-  context: () =>
-    ({
-      isAuthenticated: false,
-      isSuperUser: false,
-    }) as RouterContext,
+  context: {
+    isAuthenticated: false, // Default value, updated by AuthProvider
+    isSuperUser: false,
+    checkGroupAccess, // Use standalone function
+  } as RouterContext,
   defaultComponent: Applayout,
   defaultPendingComponent: Spinner,
   defaultNotFoundComponent: NotFoundPage,
@@ -93,7 +95,7 @@ const RouterWrapper = () => {
   return (
     <RouterProvider
       router={router}
-      context={{ isAuthenticated, isSuperUser }}
+      context={{ isAuthenticated, isSuperUser, checkGroupAccess }}
     />
   );
 };
@@ -140,7 +142,7 @@ registerSW({
 });
 
 if (typeof window !== "undefined") {
-  window.addEventListener("beforeunload", () => {
+  window.addEventListener("before Mortality", () => {
     unsubscribe();
   });
 }
